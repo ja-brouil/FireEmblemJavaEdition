@@ -9,6 +9,7 @@ public class DesktopLauncher {
 	// Dimensions
 	public static final int WIDTH = 240;
 	public static final int HEIGHT = 160;
+	public static final int CONSTANT = 5;
 	public static final String TITLE = "Fire Emblem Java Edition";
 	
 	public static void main (String[] args) {
@@ -16,8 +17,8 @@ public class DesktopLauncher {
 		
 		// Frame Settings
 		config.title = TITLE;
-		config.height = HEIGHT;
-		config.width = WIDTH;
+		config.height = HEIGHT * CONSTANT;
+		config.width = WIDTH * CONSTANT;
 		config.x = -1;
 		config.y = -1;
 		

@@ -41,7 +41,6 @@ public class MovementUtilityCalculator {
 	public void calculateAllPossibleMoves(Entity unit) {
 		// Reset Queue
 		allPossibleMoves.clear();
-		pathfindingQueue.clear();
 		
 		// Stats on unit
 		UnitStatsComponent unitStatsComponent = uComponentMapper.get(unit);
@@ -92,7 +91,53 @@ public class MovementUtilityCalculator {
 		
 		// Enabled Blue Squares
 		enableBlueSquares();
+		
+		// Get Parent Tiles
+		setParentTiles(initialTile);
 	}
+	
+	// Set Parent Tiles
+	private void setParentTiles(MapCell initialCell) {
+		// Open List for tiles to be processed
+		Queue<MapCell> openList = new Queue<MapCell>();
+		
+		// Set initial tile to itself
+		initialCell.parentTile = initialCell;
+		initialCell.isVisited = true;
+		openList.addFirst(initialCell);
+		
+		while (openList.size > 0) {
+			MapCell cellCheck = openList.removeFirst();
+			
+			// Must be part of the valid tile set and not visited yet
+			for (MapCell adjMapCell : cellCheck.adjTiles) {
+				if (allPossibleMoves.contains(adjMapCell) && !adjMapCell.isVisited) {
+					adjMapCell.parentTile = cellCheck;
+					adjMapCell.isVisited = true;
+					openList.addLast(adjMapCell);
+				}
+			}
+		}
+	}
+	
+	// Get Pathfinding Queue
+	public void createPathFindingQueue(MapCell destinationCell, Entity unit) {
+		// Clear queue
+		pathfindingQueue.clear();
+		
+		// Starting cell
+		UnitStatsComponent unitStatsComponent = uComponentMapper.get(unit);
+		MapCell nextCell = unitStatsComponent.currentCell;
+		pathfindingQueue.addFirst(destinationCell);
+		
+		// Work backward until we have found the destination cell
+		while (!nextCell.equals(destinationCell)) {
+			pathfindingQueue.addFirst(nextCell.parentTile);
+			nextCell = nextCell.parentTile;
+		}
+	}
+	
+	// Get Attack Range Tiles
 	
 	// Get Tile from All Tiles
 	public MapCell getMapCell(Entity unit) {

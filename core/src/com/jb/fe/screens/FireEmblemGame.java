@@ -48,8 +48,6 @@ public class FireEmblemGame extends Game {
 	}
 
 	public void create() {
-		// Window Size
-		Gdx.graphics.setWindowedMode(WIDTH * CONSTANT, HEIGHT * CONSTANT);
 
 		// Camera
 		gameCamera = new OrthographicCamera(WIDTH, HEIGHT);

@@ -63,18 +63,13 @@ public class MapCursorInputHandling implements InputHandling, Component {
 			}
 
 			// A
-			if (Gdx.input.isKeyPressed(Keys.Z)) {
-				// Do nothing if there is no unit selected
+			if (Gdx.input.isKeyJustPressed(Keys.Z)) {
+				// Do nothing if there is no unit selected --> Switch to open menu later
 				if (mapCursorStateComponent.unitSelected == null) { return; }
 				mapCursorStateComponent.mapCursorState = MapCursorState.UNIT_SELECTED;
+				currentTimerForDelay = 0;
 			}
-		} else if (mapCursorStateComponent.mapCursorState.equals(MapCursorStateComponent.MapCursorState.DISABLED)) {
-
-		} else if (mapCursorStateComponent.mapCursorState
-				.equals(MapCursorStateComponent.MapCursorState.SELECT_UNIT_FOR_ACTION)) {
-
-		} else if (mapCursorStateComponent.mapCursorState
-				.equals(MapCursorStateComponent.MapCursorState.UNIT_SELECTED)) {
+		} else if (mapCursorStateComponent.mapCursorState.equals(MapCursorStateComponent.MapCursorState.WAITING_FOR_VALID_MOVE)) {
 			currentTimerForDelay += Gdx.graphics.getDeltaTime();
 			if (currentTimerForDelay <= keyDelayForMovement) {
 				return;
@@ -105,8 +100,15 @@ public class MapCursorInputHandling implements InputHandling, Component {
 			}
 			
 			// Back
-			if (Gdx.input.isKeyPressed(Keys.X)) {
+			if (Gdx.input.isKeyJustPressed(Keys.X)) {
 				mapCursorStateComponent.mapCursorState = MapCursorState.MOVEMENT_ONLY;
+				currentTimerForDelay = 0;
+			}
+			
+			// Move Unit
+			if (Gdx.input.isKeyJustPressed(Keys.Z)) {
+				mapCursorStateComponent.mapCursorState = MapCursorState.VALID_MOVE_CHECK;
+				currentTimerForDelay = 0;
 			}
 		}
 	}

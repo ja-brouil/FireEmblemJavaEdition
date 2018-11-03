@@ -39,8 +39,6 @@ public class FireEmblemGame extends Game {
 	// Screens
 	private HashMap<String, ScreenAdapter> allGameScreens;
 
-
-
 	// Engine
 	private Engine engine;
 

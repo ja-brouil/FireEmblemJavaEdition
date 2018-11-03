@@ -15,12 +15,14 @@ import com.jb.fe.systems.graphics.StaticImageSystem;
 import com.jb.fe.systems.input.InputHandlingSystem;
 import com.jb.fe.systems.input.MapCursorInfoUpdateSystem;
 import com.jb.fe.systems.input.MapCursorOutOfBoundsSystem;
+import com.jb.fe.systems.movement.UnitMapCellUpdater;
+import com.jb.fe.systems.movement.UnitMovementSystem;
 
 public class GameScreen extends ScreenAdapter{
 	
 	// Audio
-	private MusicSystem musicSystem;
-	private SoundSystem soundSystem;
+	//private MusicSystem musicSystem;
+	//private SoundSystem soundSystem;
 	
 	// Engine
 	private Engine engine;
@@ -36,10 +38,12 @@ public class GameScreen extends ScreenAdapter{
 	private InputHandlingSystem inputHandlingSystem;
 	private MapCursorOutOfBoundsSystem mapCursorOutOfBoundsSystem;
 	private MapCursorInfoUpdateSystem mapCursorInfoUpdateSystem;
+	private UnitMapCellUpdater unitMapCellUpdater;
+	private UnitMovementSystem unitMovementSystem;
 	
 	public GameScreen(MusicSystem musicSystem, SoundSystem soundSystem, Engine engine, AssetManager assetManager, SpriteBatch spriteBatch, OrthographicCamera gameCamera) {
-		this.soundSystem = soundSystem;
-		this.musicSystem = musicSystem;
+		//this.soundSystem = soundSystem;
+		//this.musicSystem = musicSystem;
 		this.engine = engine;
 		
 		// Start Systems
@@ -50,6 +54,8 @@ public class GameScreen extends ScreenAdapter{
 		inputHandlingSystem = new InputHandlingSystem();
 		mapCursorOutOfBoundsSystem = new MapCursorOutOfBoundsSystem();
 		mapCursorInfoUpdateSystem = new MapCursorInfoUpdateSystem();
+		unitMapCellUpdater = new UnitMapCellUpdater();
+		unitMovementSystem = new UnitMovementSystem();
 		
 		// Add Systems to the Engine
 		engine.addSystem(staticImageSystem);
@@ -58,6 +64,8 @@ public class GameScreen extends ScreenAdapter{
 		engine.addSystem(inputHandlingSystem);
 		engine.addSystem(mapCursorOutOfBoundsSystem);
 		engine.addSystem(mapCursorInfoUpdateSystem);
+		engine.addSystem(unitMapCellUpdater);
+		engine.addSystem(unitMovementSystem);
 	
 		// Start First Level
 		currentLevel = new Level("levels/level1/level1.tmx", assetManager, engine);
@@ -73,7 +81,6 @@ public class GameScreen extends ScreenAdapter{
 	
 	@Override
 	public void render(float delta) {
-		// Start spritebatch
 		engine.update(delta);
 	}
 	
@@ -86,5 +93,7 @@ public class GameScreen extends ScreenAdapter{
 		mapCellInfoSystem.processTiles(level);
 		mapCursorOutOfBoundsSystem.startSystem(level);
 		mapCursorInfoUpdateSystem.startSystem(level);
+		unitMapCellUpdater.startSystem(level);
+		unitMovementSystem.startSystem();
 	}
 }

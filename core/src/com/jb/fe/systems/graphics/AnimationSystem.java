@@ -31,6 +31,9 @@ public class AnimationSystem extends EntitySystem {
 	// SpriteBatch
 	private SpriteBatch spriteBatch;
 	
+	// Synchronized Timer
+	private float synchronizedAnimationTimer;
+	
 	public AnimationSystem(SpriteBatch spriteBatch){
 		this.spriteBatch = spriteBatch;
 		sortedAnimationEntities = new Array<>();
@@ -73,13 +76,22 @@ public class AnimationSystem extends EntitySystem {
 	// Update Function
 	@Override
 	public void update(float delta) {
+		// Update Synchronized Timer
+		synchronizedAnimationTimer += delta;
+		
 		for (Entity entity : animationEntities) {
 			AnimationComponent animationComponent = animationComponentMapper.get(entity);
 			PositionComponent positionComponent = positionComponentMapper.get(entity);
 			
 			// Update Timer
 			if (animationComponent.currentAnimation.isDrawing) {
-				animationComponent.currentAnimation.animationElapsedTime += delta;
+				
+				// Set Timer
+				if (animationComponent.currentAnimation.useSynchronizedTimer) {
+					animationComponent.currentAnimation.animationElapsedTime = synchronizedAnimationTimer;
+				} else {
+					animationComponent.currentAnimation.animationElapsedTime += delta;
+				}
 				
 				// Render out animation
 				spriteBatch.draw(animationComponent.currentAnimation.animationFrames.getKeyFrame(animationComponent.currentAnimation.animationElapsedTime,

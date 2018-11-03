@@ -59,7 +59,7 @@ public class PlayerUnitFactory {
 		animationComponent.allAnimationObjects.get("Left").Xoffset = -6;
 		animationComponent.allAnimationObjects.get("Right").Xoffset = -12;
 		animationComponent.allAnimationObjects.get("Up").Xoffset = -3;
-		animationComponent.allAnimationObjects.get("Down").Xoffset = -2;
+		animationComponent.allAnimationObjects.get("Down").Xoffset = -4;
 		animationComponent.allAnimationObjects.get("Hovering").Xoffset = -3;
 		animationComponent.allAnimationObjects.get("Idle").Xoffset = -3;
 		animationComponent.allAnimationObjects.get("Selected").Xoffset = -2;

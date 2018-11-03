@@ -15,6 +15,12 @@ public class MapCursorStateComponent implements Component {
 
 		// Unit Selected
 		UNIT_SELECTED,
+		
+		// Waiting for valid move
+		WAITING_FOR_VALID_MOVE,
+		
+		// Check for Valid move
+		VALID_MOVE_CHECK,
 
 		// Select unit to attack/heal
 		SELECT_UNIT_FOR_ACTION,

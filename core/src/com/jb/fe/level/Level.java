@@ -1,6 +1,7 @@
 package com.jb.fe.level;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -45,6 +46,10 @@ public class Level {
 		// Unit Factory
 		playerUnitFactory = new PlayerUnitFactory(assetManager);
 		engine.addEntity(playerUnitFactory.createEirika("Eirika", "units/eirika/eirika copy.png", 2 * MapCell.CELL_SIZE , 2 * MapCell.CELL_SIZE));
+		engine.addEntity(playerUnitFactory.createEirika("Eirika", "units/eirika/eirika copy.png", 4 * MapCell.CELL_SIZE , 2 * MapCell.CELL_SIZE));
+		
+		Entity enemy = new Entity();
+		enemy = playerUnitFactory.createEirika("Eirika", "units/eirika/eirika copy.png", 4 * MapCell.CELL_SIZE , 2 * MapCell.CELL_SIZE);
 		
 		// Map cursor
 		mapCursorFactory = new MapCursorFactory(assetManager);

@@ -16,6 +16,7 @@ public class AnimationObject{
 	// Timers
 	public float animationElapsedTime;
 	public float animationTimerLength;
+	public boolean useSynchronizedTimer;
 	
 	// Offsets
 	public float Xoffset;
@@ -61,6 +62,9 @@ public class AnimationObject{
 		// Set Default Width/Height
 		this.width = animationKeyFrames[0].getRegionWidth();
 		this.height = animationKeyFrames[0].getRegionHeight();
+		
+		// Synchronize Default
+		useSynchronizedTimer = true;
 	}
 	
 	public AnimationObject(AssetManager assetManager, String fileLocation, int width, int height, float animationTimerLength, int col, int row, int frameAmount, int zOrder) {

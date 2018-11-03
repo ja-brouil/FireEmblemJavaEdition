@@ -30,6 +30,7 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 	private ComponentMapper<AnimationComponent> animationComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
 	private ComponentMapper<PositionComponent> positionComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<MapCursorStateComponent> mapCursorComponentMapper = ComponentMapper.getFor(MapCursorStateComponent.class);
+	private ComponentMapper<UnitStatsComponent> unitStatComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
 	
 	// Square Selector Calulator
 	private MovementUtilityCalculator movementUtilityCalculator;
@@ -63,7 +64,6 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 		// Set Units to Selected
 		PositionComponent  mapCursorPositionComponent = positionComponentMapper.get(mapCursor);
 		MapCursorStateComponent mapCursorStateComponent = mapCursorComponentMapper.get(mapCursor);
-
 		
 		// Movement
 		if (mapCursorStateComponent.mapCursorState.equals(MapCursorState.MOVEMENT_ONLY)) {
@@ -79,7 +79,11 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 				unitAnimation.currentAnimation = unitAnimation.allAnimationObjects.get("Idle");
 				
 				if (mapCursorPositionComponent.x == unitPositionComponent.x && mapCursorPositionComponent.y == unitPositionComponent.y) {
-					unitAnimation.currentAnimation = unitAnimation.allAnimationObjects.get("Hovering");
+					UnitStatsComponent unitStatsComponent = unitStatComponentMapper.get(unit);
+					// Select only ally units for movement purposes
+					if (unitStatsComponent.isAlly) {
+						unitAnimation.currentAnimation = unitAnimation.allAnimationObjects.get("Hovering");
+					}
 					mapCursorStateComponent.unitSelected = unit;
 				}
 			}
@@ -87,20 +91,36 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 		
 		// Unit Selection
 		else if (mapCursorStateComponent.mapCursorState.equals(MapCursorState.UNIT_SELECTED)) {
-			// Set Animation
-			AnimationComponent unitAnimation = animationComponentMapper.get(mapCursorStateComponent.unitSelected);
-			unitAnimation.currentAnimation = unitAnimation.allAnimationObjects.get("Selected");
-			
-			// Calculate Movement
-			unitMapCellUpdater.updateCellInfo();
-			movementUtilityCalculator.calculateAllPossibleMoves(mapCursorStateComponent.unitSelected);
-			
-			// Set Cursor to Allow movement
-			mapCursorStateComponent.mapCursorState = MapCursorState.WAITING_FOR_VALID_MOVE;
+			// Only units that are allies can be selected!
+			UnitStatsComponent unitStatsComponent = unitStatComponentMapper.get(mapCursorStateComponent.unitSelected);
+			if (unitStatsComponent.isAlly) {
+				// Set Animation
+				AnimationComponent unitAnimation = animationComponentMapper.get(mapCursorStateComponent.unitSelected);
+				unitAnimation.currentAnimation = unitAnimation.allAnimationObjects.get("Selected");
+				
+				// Calculate Movement
+				unitMapCellUpdater.updateCellInfo();
+				movementUtilityCalculator.calculateAllPossibleMoves(mapCursorStateComponent.unitSelected);
+				
+				// Set Cursor to Allow movement
+				mapCursorStateComponent.mapCursorState = MapCursorState.WAITING_FOR_VALID_MOVE;
+			} else {
+				// See Enemy Move tile
+				unitMapCellUpdater.updateCellInfo();
+				movementUtilityCalculator.calculateAllPossibleMoves(mapCursorStateComponent.unitSelected);
+				mapCursorStateComponent.mapCursorState = MapCursorState.WAITING_FOR_VALID_MOVE;
+			}
 		}
 		
 		// Check Valid Move
 		else if (mapCursorStateComponent.mapCursorState.equals(MapCursorState.VALID_MOVE_CHECK)) {
+			// Is the unit 'selected' an ally?
+			UnitStatsComponent unitStatsComponent = unitStatComponentMapper.get(mapCursorStateComponent.unitSelected);
+			if (!unitStatsComponent.isAlly) {
+				mapCursorStateComponent.mapCursorState = MapCursorState.MOVEMENT_ONLY;
+				return;
+			}
+			
 			// Is the Move Valid?
 			MapCell cursorMapCell = movementUtilityCalculator.getMapCell(mapCursor);
 			if (cursorMapCell.isOccupied) {

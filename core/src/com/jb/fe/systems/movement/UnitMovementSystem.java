@@ -37,7 +37,7 @@ public class UnitMovementSystem extends EntitySystem {
 	// Map Cursor and UI elements
 	private Entity mapCursor;
 
-	// System for Unit U pdate
+	// System for Unit Update
 	private UnitMapCellUpdater unitMapCellUpdater;
 
 	public UnitMovementSystem() {
@@ -111,8 +111,6 @@ public class UnitMovementSystem extends EntitySystem {
 							* unitStatsComponent.animationMovementSpeed * Gdx.graphics.getDeltaTime();
 					unitPositionComponent.y += (nextCell.position.y - startingCell.position.y)
 							* unitStatsComponent.animationMovementSpeed * Gdx.graphics.getDeltaTime();
-					
-					System.out.println(unitPositionComponent.x - nextCell.position.x);
 				} else {
 					// Finalize movement to prevent rounding errors
 					unitPositionComponent.x = nextCell.position.x;

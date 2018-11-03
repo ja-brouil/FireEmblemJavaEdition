@@ -23,6 +23,8 @@ public class AnimationSystem extends EntitySystem {
 	
 	// Sort
 	private Comparator<Entity> compareEntityListener;
+	private Comparator<Entity> compareXAxis;
+	private Comparator<Entity> compareYAxis;
 	
 	// Component Mappers
 	private ComponentMapper<AnimationComponent> animationComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
@@ -39,6 +41,12 @@ public class AnimationSystem extends EntitySystem {
 		sortedAnimationEntities = new Array<>();
 		compareEntityListener = (Entity a, Entity b) -> {
 			return animationComponentMapper.get(b).zOrder - animationComponentMapper.get(a).zOrder;
+		};
+		compareXAxis = (Entity a, Entity b) -> {
+			return (int) positionComponentMapper.get(a).x - (int) positionComponentMapper.get(b).x;
+		};
+		compareYAxis = (Entity a, Entity b) -> {
+			return (int) positionComponentMapper.get(a).y - (int) positionComponentMapper.get(b).y;
 		};
 		
 		// Engine Priority
@@ -76,10 +84,14 @@ public class AnimationSystem extends EntitySystem {
 	// Update Function
 	@Override
 	public void update(float delta) {
+		// Sort Animation entites by x and y
+		sortedAnimationEntities.sort(compareXAxis);
+		sortedAnimationEntities.sort(compareYAxis);
+		
 		// Update Synchronized Timer
 		synchronizedAnimationTimer += delta;
 		
-		for (Entity entity : animationEntities) {
+		for (Entity entity : sortedAnimationEntities) {
 			AnimationComponent animationComponent = animationComponentMapper.get(entity);
 			PositionComponent positionComponent = positionComponentMapper.get(entity);
 			

@@ -14,11 +14,12 @@ public class StaticImageComponent implements Component{
 	// Dimension
 	public float width, height;
 	
+	// Offset
+	public float xOffset = 0;
+	public float yOffset = 0;
+	
 	// Enabled
 	public boolean isEnabled;
-	
-	// Z Order
-	public int zOrder = 0;
 	
 	// Alpha
 	public float alpha = 1f;

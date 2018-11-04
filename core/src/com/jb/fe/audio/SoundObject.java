@@ -1,6 +1,5 @@
 package com.jb.fe.audio;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 
@@ -8,7 +7,7 @@ import com.badlogic.gdx.audio.Sound;
  * Represents a Sound Object
  */
 
-public class SoundObject implements Component{
+public class SoundObject{
 	
 	// Sound byte
 	private Sound sound;

@@ -16,17 +16,9 @@ public class AnimationComponent implements Component{
 	// Animation to draw
 	public AnimationObject currentAnimation;
 	
-	// Set this for sorting
-	public int zOrder;
-	
 	public AnimationComponent() {
 		allAnimationObjects = new HashMap<>();
-		zOrder = 0;
-	}
-	
-	public AnimationComponent(int zOrder) {
-		this();
-		this.zOrder = zOrder;
+
 	}
 	
 }

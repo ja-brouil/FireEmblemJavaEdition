@@ -5,12 +5,12 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.utils.Array;
-import com.jb.fe.components.SquareSelectorFactory;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell.AvoidanceTileBonus;
 import com.jb.fe.map.MapCell.CellType;
 import com.jb.fe.map.MapCell.DefenseTileBonus;
 import com.jb.fe.map.MapCell.MovementTileValues;
+import com.jb.fe.systems.movement.SquareSelectorFactory;
 
 public class MapCellInfoSystem {
 

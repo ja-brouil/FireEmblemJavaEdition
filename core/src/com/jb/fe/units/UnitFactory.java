@@ -7,6 +7,8 @@ import com.jb.fe.components.AnimationObject;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.UnitStatsComponent;
+import com.jb.fe.components.ZOrderComponent;
+import com.jb.fe.systems.graphics.ZOrderDictionnary;
 
 /*
  * This creates player units
@@ -34,6 +36,7 @@ public class UnitFactory {
 		PositionComponent positionComponent = new PositionComponent(x, y);
 		AnimationComponent animationComponent = new AnimationComponent();
 		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.MIDDLE_LAYER);
 
 		animationComponent.allAnimationObjects.put("Hovering", new AnimationObject(assetManager, animationFileLocation,
 				32, 32, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 0, 4));
@@ -63,17 +66,17 @@ public class UnitFactory {
 		animationComponent.allAnimationObjects.get("Idle").Xoffset = -3;
 		animationComponent.allAnimationObjects.get("Selected").Xoffset = -2;
 
-		// Z order
-		animationComponent.zOrder = 1;
 
 		// Unit Stats
 		unitStatsComponent.isAlly = isAlly;
+		unitStatsComponent.attackRange = 1;
 
 		// Add Components
 		Eirika.add(nameComponent);
 		Eirika.add(positionComponent);
 		Eirika.add(animationComponent);
 		Eirika.add(unitStatsComponent);
+		Eirika.add(zOrderComponent);
 
 		return Eirika;
 	}
@@ -91,6 +94,7 @@ public class UnitFactory {
 		PositionComponent positionComponent = new PositionComponent(x, y);
 		AnimationComponent animationComponent = new AnimationComponent();
 		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.MIDDLE_LAYER);
 
 		animationComponent.allAnimationObjects.put("Hovering", new AnimationObject(assetManager, animationFileLocation,
 				32, 32, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 0, 4));
@@ -123,6 +127,7 @@ public class UnitFactory {
 		
 		// Unit Stats
 		unitStatsComponent.movementSteps = 7;
+		unitStatsComponent.attackRange = 1;
 		unitStatsComponent.isAlly = isAlly;
 		
 		// Add Components
@@ -130,6 +135,7 @@ public class UnitFactory {
 		cavalierUnit.add(animationComponent);
 		cavalierUnit.add(positionComponent);
 		cavalierUnit.add(nameComponent);
+		cavalierUnit.add(zOrderComponent);
 
 		return cavalierUnit;
 	}

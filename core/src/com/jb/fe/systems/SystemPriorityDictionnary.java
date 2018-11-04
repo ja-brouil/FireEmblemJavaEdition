@@ -13,6 +13,5 @@ public final class SystemPriorityDictionnary {
 	public static final int MovementUpdate = 5;
 	public static final int AttackPhase = 6;
 	public static final int MapRender = 7;
-	public static final int StaticRender = 8;
-	public static final int AnimationRender = 9;
+	public static final int GraphicsRender = 8;
 }

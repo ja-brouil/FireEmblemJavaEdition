@@ -1,35 +1,21 @@
 package com.jb.fe.systems.audio;
 
-import java.util.HashMap;
-
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.jb.fe.audio.SoundObject;
 
 /*
  * Player for all the sounds
  */
 
-public class SoundSystem {
-	
-	private HashMap<String, SoundObject> allSoundObjects;
+public class SoundSystem extends EntitySystem{
 	
 	public SoundSystem() {
-		allSoundObjects = new HashMap<>();
+		setProcessing(false);
 	}
 	
-	public void addSound(String soundName, String fileLocation, AssetManager assetManager) {
-		allSoundObjects.put(soundName, new SoundObject(fileLocation, assetManager));
-	}
-	
-	public void removeSound(String soundName) {
-		allSoundObjects.remove(soundName);
-	}
-	
-	public void playSound(String soundName) {
+	public void playSound(SoundObject soundObject) {
 		// Check if delay is 0
-		SoundObject soundObject = allSoundObjects.get(soundName);
-		
 		if (soundObject.delayTimer == 0) {
 			soundObject.getSound().play(soundObject.getVolume());
 		} else {
@@ -39,9 +25,5 @@ public class SoundSystem {
 				soundObject.currentTimer = 0;
 			}
 		}
-	}
-	
-	public SoundObject getSoundObject(String soundName) {
-		return allSoundObjects.get(soundName);
 	}
 }

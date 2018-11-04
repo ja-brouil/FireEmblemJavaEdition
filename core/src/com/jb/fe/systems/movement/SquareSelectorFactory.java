@@ -1,8 +1,12 @@
-package com.jb.fe.components;
+package com.jb.fe.systems.movement;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
+import com.jb.fe.components.PositionComponent;
+import com.jb.fe.components.StaticImageComponent;
+import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.map.MapCell;
+import com.jb.fe.systems.graphics.ZOrderDictionnary;
 
 public class SquareSelectorFactory {
 	
@@ -18,6 +22,7 @@ public class SquareSelectorFactory {
 	public Entity createBlueSquare(float x, float y) {
 		Entity blueSquare = new Entity();
 		
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.BACKGROUND);
 		PositionComponent positionComponent = new PositionComponent(x, y);
 		StaticImageComponent blueSquareImage = new StaticImageComponent(assetManager, "UI/selected/bluedarkSelect.png", MapCell.CELL_SIZE, MapCell.CELL_SIZE);
 		blueSquareImage.alpha = SquareSelectorFactory.alpha;
@@ -25,12 +30,15 @@ public class SquareSelectorFactory {
 		
 		blueSquare.add(positionComponent);
 		blueSquare.add(blueSquareImage);
+		blueSquare.add(zOrderComponent);
 		
 		return blueSquare;
 	}
 	
 	public Entity createRedSquare(float x, float y) {
 		Entity redSquare = new Entity();
+		
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.BACKGROUND);
 		PositionComponent positionComponent = new PositionComponent(x, y);
 		StaticImageComponent redSquareImage = new StaticImageComponent(assetManager, "UI/selected/redselect.png", MapCell.CELL_SIZE, MapCell.CELL_SIZE);
 		redSquareImage.alpha = SquareSelectorFactory.alpha;
@@ -38,6 +46,7 @@ public class SquareSelectorFactory {
 		
 		redSquare.add(positionComponent);
 		redSquare.add(redSquareImage);
+		redSquare.add(zOrderComponent);
 		
 		return redSquare;
 	}

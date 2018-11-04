@@ -20,6 +20,7 @@ public class MovementUtilityCalculator {
 
 	// Pathfinding arrays
 	public HashSet<MapCell> allPossibleMoves;
+	public Array<MapCell> attackCells;
 	public Queue<MapCell> pathfindingQueue;
 
 	// All Map Cells
@@ -32,6 +33,7 @@ public class MovementUtilityCalculator {
 
 	public MovementUtilityCalculator(Level level) {
 		allPossibleMoves = new HashSet<>();
+		attackCells = new Array<>();
 		pathfindingQueue = new Queue<>();
 
 		allMapCells = level.allLevelMapCells;
@@ -44,8 +46,10 @@ public class MovementUtilityCalculator {
 
 		// Reset Queue
 		allPossibleMoves.clear();
+		attackCells.clear();
 		unitStatsComponent.allPossibleMoves.clear();
-
+		unitStatsComponent.allOutsideAttackMoves.clear();
+		
 		// Reset Stats on MapCell
 		for (MapCell mapCell : allMapCells) {
 			mapCell.isVisited = false;
@@ -56,17 +60,19 @@ public class MovementUtilityCalculator {
 		// Remove Colors if not reset
 		resetMovementAlgorithms();
 
-		// Get Initial tile and add it to the closed list
+		// Process Movement and Attack Tiles
 		processTile(getMapCell(unit), unitStatsComponent, unitStatsComponent.movementSteps, unit);
-
-		// Enabled Blue Squares
-		enableBlueSquares();
+		processAttackTile(getMapCell(unit), unitStatsComponent);
+		
+		// Enabled Squares
+		enableSquares();
 
 		// Get Parent Tiles
 		setParentTiles(getMapCell(unit));
 
 		// Set Stats
 		unitStatsComponent.allPossibleMoves = allPossibleMoves;
+		unitStatsComponent.allOutsideAttackMoves = attackCells;
 	}
 
 	private void processTile(MapCell initialTile, UnitStatsComponent unitStatsComponent, int moveSteps, Entity unit) {
@@ -100,7 +106,33 @@ public class MovementUtilityCalculator {
 				}
 			}
 		}
-
+	}
+	
+	// Process Attack Tiles
+	private void processAttackTile(MapCell initialTile, UnitStatsComponent unitStatsComponent) {
+		for (MapCell mapCell : allPossibleMoves) {	
+			for (int i = 0; i < mapCell.adjTiles.size; i++) {
+				MapCell adjCell = mapCell.adjTiles.get(i);
+				if (!allPossibleMoves.contains(adjCell)) {
+					attackCells.add(adjCell);
+				}
+			}
+		}
+		
+		// Process Ranged Units
+		for (int i = 1; i < unitStatsComponent.attackRange; i++) {
+			Array<MapCell> newAttackCells = new Array<MapCell>();
+			for (int h = 0; h < attackCells.size; h++) {
+				MapCell mapCell = attackCells.get(h);
+				for (int j = 0; j < mapCell.adjTiles.size; j++) {
+					MapCell adjCell = mapCell.adjTiles.get(j);
+					if (!allPossibleMoves.contains(adjCell) && !attackCells.contains(adjCell, true)) {
+						newAttackCells.add(adjCell);
+					}
+				}
+			}
+			attackCells.addAll(newAttackCells);
+		}
 	}
 
 	// Set Parent Tiles
@@ -157,11 +189,6 @@ public class MovementUtilityCalculator {
 		unitStatsComponent.pathfindingQueue = pathfindingQueue;
 	}
 
-	// Get Attack Range Tiles
-	public void getRedAttackTiles() {
-		
-	}
-
 	// Get Tile from All Tiles
 	public MapCell getMapCell(Entity unit) {
 		PositionComponent unitPositionComponent = pComponentMapper.get(unit);
@@ -174,21 +201,24 @@ public class MovementUtilityCalculator {
 		return null;
 	}
 
-	// Enable Blue squares
-	private void enableBlueSquares() {
+	// Enable Squares
+	private void enableSquares() {
 		for (MapCell mapCell : allPossibleMoves) {
-			StaticImageComponent staticImageComponent = sComponentMapper.get(mapCell.blueSquare);
-			staticImageComponent.isEnabled = true;
+			sComponentMapper.get(mapCell.blueSquare).isEnabled = true;
+		}
+		
+		for (MapCell mapCell : attackCells) {
+			sComponentMapper.get(mapCell.redSquare).isEnabled = true;
 		}
 	}
-
+	
 	// Reset to default
 	public void resetMovementAlgorithms() {
 		// Reset Colors
 		for (MapCell mapCell : allMapCells) {
 			StaticImageComponent blueStaticImageComponent = sComponentMapper.get(mapCell.blueSquare);
 			blueStaticImageComponent.isEnabled = false;
-			StaticImageComponent redStaticImageComponent = sComponentMapper.get(mapCell.blueSquare);
+			StaticImageComponent redStaticImageComponent = sComponentMapper.get(mapCell.redSquare);
 			redStaticImageComponent.isEnabled = false;
 		}
 	}

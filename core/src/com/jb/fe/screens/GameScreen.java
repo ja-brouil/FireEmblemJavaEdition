@@ -5,13 +5,13 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.jb.fe.input.MapCursorFactory;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCellInfoSystem;
 import com.jb.fe.map.MapRenderSystem;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
-import com.jb.fe.systems.graphics.AnimationSystem;
-import com.jb.fe.systems.graphics.StaticImageSystem;
+import com.jb.fe.systems.graphics.RenderSystem;
 import com.jb.fe.systems.input.InputHandlingSystem;
 import com.jb.fe.systems.input.MapCursorInfoUpdateSystem;
 import com.jb.fe.systems.input.MapCursorOutOfBoundsSystem;
@@ -20,21 +20,19 @@ import com.jb.fe.systems.movement.UnitMovementSystem;
 
 public class GameScreen extends ScreenAdapter{
 	
-	// Audio
-	//private MusicSystem musicSystem;
-	//private SoundSystem soundSystem;
-	
 	// Engine
 	private Engine engine;
 	
 	// Level
 	private Level currentLevel;
 	
+	// User Interface
+	private MapCursorFactory mapCursorFactory;
+	
 	// Systems Required
 	private MapRenderSystem mapRenderSystem;
 	private MapCellInfoSystem mapCellInfoSystem;
-	private AnimationSystem animationSystem;
-	private StaticImageSystem staticImageSystem;
+	private RenderSystem animationSystem;
 	private InputHandlingSystem inputHandlingSystem;
 	private MapCursorOutOfBoundsSystem mapCursorOutOfBoundsSystem;
 	private MapCursorInfoUpdateSystem mapCursorInfoUpdateSystem;
@@ -42,15 +40,12 @@ public class GameScreen extends ScreenAdapter{
 	private UnitMovementSystem unitMovementSystem;
 	
 	public GameScreen(MusicSystem musicSystem, SoundSystem soundSystem, Engine engine, AssetManager assetManager, SpriteBatch spriteBatch, OrthographicCamera gameCamera) {
-		//this.soundSystem = soundSystem;
-		//this.musicSystem = musicSystem;
 		this.engine = engine;
 		
 		// Start Systems
 		mapRenderSystem = new MapRenderSystem(gameCamera, spriteBatch);
 		mapCellInfoSystem = new MapCellInfoSystem(assetManager, engine);
-		animationSystem = new AnimationSystem(spriteBatch);
-		staticImageSystem = new StaticImageSystem(spriteBatch);
+		animationSystem = new RenderSystem(spriteBatch);
 		inputHandlingSystem = new InputHandlingSystem();
 		mapCursorOutOfBoundsSystem = new MapCursorOutOfBoundsSystem();
 		mapCursorInfoUpdateSystem = new MapCursorInfoUpdateSystem();
@@ -58,7 +53,6 @@ public class GameScreen extends ScreenAdapter{
 		unitMovementSystem = new UnitMovementSystem();
 		
 		// Add Systems to the Engine
-		engine.addSystem(staticImageSystem);
 		engine.addSystem(mapRenderSystem);
 		engine.addSystem(animationSystem);
 		engine.addSystem(inputHandlingSystem);
@@ -66,9 +60,20 @@ public class GameScreen extends ScreenAdapter{
 		engine.addSystem(mapCursorInfoUpdateSystem);
 		engine.addSystem(unitMapCellUpdater);
 		engine.addSystem(unitMovementSystem);
+		engine.addSystem(soundSystem);
+		engine.addSystem(musicSystem);
 	
 		// Start First Level
 		currentLevel = new Level("levels/level1/level1.tmx", assetManager, engine);
+		currentLevel.startLevel();
+		
+		// User Interface
+		mapCursorFactory = new MapCursorFactory(assetManager, soundSystem);
+		engine.addEntity(mapCursorFactory.createMapCursor());
+		
+		// Set First Audio
+		musicSystem.addNewSong("Ally Battle Theme", "music/FE Level1 HD Good.mp3", assetManager);
+		currentLevel.setMusic("Ally Battle Theme");
 		
 		// Set Level
 		setNewMap(currentLevel);

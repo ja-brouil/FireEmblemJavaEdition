@@ -6,16 +6,20 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
-import com.jb.fe.input.MapCursorFactory;
 import com.jb.fe.map.MapCell;
+import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.units.UnitFactory;
 
 public class Level {
 
 	// Engine
-	private Engine engine;
+	public Engine engine;
+	
+	// Asset Manager
+	public AssetManager assetManager;
 
 	// Map
+	public String mapFileLocation;
 	public TiledMap levelMap;
 	public Array<MapCell> allLevelMapCells;
 
@@ -26,13 +30,17 @@ public class Level {
 	// Units
 	public UnitFactory unitFactory;
 
-	// User Interface
-	public MapCursorFactory mapCursorFactory;
+	
 
 	// Victory/Defeat condition
 
 	public Level(String mapFileLocation, AssetManager assetManager, Engine engine) {
 		this.engine = engine;
+		this.assetManager = assetManager;
+		this.mapFileLocation = mapFileLocation;
+	}
+	
+	public void startLevel() {
 		// Map
 		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
 		assetManager.load(mapFileLocation, TiledMap.class);
@@ -46,20 +54,21 @@ public class Level {
 		unitFactory = new UnitFactory(assetManager);
 		
 		// Allies
-		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 4 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
 		engine.addEntity(unitFactory.createEirika("Eirika", "units/eirika/eirika copy.png", 2 * MapCell.CELL_SIZE,
 				2 * MapCell.CELL_SIZE, true));
 		engine.addEntity(unitFactory.createCavalierUnit("Seth", "units/cavalier/cavalierAlly copy.png", 2 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, true));
 		
 		// Enemy
+		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 4 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
 		
-		
-		// Map cursor
-		mapCursorFactory = new MapCursorFactory(assetManager);
-		engine.addEntity(mapCursorFactory.createMapCursor());
 
 		// Set Map Bounderies
 		setMapBounderies();
+	}
+	
+	public void setMusic(String songName) {
+		MusicSystem musicSystem = engine.getSystem(MusicSystem.class);
+		musicSystem.playSong(songName);
 	}
 
 	/*

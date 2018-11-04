@@ -11,10 +11,13 @@ import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.PositionComponent;
+import com.jb.fe.components.SoundComponent;
+import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
+import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.movement.MovementUtilityCalculator;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 
@@ -31,12 +34,16 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 	private ComponentMapper<PositionComponent> positionComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<MapCursorStateComponent> mapCursorComponentMapper = ComponentMapper.getFor(MapCursorStateComponent.class);
 	private ComponentMapper<UnitStatsComponent> unitStatComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
+	private ComponentMapper<StaticImageComponent> staticImageComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
 	
 	// Square Selector Calulator
 	private MovementUtilityCalculator movementUtilityCalculator;
 	
 	// Calculators
 	private UnitMapCellUpdater unitMapCellUpdater;
+	
+	// Sound
+	private SoundSystem soundSystem;
 	
 	public MapCursorInfoUpdateSystem() {
 		priority = SystemPriorityDictionnary.MapCursorInfoUpdate;
@@ -83,14 +90,26 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 					// Select only ally units for movement purposes
 					if (unitStatsComponent.isAlly) {
 						unitAnimation.currentAnimation = unitAnimation.allAnimationObjects.get("Hovering");
-					}
+						animationComponentMapper.get(mapCursor).currentAnimation.isDrawing = false;
+						staticImageComponentMapper.get(mapCursor).isEnabled = true;
+					} 
 					mapCursorStateComponent.unitSelected = unit;
+					
+					return;
 				}
 			}
+			
+			// Set Animation Back
+			animationComponentMapper.get(mapCursor).currentAnimation.isDrawing = true;
+			staticImageComponentMapper.get(mapCursor).isEnabled = false;
+			
 		} 
 		
 		// Unit Selection
 		else if (mapCursorStateComponent.mapCursorState.equals(MapCursorState.UNIT_SELECTED)) {
+			animationComponentMapper.get(mapCursor).currentAnimation.isDrawing = true;
+			staticImageComponentMapper.get(mapCursor).isEnabled = false;
+			
 			// Only units that are allies can be selected!
 			UnitStatsComponent unitStatsComponent = unitStatComponentMapper.get(mapCursorStateComponent.unitSelected);
 			if (unitStatsComponent.isAlly) {
@@ -117,6 +136,7 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 			// Is the unit 'selected' an ally?
 			UnitStatsComponent unitStatsComponent = unitStatComponentMapper.get(mapCursorStateComponent.unitSelected);
 			if (!unitStatsComponent.isAlly) {
+				soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Invalid"));
 				mapCursorStateComponent.mapCursorState = MapCursorState.MOVEMENT_ONLY;
 				return;
 			}
@@ -124,7 +144,7 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 			// Is the Move Valid?
 			MapCell cursorMapCell = movementUtilityCalculator.getMapCell(mapCursor);
 			if (cursorMapCell.isOccupied) {
-				// reject sound
+				soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Invalid"));
 				mapCursorStateComponent.mapCursorState = MapCursorState.WAITING_FOR_VALID_MOVE;
 				return;
 			}
@@ -139,8 +159,11 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 				// Stop Drawing Map Cursor
 				AnimationComponent mapCursorAnimationComponent = animationComponentMapper.get(mapCursor);
 				mapCursorAnimationComponent.currentAnimation.isDrawing = false;
+				
+				// Accept Sound
+				soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));
 			} else {
-				// Play invalid sound here
+				soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Invalid"));
 				mapCursorStateComponent.mapCursorState = MapCursorState.WAITING_FOR_VALID_MOVE;
 			}
 		}
@@ -150,5 +173,6 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 		mapCursor = getEngine().getEntitiesFor(Family.all(MapCursorStateComponent.class).get()).first();
 		movementUtilityCalculator = new MovementUtilityCalculator(level);
 		unitMapCellUpdater = getEngine().getSystem(UnitMapCellUpdater.class);
+		soundSystem = getEngine().getSystem(SoundSystem.class);
 	}
 }

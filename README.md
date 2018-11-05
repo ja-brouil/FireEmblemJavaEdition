@@ -5,3 +5,7 @@ Fire Emblem JavaEdition Practice Purposes only
 <p> This is a recreation of Fire Emblem written entirely in Java using the LibGDX framework.</p>
 <br />
 <p> This is only for educational purposes and for the intent of practicing writing code </p>
+
+
+# Live Version
+https://ja-brouil.github.io/FireEmblemJavaEdition/index.html

@@ -29,8 +29,10 @@ public class MusicSystem extends EntitySystem{
 		return currentSong;
 	}
 	
-	public void setCurrentSong(String songName) {
+	public void setCurrentSong(String songName, boolean isLoop) {
 		currentSong = allMusicObjects.get(songName);
+		currentSong.getSong().setLooping(isLoop);
+		playCurrentSong();
 	}
 	
 	public void removeSong(String songName) {

@@ -1,6 +1,7 @@
 package com.jb.fe.input;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -9,14 +10,17 @@ import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
+import com.jb.fe.components.UnitStatsComponent;
+import com.jb.fe.components.UnitStatsComponent.Unit_State;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.audio.SoundSystem;
 
 public class MapCursorInputHandling implements InputHandling, Component {
 
 	// Map Cursor Elements
-	MapCursorStateComponent mapCursorStateComponent;
-	PositionComponent positionComponent;
+	private MapCursorStateComponent mapCursorStateComponent;
+	private PositionComponent positionComponent;
+	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
 
 	// Key Delay
 	private float keyDelayForMovement;
@@ -82,6 +86,10 @@ public class MapCursorInputHandling implements InputHandling, Component {
 			if (Gdx.input.isKeyJustPressed(Keys.Z)) {
 				// Do nothing if there is no unit selected --> Switch to open menu later
 				if (mapCursorStateComponent.unitSelected == null) { return; }
+				
+				// If Unit cannot do anything anymore, do nothing
+				if (uComponentMapper.get(mapCursorStateComponent.unitSelected).unit_State.equals(Unit_State.DONE)) { return; }
+				
 				mapCursorStateComponent.mapCursorState = MapCursorState.UNIT_SELECTED;
 				soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));
 				currentTimerForDelay = 0;

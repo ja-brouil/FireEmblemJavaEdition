@@ -11,6 +11,13 @@ public class UnitStatsComponent implements Component {
 	
 	// Unit Stats
 	
+	// Unit Level
+	public int Level;
+	public int currentExperience;
+	public final int experiencedToNextLevel = 100;
+	
+	// Unit Growth Rate
+	
 	// Attack Range
 	public int attackRange;
 	
@@ -24,11 +31,18 @@ public class UnitStatsComponent implements Component {
 	public Queue<MapCell> pathfindingQueue;
 	public boolean isMoving;
 	
+	// Attack Status
+	public Unit_State unit_State;
+	
 	// Ally
 	public boolean isAlly;
 	
 	// Default Stats
 	public UnitStatsComponent() {
+		
+		// Unit level
+		Level = 1;
+		currentExperience = 100;
 		
 		// Movement Defaults
 		allPossibleMoves = new HashSet<>();
@@ -40,6 +54,16 @@ public class UnitStatsComponent implements Component {
 		currentCell = null;
 		isMoving = false;
 		animationMovementSpeed = 4f;
+		
+		// Unit State
+		unit_State = Unit_State.CAN_DO_BOTH;
+	}
+	
+	public static enum Unit_State {
+		CAN_DO_ACTION,
+		CAN_ONLY_MOVE,
+		CAN_DO_BOTH, 
+		DONE
 	}
 	
 }

@@ -7,13 +7,11 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.utils.Array;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell;
-import com.jb.fe.systems.SystemPriorityDictionnary;
 
 public class UnitMapCellUpdater extends EntitySystem{
 	
@@ -21,7 +19,7 @@ public class UnitMapCellUpdater extends EntitySystem{
 	private ImmutableArray<Entity> allGameEntities;
 	
 	// Map Cells
-	private Array<MapCell> allMapCells;
+	private MapCell[][] allMapCells;
 	
 	// Unit Stats
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
@@ -29,7 +27,6 @@ public class UnitMapCellUpdater extends EntitySystem{
 	
 	public UnitMapCellUpdater() {
 		// This should only be called when needed
-		priority = SystemPriorityDictionnary.UnitUpdate;
 		setProcessing(false);
 	}
 	
@@ -55,25 +52,28 @@ public class UnitMapCellUpdater extends EntitySystem{
 	// Update Cell and Units
 	public void updateCellInfo() {
 		// Reset Cell Stats
-		for (MapCell mapCell : allMapCells) {
-			mapCell.isOccupied = false;
-			mapCell.occupyingUnit = null;
+		for (int outer = 0; outer < allMapCells.length; outer++) {
+			for (int inner = 0; inner < allMapCells[outer].length; inner++) {
+				allMapCells[outer][inner].isOccupied = false;
+				allMapCells[outer][inner].occupyingUnit = null;
+			}
 		}
+		
 		
 		// Update Units + Reset Moving Variable
 		for (Entity unit : allGameEntities) {
 			PositionComponent unitPositionComponent = pComponentMapper.get(unit);
-			for (int i = 0; i < allMapCells.size; i++) {
-				if (allMapCells.get(i).position.x == unitPositionComponent.x && allMapCells.get(i).position.y == unitPositionComponent.y) {
-					UnitStatsComponent unitStatsComponent = unitStatsMapper.get(unit);
-					unitStatsComponent.currentCell = allMapCells.get(i);
-					unitStatsComponent.isMoving = false;
-					allMapCells.get(i).isOccupied = true;
-					allMapCells.get(i).occupyingUnit = unit;
-					break;
-				}
-			}
+			UnitStatsComponent unitStatsComponent = unitStatsMapper.get(unit);
 			
+			// Get Cell coordinates
+			int x = (int) unitPositionComponent.x / MapCell.CELL_SIZE;
+			int y = (int) unitPositionComponent.y / MapCell.CELL_SIZE;
+			
+			unitStatsComponent.currentCell = allMapCells[x][y];
+			unitStatsComponent.isMoving = false;
+			allMapCells[x][y].isOccupied = true;
+			allMapCells[x][y].occupyingUnit = unit;
+
 		}
 	}
 	
@@ -83,7 +83,7 @@ public class UnitMapCellUpdater extends EntitySystem{
 	}
 	
 	// Set Tiles
-	public void setMapCells(Array<MapCell> allMapCells) {
+	public void setMapCells(MapCell[][] allMapCells) {
 		this.allMapCells = allMapCells;
 	}
 	

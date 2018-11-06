@@ -5,7 +5,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.utils.Array;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.units.UnitFactory;
@@ -21,16 +20,14 @@ public class Level {
 	// Map
 	public String mapFileLocation;
 	public TiledMap levelMap;
-	public Array<MapCell> allLevelMapCells;
-
+	public MapCell[][] allLevelMapCells;
+	
 	// Map Bounderies
 	public int mapWidthLimit;
 	public int mapHeightLimit;
 
 	// Units
 	public UnitFactory unitFactory;
-
-	
 
 	// Victory/Defeat condition
 
@@ -47,9 +44,6 @@ public class Level {
 		assetManager.finishLoading();
 		levelMap = assetManager.get(mapFileLocation, TiledMap.class);
 
-		// Array
-		allLevelMapCells = new Array<MapCell>();
-
 		// Unit Factory
 		unitFactory = new UnitFactory(assetManager);
 		
@@ -61,14 +55,16 @@ public class Level {
 		// Enemy
 		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 4 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
 		
-
 		// Set Map Bounderies
 		setMapBounderies();
+		
+		// Start MapCell Array
+		allLevelMapCells = new MapCell[mapWidthLimit / MapCell.CELL_SIZE][mapHeightLimit / MapCell.CELL_SIZE];
 	}
 	
 	public void setMusic(String songName) {
 		MusicSystem musicSystem = engine.getSystem(MusicSystem.class);
-		musicSystem.playSong(songName);
+		musicSystem.setCurrentSong(songName, true);
 	}
 
 	/*

@@ -11,6 +11,7 @@ import com.jb.fe.map.MapCellInfoSystem;
 import com.jb.fe.map.MapRenderSystem;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.gamePlay.TurnManager;
 import com.jb.fe.systems.graphics.RenderSystem;
 import com.jb.fe.systems.input.InputHandlingSystem;
 import com.jb.fe.systems.input.MapCursorInfoUpdateSystem;
@@ -38,6 +39,7 @@ public class GameScreen extends ScreenAdapter{
 	private MapCursorInfoUpdateSystem mapCursorInfoUpdateSystem;
 	private UnitMapCellUpdater unitMapCellUpdater;
 	private UnitMovementSystem unitMovementSystem;
+	private TurnManager turnManagerSystem;
 	
 	public GameScreen(MusicSystem musicSystem, SoundSystem soundSystem, Engine engine, AssetManager assetManager, SpriteBatch spriteBatch, OrthographicCamera gameCamera) {
 		this.engine = engine;
@@ -51,6 +53,7 @@ public class GameScreen extends ScreenAdapter{
 		mapCursorInfoUpdateSystem = new MapCursorInfoUpdateSystem();
 		unitMapCellUpdater = new UnitMapCellUpdater();
 		unitMovementSystem = new UnitMovementSystem();
+		turnManagerSystem = new TurnManager();
 		
 		// Add Systems to the Engine
 		engine.addSystem(mapRenderSystem);
@@ -62,6 +65,7 @@ public class GameScreen extends ScreenAdapter{
 		engine.addSystem(unitMovementSystem);
 		engine.addSystem(soundSystem);
 		engine.addSystem(musicSystem);
+		engine.addSystem(turnManagerSystem);
 	
 		// Start First Level
 		currentLevel = new Level("levels/level1/level1.tmx", assetManager, engine);
@@ -73,7 +77,8 @@ public class GameScreen extends ScreenAdapter{
 		
 		// Set First Audio
 		musicSystem.addNewSong("Ally Battle Theme", "music/FE Level1 HD Good.mp3", assetManager);
-		currentLevel.setMusic("Ally Battle Theme");
+		musicSystem.addNewSong("Ally Battle Theme SD", "music/FE Level1 SD.mp3", assetManager);
+		currentLevel.setMusic("Ally Battle Theme SD");
 		
 		// Set Level
 		setNewMap(currentLevel);

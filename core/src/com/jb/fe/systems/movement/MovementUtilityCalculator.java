@@ -24,7 +24,7 @@ public class MovementUtilityCalculator {
 	public Queue<MapCell> pathfindingQueue;
 
 	// All Map Cells
-	public Array<MapCell> allMapCells;
+	private MapCell[][] allMapCells;
 
 	// Component Mapper
 	public ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
@@ -51,12 +51,14 @@ public class MovementUtilityCalculator {
 		unitStatsComponent.allOutsideAttackMoves.clear();
 		
 		// Reset Stats on MapCell
-		for (MapCell mapCell : allMapCells) {
-			mapCell.isVisited = false;
-			mapCell.distanceFromParent = 0;
-			mapCell.parentTile = null;
+		for (int outer = 0; outer < allMapCells.length; outer++) {
+			for (int inner = 0; inner < allMapCells[0].length; inner++) {
+				allMapCells[outer][inner].isVisited = false;
+				allMapCells[outer][inner].distanceFromParent = 0;
+				allMapCells[outer][inner].parentTile = null;
+			}
 		}
-
+		
 		// Remove Colors if not reset
 		resetMovementAlgorithms();
 
@@ -192,17 +194,14 @@ public class MovementUtilityCalculator {
 	// Get Tile from All Tiles
 	public MapCell getMapCell(Entity unit) {
 		PositionComponent unitPositionComponent = pComponentMapper.get(unit);
-		for (MapCell mapCell : allMapCells) {
-			if (mapCell.position.x == unitPositionComponent.x && mapCell.position.y == unitPositionComponent.y) {
-				return mapCell;
-			}
-		}
-
-		return null;
+		int x = (int) unitPositionComponent.x / MapCell.CELL_SIZE;
+		int y = (int) unitPositionComponent.y / MapCell.CELL_SIZE;
+		
+		return allMapCells[x][y];
 	}
 
 	// Enable Squares
-	private void enableSquares() {
+	public void enableSquares() {
 		for (MapCell mapCell : allPossibleMoves) {
 			sComponentMapper.get(mapCell.blueSquare).isEnabled = true;
 		}
@@ -215,11 +214,13 @@ public class MovementUtilityCalculator {
 	// Reset to default
 	public void resetMovementAlgorithms() {
 		// Reset Colors
-		for (MapCell mapCell : allMapCells) {
-			StaticImageComponent blueStaticImageComponent = sComponentMapper.get(mapCell.blueSquare);
-			blueStaticImageComponent.isEnabled = false;
-			StaticImageComponent redStaticImageComponent = sComponentMapper.get(mapCell.redSquare);
-			redStaticImageComponent.isEnabled = false;
+		for (int outer = 0; outer < allMapCells.length; outer++) {
+			for (int inner = 0; inner < allMapCells[outer].length; inner++) {
+				StaticImageComponent staticImageComponent = sComponentMapper.get(allMapCells[outer][inner].blueSquare);
+				staticImageComponent.isEnabled = false;
+				StaticImageComponent redStaticImage = sComponentMapper.get(allMapCells[outer][inner].redSquare);
+				redStaticImage.isEnabled = false;
+			}
 		}
 	}
 }

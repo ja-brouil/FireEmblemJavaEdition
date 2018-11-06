@@ -4,13 +4,12 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.utils.Array;
+import com.jb.fe.UI.SquareSelectorFactory;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell.AvoidanceTileBonus;
 import com.jb.fe.map.MapCell.CellType;
 import com.jb.fe.map.MapCell.DefenseTileBonus;
 import com.jb.fe.map.MapCell.MovementTileValues;
-import com.jb.fe.systems.movement.SquareSelectorFactory;
 
 public class MapCellInfoSystem {
 
@@ -27,7 +26,11 @@ public class MapCellInfoSystem {
 
 	public void processTiles(Level level) {
 		// Reset Tiles
-		level.allLevelMapCells.clear();
+		for (int outer = 0; outer < level.allLevelMapCells.length; outer++) {
+			for (int inner = 0; inner < level.allLevelMapCells[outer].length; inner++) {
+				level.allLevelMapCells[outer][inner] = null;
+			}
+		}
 
 		// Get Tile Layer
 		MapLayer mapTileLayer = level.levelMap.getLayers().get(cellLayerName);
@@ -90,9 +93,11 @@ public class MapCellInfoSystem {
 			}
 
 			// Add Cell to the Array
-			level.allLevelMapCells.add(mapCell);
+			int row = (int) mapCell.position.x / MapCell.CELL_SIZE;
+			int col = (int) mapCell.position.y / MapCell.CELL_SIZE;
+			level.allLevelMapCells[row][col] = mapCell;
 		}
-
+		
 		// Calculate adj tiles
 		getAdjTiles(level.allLevelMapCells);
 		
@@ -103,45 +108,58 @@ public class MapCellInfoSystem {
 	/*
 	 * Calculate all adj tiles to the current tile
 	 */
-	private void getAdjTiles(Array<MapCell> allMapCells) {
-		for (int i = 0; i < allMapCells.size; i++) {
-			MapCell mapCelltoCheck = allMapCells.get(i);
-
-			for (int j = 0; j < allMapCells.size; j++) {
-				MapCell adjPotentialCell = allMapCells.get(j);
-
-				if (adjPotentialCell.position.x / MapCell.CELL_SIZE == (mapCelltoCheck.position.x / MapCell.CELL_SIZE) + 1
-						&& adjPotentialCell.position.y / MapCell.CELL_SIZE == mapCelltoCheck.position.y / MapCell.CELL_SIZE) {
-					mapCelltoCheck.adjTiles.add(adjPotentialCell);
-				} else if (adjPotentialCell.position.x / MapCell.CELL_SIZE == (mapCelltoCheck.position.x / MapCell.CELL_SIZE) - 1
-						&& adjPotentialCell.position.y / MapCell.CELL_SIZE == mapCelltoCheck.position.y / MapCell.CELL_SIZE) {
-					mapCelltoCheck.adjTiles.add(adjPotentialCell);
-				} else if (adjPotentialCell.position.x / MapCell.CELL_SIZE == mapCelltoCheck.position.x / MapCell.CELL_SIZE
-						&& adjPotentialCell.position.y / MapCell.CELL_SIZE == (mapCelltoCheck.position.y / MapCell.CELL_SIZE) + 1) {
-					mapCelltoCheck.adjTiles.add(adjPotentialCell);
-				} else if (adjPotentialCell.position.x / MapCell.CELL_SIZE == mapCelltoCheck.position.x / MapCell.CELL_SIZE
-						&& adjPotentialCell.position.y / MapCell.CELL_SIZE == (mapCelltoCheck.position.y / MapCell.CELL_SIZE) - 1) {
-					mapCelltoCheck.adjTiles.add(adjPotentialCell);
+	private void getAdjTiles(MapCell[][] allMapCells) {
+		
+		for (int outer = 0; outer < allMapCells.length; outer++) {
+			for (int inner = 0; inner < allMapCells[outer].length; inner++) {		
+				MapCell mapCell = allMapCells[outer][inner];
+				
+				int x = (int) mapCell.position.x / MapCell.CELL_SIZE;
+				int y = (int) mapCell.position.y / MapCell.CELL_SIZE;
+				
+				// East
+				if (x + 1 < allMapCells.length) {
+					mapCell.adjTiles.add(allMapCells[x + 1][y]);
 				}
+				
+				// West
+				if (x - 1 >= 0) {
+					mapCell.adjTiles.add(allMapCells[x - 1][y]);
+				}
+				
+				// North
+				if (y - 1 >= 0) {
+					mapCell.adjTiles.add(allMapCells[x][y - 1]);
+				}
+				
+				// South
+				if (y + 1 < allMapCells[x].length) {
+					mapCell.adjTiles.add(allMapCells[x][y + 1]);
+				}
+				
 			}
 		}
 	}
 	
 	// Create Selector
-	private void createSelectors(Array<MapCell> allMapCells) {
-		for (MapCell mapCell : allMapCells) {
-			mapCell.blueSquare = squareSelectorFactory.createBlueSquare(mapCell.position.x, mapCell.position.y);
-			mapCell.redSquare = squareSelectorFactory.createRedSquare(mapCell.position.x, mapCell.position.y);
-			engine.addEntity(mapCell.blueSquare);
-			engine.addEntity(mapCell.redSquare);
+	private void createSelectors(MapCell[][] allMapCells) {
+		for (int outer = 0; outer < allMapCells.length; outer++) {
+			for (int inner = 0; inner < allMapCells[outer].length; inner++) {
+				allMapCells[outer][inner].blueSquare = squareSelectorFactory.createBlueSquare(allMapCells[outer][inner].position.x, allMapCells[outer][inner].position.y);
+				allMapCells[outer][inner].redSquare = squareSelectorFactory.createRedSquare(allMapCells[outer][inner].position.x, allMapCells[outer][inner].position.y);
+				engine.addEntity(allMapCells[outer][inner].blueSquare);
+				engine.addEntity(allMapCells[outer][inner].redSquare);
+			}
 		}
 	}
 	
 	// Clear Engine of all MapCell Square Selectors
-	public void clearSquareSelectorsFromEngine(Array<MapCell> allMapCells) {
-		for (MapCell mapCell : allMapCells) {
-			engine.removeEntity(mapCell.blueSquare);
-			engine.removeEntity(mapCell.redSquare);
+	public void clearSquareSelectorsFromEngine(MapCell[][] allMapCells) {
+		for (int outer = 0; outer < allMapCells.length; outer++) {
+			for (int inner = 0; inner < allMapCells[outer].length; inner++) {
+				engine.removeEntity(allMapCells[outer][inner].blueSquare);
+				engine.removeEntity(allMapCells[outer][inner].redSquare);
+			}
 		}
 	}
 }

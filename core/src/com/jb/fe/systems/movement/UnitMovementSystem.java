@@ -11,10 +11,13 @@ import com.badlogic.gdx.Gdx;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
+import com.jb.fe.components.UnitStatsComponent.Unit_State;
 import com.jb.fe.components.PositionComponent;
+import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
+import com.jb.fe.systems.audio.SoundSystem;
 
 /**
  * Controls the unit movements
@@ -33,12 +36,16 @@ public class UnitMovementSystem extends EntitySystem {
 	private ComponentMapper<UnitStatsComponent> sComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
 	private ComponentMapper<MapCursorStateComponent> mapCursorStateComponemtMapper = ComponentMapper
 			.getFor(MapCursorStateComponent.class);
+	private ComponentMapper<SoundComponent> soundComponentMapper = ComponentMapper.getFor(SoundComponent.class);
 
 	// Map Cursor and UI elements
 	private Entity mapCursor;
 
 	// System for Unit Update
 	private UnitMapCellUpdater unitMapCellUpdater;
+	
+	// Sound
+	private SoundSystem soundSystem;
 
 	public UnitMovementSystem() {
 		priority = SystemPriorityDictionnary.MovementUpdate;
@@ -118,8 +125,11 @@ public class UnitMovementSystem extends EntitySystem {
 					unitStatsComponent.currentCell = nextCell;
 					unitStatsComponent.pathfindingQueue.removeFirst();
 				}
+				
+				// Play Sound
+				soundSystem.playSound(soundComponentMapper.get(unit).allSoundObjects.get("Movement"));
 
-				// Reset Movement back to the cursor if the queue is empty
+				// Reset Movement back to the cursor if the queue is empty || this must be modified for AI movement as well
 				if (unitStatsComponent.pathfindingQueue.size == 0) {
 					unitStatsComponent.isMoving = false;
 					MapCursorStateComponent mapCursorStateComponent = mapCursorStateComponemtMapper.get(mapCursor);
@@ -133,6 +143,9 @@ public class UnitMovementSystem extends EntitySystem {
 
 					// Enable Cursor Again (This should be set to action menu with unit)
 					mapCursorStateComponent.mapCursorState = MapCursorState.MOVEMENT_ONLY;
+					
+					// Set Unit to Done status -> This needs to be changed to check later if you did an action first.
+					unitStatsComponent.unit_State = Unit_State.DONE;
 
 					// Do an up on unit map location
 					unitMapCellUpdater.updateCellInfo();
@@ -145,5 +158,6 @@ public class UnitMovementSystem extends EntitySystem {
 	public void startSystem() {
 		mapCursor = getEngine().getEntitiesFor(Family.all(MapCursorStateComponent.class).get()).first();
 		unitMapCellUpdater = getEngine().getSystem(UnitMapCellUpdater.class);
+		soundSystem = getEngine().getSystem(SoundSystem.class);
 	}
 }

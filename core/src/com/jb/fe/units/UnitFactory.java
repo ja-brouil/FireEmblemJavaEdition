@@ -2,10 +2,13 @@ package com.jb.fe.units;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
+import com.jb.fe.audio.SoundObject;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.AnimationObject;
+import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
+import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.systems.graphics.ZOrderDictionnary;
@@ -37,7 +40,13 @@ public class UnitFactory {
 		AnimationComponent animationComponent = new AnimationComponent();
 		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
 		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.MIDDLE_LAYER);
+		SoundComponent soundComponent = new SoundComponent();
+		
+		// Movement Sound
+		soundComponent.allSoundObjects.put("Movement", new SoundObject("sound/unitMovement/Light Foot Steps 1.wav", assetManager));
+		soundComponent.allSoundObjects.get("Movement").delayTimer = 0.24f;
 
+		// Graphics
 		animationComponent.allAnimationObjects.put("Hovering", new AnimationObject(assetManager, animationFileLocation,
 				32, 32, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 0, 4));
 		animationComponent.allAnimationObjects.put("Left", new AnimationObject(assetManager, animationFileLocation, 32,
@@ -77,6 +86,7 @@ public class UnitFactory {
 		Eirika.add(animationComponent);
 		Eirika.add(unitStatsComponent);
 		Eirika.add(zOrderComponent);
+		Eirika.add(soundComponent);
 
 		return Eirika;
 	}
@@ -95,7 +105,13 @@ public class UnitFactory {
 		AnimationComponent animationComponent = new AnimationComponent();
 		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
 		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.MIDDLE_LAYER);
-
+		SoundComponent soundComponent = new SoundComponent();
+		
+		// Sound
+		soundComponent.allSoundObjects.put("Movement", new SoundObject("sound/unitMovement/Horse Steps.wav", assetManager));
+		soundComponent.allSoundObjects.get("Movement").delayTimer = 0.35f;
+		
+		// Graphics
 		animationComponent.allAnimationObjects.put("Hovering", new AnimationObject(assetManager, animationFileLocation,
 				32, 32, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 0, 4));
 		animationComponent.allAnimationObjects.put("Left", new AnimationObject(assetManager, animationFileLocation, 32,
@@ -130,12 +146,19 @@ public class UnitFactory {
 		unitStatsComponent.attackRange = 1;
 		unitStatsComponent.isAlly = isAlly;
 		
+		// Add AI component if not ally
+		if (!isAlly) {
+			Artifical_IntelligenceComponent aiComponent = new Artifical_IntelligenceComponent();
+			cavalierUnit.add(aiComponent);
+		}
+		
 		// Add Components
 		cavalierUnit.add(unitStatsComponent);
 		cavalierUnit.add(animationComponent);
 		cavalierUnit.add(positionComponent);
 		cavalierUnit.add(nameComponent);
 		cavalierUnit.add(zOrderComponent);
+		cavalierUnit.add(soundComponent);
 
 		return cavalierUnit;
 	}

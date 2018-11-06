@@ -66,10 +66,9 @@ public class TurnManager extends EntitySystem {
 	public void update(float delta) {
 		// Player Phase
 		if (turn_Status.equals(Turn_Status.PLAYER_TURN)) {
-			System.out.println("Player Phase!"); // Play Player phase graphic here
 			for (Entity allyUnit : allyUnits) {
 				if (!uComponentMapper.get(allyUnit).unit_State.equals(Unit_State.DONE)) {
-					return; // Exit, we don't want to end the turn if we find a unit that is done.
+					return; // Exit, we don't want to end the turn if we find a unit that isn't done.
 				}
 			}
 			
@@ -83,7 +82,6 @@ public class TurnManager extends EntitySystem {
 		} else {
 			// Enemy Phase
 			// Do AI here
-			System.out.println("Enemy Turn!"); // Set Enemy Phase Graphic Here
 			turn_Status = Turn_Status.PLAYER_TURN;
 			
 			// Reset AI done status here

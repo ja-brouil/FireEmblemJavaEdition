@@ -1,6 +1,7 @@
 package com.jb.fe.level;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -54,6 +55,9 @@ public class Level {
 		
 		// Enemy
 		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 4 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
+		Entity entity = unitFactory.createCavalierUnit("Evil Seth 2", "units/cavalier/cavalierAllyRed.png", 208, 48, false);
+		engine.addEntity(entity);
+		
 		
 		// Set Map Bounderies
 		setMapBounderies();

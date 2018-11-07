@@ -31,16 +31,23 @@ public class MovementUtilityCalculator {
 	public ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
 	public ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
 
-	public MovementUtilityCalculator(Level level) {
+	// Cell Updated
+	private UnitMapCellUpdater unitMapCellUpdater;
+	
+	public MovementUtilityCalculator(Level level, UnitMapCellUpdater unitMapCellUpdater) {
 		allPossibleMoves = new HashSet<>();
 		attackCells = new Array<>();
 		pathfindingQueue = new Queue<>();
+		this.unitMapCellUpdater = unitMapCellUpdater;
 
 		allMapCells = level.allLevelMapCells;
 	}
 
 	// Get All possible Moves
 	public void calculateAllPossibleMoves(Entity unit) {
+		// Update all the cells
+		unitMapCellUpdater.updateCellInfo();
+		
 		// Stats on unit
 		UnitStatsComponent unitStatsComponent = uComponentMapper.get(unit);
 
@@ -66,7 +73,7 @@ public class MovementUtilityCalculator {
 		processTile(getMapCell(unit), unitStatsComponent, unitStatsComponent.movementSteps, unit);
 		processAttackTile(getMapCell(unit), unitStatsComponent);
 		
-		// Enabled Squares
+		// Light Squares
 		enableSquares();
 
 		// Get Parent Tiles

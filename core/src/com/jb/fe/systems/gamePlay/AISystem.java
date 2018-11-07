@@ -10,8 +10,8 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Array;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
-import com.jb.fe.map.MapCell;
 import com.jb.fe.components.UnitStatsComponent;
+import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.movement.MovementUtilityCalculator;
 
@@ -120,7 +120,7 @@ public class AISystem extends EntitySystem{
 	
 	// Aggressive
 	private void processAggresiveAI() {
-		System.out.println("Aggresive AI processed!");
+		
 		artifical_IntelligenceComponent.isProcessing = false;
 		enemyUnit = null;
 	}
@@ -135,7 +135,7 @@ public class AISystem extends EntitySystem{
 		int hp = 100000;
 		Entity currentUnitToAttack = null;
 		UnitStatsComponent allyUnitStatsComponent;
-		for (Entity allyUnit : allyUnits) {
+		for (Entity allyUnit : reachableUnits) {
 			allyUnitStatsComponent = uComponentMapper.get(allyUnit);
 			
 			if (allyUnitStatsComponent.health < hp) {
@@ -154,11 +154,21 @@ public class AISystem extends EntitySystem{
 		if (enemyStats.attackRange == 1) {
 			for (MapCell mapCell : uComponentMapper.get(unitToAttack).currentCell.adjTiles) {
 				if (enemyStats.allPossibleMoves.contains(mapCell)) {
-					enemyStats.destinationCell = mapCell;
-					movementUtilityCalculator.createPathFindingQueue(enemyStats.destinationCell, enemyUnit);
-					enemyStats.isMoving = true;
-					enemyUnit = null;
-					return;
+						if (mapCell.isOccupied) {
+							if (mapCell.occupyingUnit.equals(enemyUnit)) {
+								enemyStats.destinationCell = mapCell;
+								movementUtilityCalculator.createPathFindingQueue(enemyStats.destinationCell, enemyUnit);
+								enemyStats.isMoving = true;
+								enemyUnit = null;
+								return;
+							}
+						} else {
+							enemyStats.destinationCell = mapCell;
+							movementUtilityCalculator.createPathFindingQueue(enemyStats.destinationCell, enemyUnit);
+							enemyStats.isMoving = true;
+							enemyUnit = null;
+							return;
+						}
 				}
 			}
 		} else {

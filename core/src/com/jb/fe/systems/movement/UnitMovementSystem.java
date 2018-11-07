@@ -137,22 +137,28 @@ public class UnitMovementSystem extends EntitySystem {
 					MapCursorStateComponent mapCursorStateComponent = mapCursorStateComponemtMapper.get(mapCursor);
 					PositionComponent mapPositionComponent = pComponentMapper.get(mapCursor);
 					AnimationComponent cursorAnimation = aComponentMapper.get(mapCursor);
-
-					// Move Cursor to where the new unit is now
-					mapPositionComponent.x = unitPositionComponent.x;
-					mapPositionComponent.y = unitPositionComponent.y;
-					cursorAnimation.currentAnimation.isDrawing = true;
 					
 					// Ally Unit Reset | Enemy Unit Reset
 					if (unitStatsComponent.isAlly) {
 						// Enable Cursor Again (This should be set to action menu with unit)
 						mapCursorStateComponent.mapCursorState = MapCursorState.MOVEMENT_ONLY;
 						
+						// Set Correct Animation Status -> Modify this later if unit did an action
+						aComponentMapper.get(unit).currentAnimation = aComponentMapper.get(unit).allAnimationObjects.get("Idle");
+						
 						// Set Unit to Done status -> This needs to be changed to check later if you did an action first.
 						unitStatsComponent.unit_State = Unit_State.DONE;
+						
+						// Move Cursor to where the new unit is now
+						mapPositionComponent.x = unitPositionComponent.x;
+						mapPositionComponent.y = unitPositionComponent.y;
+						cursorAnimation.currentAnimation.isDrawing = true;
+						
 					} else {
 						Artifical_IntelligenceComponent artifical_IntelligenceComponent = aiComponentMapper.get(unit);
 						artifical_IntelligenceComponent.isProcessing = false;
+						
+						aComponentMapper.get(unit).currentAnimation = aComponentMapper.get(unit).allAnimationObjects.get("Idle");
 					}
 
 					// Do an up on unit map location

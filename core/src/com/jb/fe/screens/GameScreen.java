@@ -76,7 +76,7 @@ public class GameScreen extends ScreenAdapter{
 		currentLevel.startLevel();
 		
 		// User Interface
-		mapCursorFactory = new MapCursorFactory(assetManager, soundSystem);
+		mapCursorFactory = new MapCursorFactory(assetManager, soundSystem, gameCamera);
 		engine.addEntity(mapCursorFactory.createMapCursor());
 		
 		// Set First Audio
@@ -110,5 +110,6 @@ public class GameScreen extends ScreenAdapter{
 		unitMapCellUpdater.startSystem(level);
 		unitMovementSystem.startSystem();
 		turnManagerSystem.startSystem();
+		unitMapCellUpdater.updateCellInfo();
 	}
 }

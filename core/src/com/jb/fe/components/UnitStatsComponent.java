@@ -72,4 +72,14 @@ public class UnitStatsComponent implements Component {
 		DONE
 	}
 	
+	// Debug
+	@Override
+	public String toString() {
+		return "Health: " + health + "\n" +
+			   "Max Health: " + maxHealth + "\n" +
+			   "Movement Steps: " + movementSteps + "\n" +
+			   "IsAlly: " + isAlly + "\n" +
+			   "Attack Range: " + attackRange;
+	}
+	
 }

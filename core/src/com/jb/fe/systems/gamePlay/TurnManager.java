@@ -9,8 +9,12 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
+import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
+import com.jb.fe.components.MapCursorStateComponent;
+import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.UnitStatsComponent;
+import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.UnitStatsComponent.Unit_State;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 
@@ -32,10 +36,16 @@ public class TurnManager extends EntitySystem {
 	
 	// AI Engine
 	private AISystem aiSystem;
+	
+	// UI Elements -> Will need a manager for this later
+	private Entity mapCursor;
 
 	// Component Mapper
 	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
 	private ComponentMapper<Artifical_IntelligenceComponent> aiComponentMapper = ComponentMapper.getFor(Artifical_IntelligenceComponent.class);
+	private ComponentMapper<MapCursorStateComponent> cursorStateComponentMapper = ComponentMapper.getFor(MapCursorStateComponent.class);
+	private ComponentMapper<AnimationComponent> aComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
+	private ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
 
 	public TurnManager() {
 		priority = SystemPriorityDictionnary.TurnManager;
@@ -78,12 +88,16 @@ public class TurnManager extends EntitySystem {
 		if (turn_Status.equals(Turn_Status.PLAYER_TURN)) {
 			for (Entity allyUnit : allyUnits) {
 				if (!uComponentMapper.get(allyUnit).unit_State.equals(Unit_State.DONE)) {
-					return; // Exit, we don't want to end the turn if we find a unit that isn't done.
+					// Exit, we don't want to end the turn if we find a unit that isn't done.
+					return; 
 				}
 			}
 			
-			// All Units are done, move to the AI turn -> Map Cursor will need to be disabled here too
+			// All Units are done, move to the AI turn
 			this.turn_Status = Turn_Status.ENEMY_TURN;
+			cursorStateComponentMapper.get(mapCursor).mapCursorState = MapCursorState.DISABLED;
+			aComponentMapper.get(mapCursor).currentAnimation.isDrawing = false;
+			sComponentMapper.get(mapCursor).isEnabled = false;
 			
 			// Get all enemies
 			sortEnemyUnits();
@@ -97,6 +111,9 @@ public class TurnManager extends EntitySystem {
 			// Are we empty? Yes -> done, go to player phase | No, keep going
 			if (enemyUnits.size == 0 && unitBeingProcessed == null) {
 				turn_Status = Turn_Status.PLAYER_TURN;
+				cursorStateComponentMapper.get(mapCursor).mapCursorState = MapCursorState.MOVEMENT_ONLY;
+				aComponentMapper.get(mapCursor).currentAnimation.isDrawing = true;
+				sComponentMapper.get(mapCursor).isEnabled = true;
 				return;
 			}
 			
@@ -135,5 +152,6 @@ public class TurnManager extends EntitySystem {
 	
 	public void startSystem() {
 		aiSystem = getEngine().getSystem(AISystem.class);
+		mapCursor = getEngine().getEntitiesFor(Family.all(MapCursorStateComponent.class).get()).first();
 	}
 }

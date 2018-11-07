@@ -32,10 +32,10 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 	
 	// Retrievers
 	private ComponentMapper<AnimationComponent> animationComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
-	private ComponentMapper<PositionComponent> positionComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<MapCursorStateComponent> mapCursorComponentMapper = ComponentMapper.getFor(MapCursorStateComponent.class);
 	private ComponentMapper<UnitStatsComponent> unitStatComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
 	private ComponentMapper<StaticImageComponent> staticImageComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
+	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	
 	// Square Selector Calulator
 	private MovementUtilityCalculator movementUtilityCalculator;
@@ -70,7 +70,6 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 	@Override
 	public void update(float delta) {
 		// Set Units to Selected
-		PositionComponent  mapCursorPositionComponent = positionComponentMapper.get(mapCursor);
 		MapCursorStateComponent mapCursorStateComponent = mapCursorComponentMapper.get(mapCursor);
 		
 		// Movement
@@ -80,22 +79,23 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 			movementUtilityCalculator.resetMovementAlgorithms();
 			mapCursorStateComponent.unitSelected = null;
 			
+			PositionComponent mapCursorPositionComponent = pComponentMapper.get(mapCursor);
+			
 			for (Entity unit : allGameUnits) {
-				PositionComponent unitPositionComponent = positionComponentMapper.get(unit);
 				AnimationComponent unitAnimation = animationComponentMapper.get(unit);
+				UnitStatsComponent unitStatsComponent = unitStatComponentMapper.get(unit);
+				PositionComponent positionComponent = pComponentMapper.get(unit);
 				// Reset
 				unitAnimation.currentAnimation = unitAnimation.allAnimationObjects.get("Idle");
-				
-				if (mapCursorPositionComponent.x == unitPositionComponent.x && mapCursorPositionComponent.y == unitPositionComponent.y) {
-					UnitStatsComponent unitStatsComponent = unitStatComponentMapper.get(unit);
+
+				if (positionComponent.x == mapCursorPositionComponent.x && positionComponent.y == mapCursorPositionComponent.y) {
 					// Select only ally units for movement purposes
 					if (unitStatsComponent.isAlly) {
 						unitAnimation.currentAnimation = unitAnimation.allAnimationObjects.get("Hovering");
 						animationComponentMapper.get(mapCursor).currentAnimation.isDrawing = false;
 						staticImageComponentMapper.get(mapCursor).isEnabled = true;
-					} 
+					}
 					mapCursorStateComponent.unitSelected = unit;
-					
 					return;
 				}
 			}
@@ -172,8 +172,8 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 	
 	public void startSystem(Level level) {
 		mapCursor = getEngine().getEntitiesFor(Family.all(MapCursorStateComponent.class).get()).first();
-		movementUtilityCalculator = new MovementUtilityCalculator(level);
 		unitMapCellUpdater = getEngine().getSystem(UnitMapCellUpdater.class);
+		movementUtilityCalculator = new MovementUtilityCalculator(level, unitMapCellUpdater);
 		soundSystem = getEngine().getSystem(SoundSystem.class);
 		getEngine().getSystem(AISystem.class).setMovementCalculator(movementUtilityCalculator);
 	}

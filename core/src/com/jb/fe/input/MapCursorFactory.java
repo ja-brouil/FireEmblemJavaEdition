@@ -2,6 +2,7 @@ package com.jb.fe.input;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.jb.fe.audio.SoundObject;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.AnimationObject;
@@ -26,9 +27,13 @@ public class MapCursorFactory {
 	// Audio
 	private SoundSystem soundSystem;
 	
-	public MapCursorFactory(AssetManager assetManager, SoundSystem soundSystem) {
+	// Camera
+	private OrthographicCamera camera;
+	
+	public MapCursorFactory(AssetManager assetManager, SoundSystem soundSystem, OrthographicCamera camera) {
 		this.assetManager = assetManager;
 		this.soundSystem = soundSystem;
+		this.camera = camera;
 	}
 	
 	public Entity createMapCursor() {
@@ -57,7 +62,7 @@ public class MapCursorFactory {
 		soundComponent.allSoundObjects.put("Invalid", new SoundObject("sound/Not Allowed.mp3", assetManager));
 		
 		InputComponent inputComponent = new InputComponent();
-		inputComponent.inputHandling = new MapCursorInputHandling(mapCursorStateComponent, positionComponent, soundSystem, mapCursor);
+		inputComponent.inputHandling = new MapCursorInputHandling(mapCursorStateComponent, positionComponent, soundSystem, mapCursor, camera);
 		
 		// Add components
 		mapCursor.add(animationComponent);

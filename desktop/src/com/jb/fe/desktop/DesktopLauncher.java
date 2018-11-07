@@ -22,6 +22,10 @@ public class DesktopLauncher {
 		config.x = -1;
 		config.y = -1;
 		
+		// Attempt to run at 60 fps
+		config.foregroundFPS = 60;
+		config.backgroundFPS = -1;
+		
 		// Windows
 		config.vSyncEnabled = false;
 		

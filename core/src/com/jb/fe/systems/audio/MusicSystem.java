@@ -59,4 +59,15 @@ public class MusicSystem extends EntitySystem{
 			currentSong.getSong().play();
 		}
 	}
+	
+	/*
+	 * Will pause or resume the song
+	 */
+	public void pauseCurrentSong() {
+		if (currentSong.getSong().isPlaying()) {
+			currentSong.getSong().pause();
+		} else {
+			currentSong.getSong().play();
+		}
+	}
 }

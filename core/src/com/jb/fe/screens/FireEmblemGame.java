@@ -42,8 +42,8 @@ public class FireEmblemGame extends Game {
 	// Engine
 	private Engine engine;
 
-	public FireEmblemGame() {
-	}
+	public FireEmblemGame() {}
+
 
 	public void create() {
 
@@ -73,6 +73,18 @@ public class FireEmblemGame extends Game {
 		allGameScreens.put("PauseScreen", new PauseScreen());
 		this.setScreen(allGameScreens.get("GameScreen"));
 	}
+	
+	@Override
+	public void resume() {
+		// Resume all audio
+		musicSystem.pauseCurrentSong();
+	}
+	
+	@Override
+	public void pause() {
+		// Pause audio
+		musicSystem.pauseCurrentSong();
+	}
 
 	@Override
 	public void render() {
@@ -81,9 +93,11 @@ public class FireEmblemGame extends Game {
 				+ Gdx.graphics.getFramesPerSecond());
 		// DEBUG
 		
+		// Clear Screen
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+		// Start Main Loop Cycle
 		this.getScreen().render(Gdx.graphics.getDeltaTime());
 	}
 

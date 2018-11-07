@@ -10,6 +10,8 @@ import com.jb.fe.map.MapCell;
 public class UnitStatsComponent implements Component {
 	
 	// Unit Stats
+	public int health;
+	public int maxHealth;
 	
 	// Unit Level
 	public int Level;
@@ -39,6 +41,10 @@ public class UnitStatsComponent implements Component {
 	
 	// Default Stats
 	public UnitStatsComponent() {
+		
+		// Stats
+		health = 20;
+		maxHealth = 20;
 		
 		// Unit level
 		Level = 1;

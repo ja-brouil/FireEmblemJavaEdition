@@ -11,6 +11,7 @@ import com.jb.fe.map.MapCellInfoSystem;
 import com.jb.fe.map.MapRenderSystem;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.gamePlay.AISystem;
 import com.jb.fe.systems.gamePlay.TurnManager;
 import com.jb.fe.systems.graphics.RenderSystem;
 import com.jb.fe.systems.input.InputHandlingSystem;
@@ -40,6 +41,7 @@ public class GameScreen extends ScreenAdapter{
 	private UnitMapCellUpdater unitMapCellUpdater;
 	private UnitMovementSystem unitMovementSystem;
 	private TurnManager turnManagerSystem;
+	private AISystem aiSystem;
 	
 	public GameScreen(MusicSystem musicSystem, SoundSystem soundSystem, Engine engine, AssetManager assetManager, SpriteBatch spriteBatch, OrthographicCamera gameCamera) {
 		this.engine = engine;
@@ -54,6 +56,7 @@ public class GameScreen extends ScreenAdapter{
 		unitMapCellUpdater = new UnitMapCellUpdater();
 		unitMovementSystem = new UnitMovementSystem();
 		turnManagerSystem = new TurnManager();
+		aiSystem = new AISystem();
 		
 		// Add Systems to the Engine
 		engine.addSystem(mapRenderSystem);
@@ -66,6 +69,7 @@ public class GameScreen extends ScreenAdapter{
 		engine.addSystem(soundSystem);
 		engine.addSystem(musicSystem);
 		engine.addSystem(turnManagerSystem);
+		engine.addSystem(aiSystem);
 	
 		// Start First Level
 		currentLevel = new Level("levels/level1/level1.tmx", assetManager, engine);
@@ -105,5 +109,6 @@ public class GameScreen extends ScreenAdapter{
 		mapCursorInfoUpdateSystem.startSystem(level);
 		unitMapCellUpdater.startSystem(level);
 		unitMovementSystem.startSystem();
+		turnManagerSystem.startSystem();
 	}
 }

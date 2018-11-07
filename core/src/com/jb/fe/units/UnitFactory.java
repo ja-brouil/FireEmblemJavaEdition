@@ -11,6 +11,7 @@ import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.components.ZOrderComponent;
+import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
 import com.jb.fe.systems.graphics.ZOrderDictionnary;
 
 /*
@@ -149,6 +150,7 @@ public class UnitFactory {
 		// Add AI component if not ally
 		if (!isAlly) {
 			Artifical_IntelligenceComponent aiComponent = new Artifical_IntelligenceComponent();
+			aiComponent.ai_Type = AI_TYPE.PASSIVE;
 			cavalierUnit.add(aiComponent);
 		}
 		

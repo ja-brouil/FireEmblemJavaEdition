@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
+import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.components.UnitStatsComponent.Unit_State;
 import com.jb.fe.systems.SystemPriorityDictionnary;
@@ -25,9 +26,16 @@ public class TurnManager extends EntitySystem {
 	private ImmutableArray<Entity> allGameUnits;
 	private Queue<Entity> enemyUnits;
 	private Array<Entity> allyUnits;
+	
+	// Unit being processed
+	private Entity unitBeingProcessed;
+	
+	// AI Engine
+	private AISystem aiSystem;
 
 	// Component Mapper
 	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
+	private ComponentMapper<Artifical_IntelligenceComponent> aiComponentMapper = ComponentMapper.getFor(Artifical_IntelligenceComponent.class);
 
 	public TurnManager() {
 		priority = SystemPriorityDictionnary.TurnManager;
@@ -57,6 +65,8 @@ public class TurnManager extends EntitySystem {
 
 				if (uComponentMapper.get(entity).isAlly) {
 					allyUnits.add(entity);
+				} else {
+					enemyUnits.addFirst(entity);
 				}
 			}
 		});
@@ -75,20 +85,39 @@ public class TurnManager extends EntitySystem {
 			// All Units are done, move to the AI turn -> Map Cursor will need to be disabled here too
 			this.turn_Status = Turn_Status.ENEMY_TURN;
 			
+			// Get all enemies
+			sortEnemyUnits();
+			
 			// Reset done status on the units
 			for (Entity allyUnit : allyUnits) {
 				uComponentMapper.get(allyUnit).unit_State = Unit_State.CAN_DO_BOTH;
 			}
 		} else {
 			// Enemy Phase
-			// Do AI here
-			turn_Status = Turn_Status.PLAYER_TURN;
+			// Are we empty? Yes -> done, go to player phase | No, keep going
+			if (enemyUnits.size == 0 && unitBeingProcessed == null) {
+				turn_Status = Turn_Status.PLAYER_TURN;
+				return;
+			}
 			
-			// Reset AI done status here
+			// Unit
+			if (unitBeingProcessed == null) {
+				unitBeingProcessed = enemyUnits.removeFirst();
+				aiComponentMapper.get(unitBeingProcessed).isProcessing = true;
+				aiSystem.setEnemyUnit(unitBeingProcessed);
+				aiSystem.processAI();
+				return;
+			}
+			
+			// Are we still processing the unit? Yes -> do nothing, No -> move on to the next unit
+			if (!aiComponentMapper.get(unitBeingProcessed).isProcessing) {
+				unitBeingProcessed = null;
+			}
 		}
 	}
 	
 	public void sortEnemyUnits() {
+		enemyUnits.clear();
 		for (Entity entity : allGameUnits) {
 			if (!uComponentMapper.get(entity).isAlly) {
 				enemyUnits.addFirst(entity);
@@ -102,5 +131,9 @@ public class TurnManager extends EntitySystem {
 	
 	public void setTurnStatus(Turn_Status turn_Status) {
 		this.turn_Status = turn_Status;
+	}
+	
+	public void startSystem() {
+		aiSystem = getEngine().getSystem(AISystem.class);
 	}
 }

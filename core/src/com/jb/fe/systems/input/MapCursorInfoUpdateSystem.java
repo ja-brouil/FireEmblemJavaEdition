@@ -18,6 +18,7 @@ import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.gamePlay.AISystem;
 import com.jb.fe.systems.movement.MovementUtilityCalculator;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 
@@ -143,7 +144,7 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 			
 			// Is the Move Valid?
 			MapCell cursorMapCell = movementUtilityCalculator.getMapCell(mapCursor);
-			if (cursorMapCell.isOccupied) {
+			if (cursorMapCell.isOccupied && !cursorMapCell.occupyingUnit.equals(mapCursorStateComponent.unitSelected)) {
 				soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Invalid"));
 				mapCursorStateComponent.mapCursorState = MapCursorState.WAITING_FOR_VALID_MOVE;
 				return;
@@ -174,5 +175,6 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 		movementUtilityCalculator = new MovementUtilityCalculator(level);
 		unitMapCellUpdater = getEngine().getSystem(UnitMapCellUpdater.class);
 		soundSystem = getEngine().getSystem(SoundSystem.class);
+		getEngine().getSystem(AISystem.class).setMovementCalculator(movementUtilityCalculator);
 	}
 }

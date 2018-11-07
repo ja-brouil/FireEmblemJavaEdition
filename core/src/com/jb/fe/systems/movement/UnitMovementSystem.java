@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.jb.fe.components.AnimationComponent;
+import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.UnitStatsComponent.Unit_State;
@@ -37,6 +38,7 @@ public class UnitMovementSystem extends EntitySystem {
 	private ComponentMapper<MapCursorStateComponent> mapCursorStateComponemtMapper = ComponentMapper
 			.getFor(MapCursorStateComponent.class);
 	private ComponentMapper<SoundComponent> soundComponentMapper = ComponentMapper.getFor(SoundComponent.class);
+	private ComponentMapper<Artifical_IntelligenceComponent> aiComponentMapper = ComponentMapper.getFor(Artifical_IntelligenceComponent.class);
 
 	// Map Cursor and UI elements
 	private Entity mapCursor;
@@ -140,12 +142,18 @@ public class UnitMovementSystem extends EntitySystem {
 					mapPositionComponent.x = unitPositionComponent.x;
 					mapPositionComponent.y = unitPositionComponent.y;
 					cursorAnimation.currentAnimation.isDrawing = true;
-
-					// Enable Cursor Again (This should be set to action menu with unit)
-					mapCursorStateComponent.mapCursorState = MapCursorState.MOVEMENT_ONLY;
 					
-					// Set Unit to Done status -> This needs to be changed to check later if you did an action first.
-					unitStatsComponent.unit_State = Unit_State.DONE;
+					// Ally Unit Reset | Enemy Unit Reset
+					if (unitStatsComponent.isAlly) {
+						// Enable Cursor Again (This should be set to action menu with unit)
+						mapCursorStateComponent.mapCursorState = MapCursorState.MOVEMENT_ONLY;
+						
+						// Set Unit to Done status -> This needs to be changed to check later if you did an action first.
+						unitStatsComponent.unit_State = Unit_State.DONE;
+					} else {
+						Artifical_IntelligenceComponent artifical_IntelligenceComponent = aiComponentMapper.get(unit);
+						artifical_IntelligenceComponent.isProcessing = false;
+					}
 
 					// Do an up on unit map location
 					unitMapCellUpdater.updateCellInfo();

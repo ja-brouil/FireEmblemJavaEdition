@@ -5,13 +5,14 @@ import com.badlogic.ashley.core.Component;
 public class Artifical_IntelligenceComponent implements Component{
 
 	// Active
-	public boolean isActive;
+	public boolean isProcessing;
 	
-	//
+	// AI Type
 	public AI_TYPE ai_Type;
 	
 	public Artifical_IntelligenceComponent() {
-		isActive = true;
+		isProcessing = true;
+		ai_Type = AI_TYPE.AGGRESSIVE;
 	}
 	
 	// Locate all enemies

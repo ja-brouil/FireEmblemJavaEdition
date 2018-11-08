@@ -97,22 +97,27 @@ public class MovementUtilityCalculator {
 			int nextMoveCost = moveSteps - adjMapCell.movementCost;
 
 			if (nextMoveCost >= 0) {
-				// Allow ally passage
-				if (unitStatsComponent.isAlly) {
-					if (adjMapCell.isOccupied
-							&& !adjMapCell.occupyingUnit.getComponent(UnitStatsComponent.class).isAlly) {
-						continue;
-					} else {
-						processTile(adjMapCell, unitStatsComponent, nextMoveCost, unit);
-					}
-				} else {
-					if (adjMapCell.isOccupied
-							&& adjMapCell.occupyingUnit.getComponent(UnitStatsComponent.class).isAlly) {
-						continue;
-					} else {
-						processTile(adjMapCell, unitStatsComponent, nextMoveCost, unit);
-					}
+				if (!adjMapCell.isOccupied) {
+					processTile(adjMapCell, unitStatsComponent, nextMoveCost, unit);
 				}
+				
+				// Allow ally passage
+				
+//				if (unitStatsComponent.isAlly) {
+//					if (adjMapCell.isOccupied
+//							&& !adjMapCell.occupyingUnit.getComponent(UnitStatsComponent.class).isAlly) {
+//						continue;
+//					} else {
+//						processTile(adjMapCell, unitStatsComponent, nextMoveCost, unit);
+//					}
+//				} else {
+//					if (adjMapCell.isOccupied
+//							&& adjMapCell.occupyingUnit.getComponent(UnitStatsComponent.class).isAlly) {
+//						continue;
+//					} else {
+//						processTile(adjMapCell, unitStatsComponent, nextMoveCost, unit);
+//					}
+//				}
 			}
 		}
 	}

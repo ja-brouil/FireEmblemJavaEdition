@@ -79,7 +79,7 @@ public class UnitFactory {
 
 		// Unit Stats
 		unitStatsComponent.isAlly = isAlly;
-		unitStatsComponent.attackRange = 1;
+		unitStatsComponent.attackRange = 2;
 
 		// Add Components
 		Eirika.add(nameComponent);

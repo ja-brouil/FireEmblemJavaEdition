@@ -33,7 +33,7 @@ public class MovementUtilityCalculator {
 
 	// Cell Updated
 	private UnitMapCellUpdater unitMapCellUpdater;
-	
+
 	public MovementUtilityCalculator(Level level, UnitMapCellUpdater unitMapCellUpdater) {
 		allPossibleMoves = new HashSet<>();
 		attackCells = new Array<>();
@@ -47,7 +47,7 @@ public class MovementUtilityCalculator {
 	public void calculateAllPossibleMoves(Entity unit) {
 		// Update all the cells
 		unitMapCellUpdater.updateCellInfo();
-		
+
 		// Stats on unit
 		UnitStatsComponent unitStatsComponent = uComponentMapper.get(unit);
 
@@ -56,7 +56,7 @@ public class MovementUtilityCalculator {
 		attackCells.clear();
 		unitStatsComponent.allPossibleMoves.clear();
 		unitStatsComponent.allOutsideAttackMoves.clear();
-		
+
 		// Reset Stats on MapCell
 		for (int outer = 0; outer < allMapCells.length; outer++) {
 			for (int inner = 0; inner < allMapCells[0].length; inner++) {
@@ -65,14 +65,17 @@ public class MovementUtilityCalculator {
 				allMapCells[outer][inner].parentTile = null;
 			}
 		}
-		
+
 		// Remove Colors if not reset
 		resetMovementAlgorithms();
 
 		// Process Movement and Attack Tiles
 		processTile(getMapCell(unit), unitStatsComponent, unitStatsComponent.movementSteps, unit);
-		processAttackTile(getMapCell(unit), unitStatsComponent);
+		for (MapCell attackMapCell : allPossibleMoves) {
+			processAttackTile(attackMapCell, unitStatsComponent.attackRange, unitStatsComponent, unit);
+		}
 		
+
 		// Light Squares
 		enableSquares();
 
@@ -97,55 +100,43 @@ public class MovementUtilityCalculator {
 			int nextMoveCost = moveSteps - adjMapCell.movementCost;
 
 			if (nextMoveCost >= 0) {
-				if (!adjMapCell.isOccupied) {
+				// Allow ally passage
+				if (adjMapCell.isOccupied && !(adjMapCell.occupyingUnit
+						.getComponent(UnitStatsComponent.class).isAlly == unitStatsComponent.isAlly)) {
+					continue;
+				} else {
 					processTile(adjMapCell, unitStatsComponent, nextMoveCost, unit);
 				}
-				
-				// Allow ally passage
-				
-//				if (unitStatsComponent.isAlly) {
-//					if (adjMapCell.isOccupied
-//							&& !adjMapCell.occupyingUnit.getComponent(UnitStatsComponent.class).isAlly) {
-//						continue;
-//					} else {
-//						processTile(adjMapCell, unitStatsComponent, nextMoveCost, unit);
-//					}
-//				} else {
-//					if (adjMapCell.isOccupied
-//							&& adjMapCell.occupyingUnit.getComponent(UnitStatsComponent.class).isAlly) {
-//						continue;
-//					} else {
-//						processTile(adjMapCell, unitStatsComponent, nextMoveCost, unit);
-//					}
-//				}
+
 			}
 		}
 	}
-	
+
 	// Process Attack Tiles
-	private void processAttackTile(MapCell initialTile, UnitStatsComponent unitStatsComponent) {
-		for (MapCell mapCell : allPossibleMoves) {	
-			for (int i = 0; i < mapCell.adjTiles.size; i++) {
-				MapCell adjCell = mapCell.adjTiles.get(i);
-				if (!allPossibleMoves.contains(adjCell)) {
-					attackCells.add(adjCell);
-				}
-			}
+	private void processAttackTile(MapCell initialTile, int attackRange, UnitStatsComponent unitStatsComponent, Entity checkingUnit) {
+		
+		if (initialTile.isOccupied && !initialTile.occupyingUnit.equals(checkingUnit) && (initialTile.occupyingUnit.getComponent(UnitStatsComponent.class).isAlly == unitStatsComponent.isAlly)) {
+			attackRange -= 1;
 		}
 		
-		// Process Ranged Units
-		for (int i = 1; i < unitStatsComponent.attackRange; i++) {
-			Array<MapCell> newAttackCells = new Array<MapCell>();
-			for (int h = 0; h < attackCells.size; h++) {
-				MapCell mapCell = attackCells.get(h);
-				for (int j = 0; j < mapCell.adjTiles.size; j++) {
-					MapCell adjCell = mapCell.adjTiles.get(j);
-					if (!allPossibleMoves.contains(adjCell) && !attackCells.contains(adjCell, true)) {
-						newAttackCells.add(adjCell);
+		for (int i = 0; i < initialTile.adjTiles.size; i++) {
+
+			MapCell adjMapCell = initialTile.adjTiles.get(i);
+
+			// Next Attack Range
+			int nextAttackRange = attackRange - 1;
+
+			if (nextAttackRange >= 0) {
+				if (!allPossibleMoves.contains(adjMapCell)) {
+					if (!adjMapCell.isOccupied) {
+						attackCells.add(adjMapCell);
+						processAttackTile(adjMapCell, nextAttackRange, unitStatsComponent, checkingUnit);
+					} else if (adjMapCell.isOccupied && !(adjMapCell.occupyingUnit.getComponent(UnitStatsComponent.class).isAlly == unitStatsComponent.isAlly)) {
+						attackCells.add(adjMapCell);
+						processAttackTile(adjMapCell, nextAttackRange, unitStatsComponent, checkingUnit);
 					}
 				}
 			}
-			attackCells.addAll(newAttackCells);
 		}
 	}
 
@@ -208,7 +199,7 @@ public class MovementUtilityCalculator {
 		PositionComponent unitPositionComponent = pComponentMapper.get(unit);
 		int x = (int) unitPositionComponent.x / MapCell.CELL_SIZE;
 		int y = (int) unitPositionComponent.y / MapCell.CELL_SIZE;
-		
+
 		return allMapCells[x][y];
 	}
 
@@ -217,12 +208,12 @@ public class MovementUtilityCalculator {
 		for (MapCell mapCell : allPossibleMoves) {
 			sComponentMapper.get(mapCell.blueSquare).isEnabled = true;
 		}
-		
+
 		for (MapCell mapCell : attackCells) {
 			sComponentMapper.get(mapCell.redSquare).isEnabled = true;
 		}
 	}
-	
+
 	// Reset to default
 	public void resetMovementAlgorithms() {
 		// Reset Colors

@@ -94,16 +94,19 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 						unitAnimation.currentAnimation = unitAnimation.allAnimationObjects.get("Hovering");
 						animationComponentMapper.get(mapCursor).currentAnimation.isDrawing = false;
 						staticImageComponentMapper.get(mapCursor).isEnabled = true;
+						mapCursorStateComponent.unitSelected = unit;
+						
 					}
 					mapCursorStateComponent.unitSelected = unit;
-					return;
+					
 				}
 			}
 			
-			// Set Animation Back
-			animationComponentMapper.get(mapCursor).currentAnimation.isDrawing = true;
-			staticImageComponentMapper.get(mapCursor).isEnabled = false;
-			
+			// Set Animation Back || Prevent from updating if not animating
+			if (mapCursorStateComponent.unitSelected == null) {
+				animationComponentMapper.get(mapCursor).currentAnimation.isDrawing = true;
+				staticImageComponentMapper.get(mapCursor).isEnabled = false;
+			}
 		} 
 		
 		// Unit Selection
@@ -167,6 +170,12 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 				soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Invalid"));
 				mapCursorStateComponent.mapCursorState = MapCursorState.WAITING_FOR_VALID_MOVE;
 			}
+		} else if (mapCursorStateComponent.mapCursorState.equals(MapCursorState.DISABLED)) {
+			AnimationComponent cursorAnimation = animationComponentMapper.get(mapCursor);
+			StaticImageComponent staticImageComponent = staticImageComponentMapper.get(mapCursor);
+			
+			cursorAnimation.currentAnimation.isDrawing = false;
+			staticImageComponent.isEnabled = false;
 		}
 	}
 	

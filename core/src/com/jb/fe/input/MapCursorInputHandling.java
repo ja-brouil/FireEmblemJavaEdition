@@ -133,7 +133,7 @@ public class MapCursorInputHandling implements InputHandling, Component {
 				}
 
 				mapCursorStateComponent.mapCursorState = MapCursorState.UNIT_SELECTED;
-				soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));
+				soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Select Unit"));
 				currentTimerForDelay = 0;
 			}
 		} else if (mapCursorStateComponent.mapCursorState

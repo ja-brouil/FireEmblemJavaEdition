@@ -57,6 +57,9 @@ public class Level {
 		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 4 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
 		Entity entity = unitFactory.createCavalierUnit("Evil Seth 2", "units/cavalier/cavalierAllyRed.png", 208, 48, false);
 		engine.addEntity(entity);
+		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 11 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
+		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 12 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
+		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 13 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
 		
 		
 		// Set Map Bounderies

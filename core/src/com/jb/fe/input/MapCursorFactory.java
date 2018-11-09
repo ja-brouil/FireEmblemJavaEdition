@@ -60,6 +60,7 @@ public class MapCursorFactory {
 		soundComponent.allSoundObjects.put("Back", new SoundObject("sound/backSound.wav", assetManager));
 		soundComponent.allSoundObjects.put("Movement", new SoundObject("sound/cursorMovement.wav", assetManager));
 		soundComponent.allSoundObjects.put("Invalid", new SoundObject("sound/Not Allowed.mp3", assetManager));
+		soundComponent.allSoundObjects.put("Select Unit", new SoundObject("sound/selectUnit.wav", assetManager));
 		
 		InputComponent inputComponent = new InputComponent();
 		inputComponent.inputHandling = new MapCursorInputHandling(mapCursorStateComponent, positionComponent, soundSystem, mapCursor, camera);

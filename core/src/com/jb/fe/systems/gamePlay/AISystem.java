@@ -114,13 +114,15 @@ public class AISystem extends EntitySystem{
 			artifical_IntelligenceComponent.isProcessing = false;
 			enemyUnit = null;
 		} else {
+			// Become aggresive once an enemy has been detected
+			//artifical_IntelligenceComponent.ai_Type = AI_TYPE.AGGRESSIVE;
 			findUnitToAttack();
 		}
 	}
 	
 	// Aggressive
 	private void processAggresiveAI() {
-		
+		// 
 		artifical_IntelligenceComponent.isProcessing = false;
 		enemyUnit = null;
 	}
@@ -132,15 +134,20 @@ public class AISystem extends EntitySystem{
 	// Find Unit to attack
 	private void findUnitToAttack() {
 		// Initialize stats for finding enemy -> Add moving to Eirika if we find her -> add other checks here
-		int hp = 100000;
+		int lowestHP = 100000;
 		Entity currentUnitToAttack = null;
 		UnitStatsComponent allyUnitStatsComponent;
 		for (Entity allyUnit : reachableUnits) {
 			allyUnitStatsComponent = uComponentMapper.get(allyUnit);
 			
-			if (allyUnitStatsComponent.health < hp) {
+			// Lowest HP
+			if (allyUnitStatsComponent.health < lowestHP) {
 				currentUnitToAttack = allyUnit;
-				hp = allyUnitStatsComponent.health;
+				lowestHP = allyUnitStatsComponent.health;
+			} else if (allyUnitStatsComponent.health == lowestHP) {
+				// if HP is the same, then go after who has less defence
+				currentUnitToAttack = allyUnit;
+				lowestHP = allyUnitStatsComponent.health;
 			}
 		}
 		

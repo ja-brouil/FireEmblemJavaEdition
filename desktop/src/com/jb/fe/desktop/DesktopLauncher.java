@@ -32,6 +32,6 @@ public class DesktopLauncher {
 		// Mac
 		config.useHDPI = true;
 		
-		new LwjglApplication(new FireEmblemGame(), config);
+		new LwjglApplication(new FireEmblemGame(), config); 
 	}
 }

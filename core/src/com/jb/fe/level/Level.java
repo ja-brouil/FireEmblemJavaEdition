@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.units.UnitFactory;
@@ -55,11 +56,11 @@ public class Level {
 		
 		// Enemy
 		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 4 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
-		Entity entity = unitFactory.createCavalierUnit("Evil Seth 2", "units/cavalier/cavalierAllyRed.png", 208, 48, false);
-		engine.addEntity(entity);
 		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 11 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
 		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 12 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
-		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 13 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
+		Entity entity = unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 13 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false);
+		entity.getComponent(UnitStatsComponent.class).movementSteps = 3;
+		engine.addEntity(entity);
 		
 		
 		// Set Map Bounderies

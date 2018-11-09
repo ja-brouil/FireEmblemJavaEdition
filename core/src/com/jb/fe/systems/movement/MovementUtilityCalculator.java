@@ -115,6 +115,7 @@ public class MovementUtilityCalculator {
 	// Process Attack Tiles
 	private void processAttackTile(MapCell initialTile, int attackRange, UnitStatsComponent unitStatsComponent, Entity checkingUnit) {
 		
+		// Can't attack if ally unit is on the tile that you can "reach"
 		if (initialTile.isOccupied && !initialTile.occupyingUnit.equals(checkingUnit) && (initialTile.occupyingUnit.getComponent(UnitStatsComponent.class).isAlly == unitStatsComponent.isAlly)) {
 			attackRange -= 1;
 		}

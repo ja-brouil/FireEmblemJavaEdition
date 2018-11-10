@@ -140,7 +140,7 @@ public class MovementUtilityCalculator {
 		}
 	}
 
-	// Set Parent Tiles
+	// Set Parent Tiles || replace this maybe with a*?
 	private void setParentTiles(MapCell initialCell) {
 		for (MapCell mapCell : allPossibleMoves) {
 			mapCell.parentTile = null;

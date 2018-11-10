@@ -83,7 +83,7 @@ public class UnitMovementSystem extends EntitySystem {
 		for (int i = 0; i < allMovableEntities.size(); i++) {
 			Entity unit = allMovableEntities.get(i);
 			UnitStatsComponent unitStatsComponent = sComponentMapper.get(unit);
-
+			
 			if (unitStatsComponent.isMoving) {
 				// Destination Cell and Starting Cell
 				MapCell startingCell = unitStatsComponent.currentCell;

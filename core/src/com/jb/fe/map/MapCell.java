@@ -38,6 +38,14 @@ public class MapCell {
 	public int distanceFromParent;
 	public boolean isOccupied;
 	
+	// gCost = distance to starting node
+	// hCost = distance to end node
+	// fCost = gCost + hCost
+	public int gCost;
+	public int hCost;
+	public int fCost;
+	public MapCell parentTileAStar;
+	
 	public MapCell() {
 		position = new PositionComponent();
 		adjTiles = new Array<MapCell>();
@@ -50,6 +58,10 @@ public class MapCell {
 		parentTile = null;
 		distanceFromParent = 0;
 		isOccupied = false;
+		gCost = 0;
+		hCost = 0;
+		fCost = 0;
+		parentTileAStar = null;
 	}
 	
 	public static class MovementTileValues {

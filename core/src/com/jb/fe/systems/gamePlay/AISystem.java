@@ -1,5 +1,9 @@
 package com.jb.fe.systems.gamePlay;
 
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.PriorityQueue;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -10,6 +14,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Array;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
+import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
@@ -31,8 +36,15 @@ public class AISystem extends EntitySystem{
 	// Component Mappers 
 	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
 	private ComponentMapper<Artifical_IntelligenceComponent> aiComponentMapper = ComponentMapper.getFor(Artifical_IntelligenceComponent.class);
-	private Artifical_IntelligenceComponent artifical_IntelligenceComponent;
+	private ComponentMapper<NameComponent> nameComponentMapper = ComponentMapper.getFor(NameComponent.class);
 	
+	// Processing Component
+	private Artifical_IntelligenceComponent artifical_IntelligenceComponent;
+	private UnitStatsComponent enemyUnitComponent;
+	
+	// Eirika for Pathfinding Purposes
+	private Entity eirika;
+	private Comparator<MapCell> compareMovementCost;
 	
 	// Entity to process
 	private Entity enemyUnit;
@@ -45,6 +57,9 @@ public class AISystem extends EntitySystem{
 		reachableUnits = new Array<Entity>();
 		allyUnits = new Array<Entity>();
 		enemyUnits = new Array<Entity>();
+		compareMovementCost = (MapCellA, MapCellB) -> {
+			return MapCellA.fCost - MapCellB.fCost;
+		};
 	}
 
 	@Override
@@ -66,6 +81,11 @@ public class AISystem extends EntitySystem{
 			public void entityAdded(Entity entity) {
 				allGameEntities = engine.getEntitiesFor(Family.all(UnitStatsComponent.class).get());
 				
+				// Set Eirika
+				if (nameComponentMapper.get(entity).name.equals("Eirika")) {
+					eirika = entity;
+				}
+				
 				if(uComponentMapper.get(entity).isAlly) {
 					allyUnits.add(entity);
 				} else {
@@ -86,7 +106,7 @@ public class AISystem extends EntitySystem{
 		
 		// Clear Arrays
 		reachableUnits.clear();
-		UnitStatsComponent enemyUnitComponent = uComponentMapper.get(enemyUnit);
+		enemyUnitComponent = uComponentMapper.get(enemyUnit);
 		artifical_IntelligenceComponent = aiComponentMapper.get(enemyUnit);
 		
 		// Start Unit Processing
@@ -100,30 +120,101 @@ public class AISystem extends EntitySystem{
 		}
 		
 		// Process AI type
-		if (artifical_IntelligenceComponent.ai_Type.equals(AI_TYPE.PASSIVE)) {
-			processPassiveAI();
-		} else if (artifical_IntelligenceComponent.ai_Type.equals(AI_TYPE.AGGRESSIVE)) {
-			processAggresiveAI();
-		}
+		findEnemy();
 	}
 	
 	// Process AI Types
 	// Passive
-	private void processPassiveAI() {
+	private void findEnemy() {
 		if (reachableUnits.size == 0) {
-			artifical_IntelligenceComponent.isProcessing = false;
-			enemyUnit = null;
+			if (artifical_IntelligenceComponent.ai_Type == AI_TYPE.AGGRESSIVE) {
+				processAggresiveAI();
+			} else {
+				artifical_IntelligenceComponent.isProcessing = false;
+				enemyUnit = null;
+			}
 		} else {
 			// Become aggresive once an enemy has been detected
-			//artifical_IntelligenceComponent.ai_Type = AI_TYPE.AGGRESSIVE;
+			artifical_IntelligenceComponent.ai_Type = AI_TYPE.AGGRESSIVE;
 			findUnitToAttack();
 		}
 	}
 	
 	// Aggressive
+	/*
+	 * might have to some slight changes here
+	 */
 	private void processAggresiveAI() {
-		// 
-		artifical_IntelligenceComponent.isProcessing = false;
+		// Locate where is Eirika
+		MapCell eirikaMapCell = uComponentMapper.get(eirika).currentCell;
+		MapCell destinationCell = null;
+		MapCell currentCell = null;
+		for (MapCell mapCell : eirikaMapCell.adjTiles) {
+			if (mapCell.movementCost < 100) {
+				destinationCell = mapCell;
+				break;
+			}
+		}
+		
+		// Reset Heuristic costs
+		for (MapCell mapCell : enemyUnitComponent.allPossibleMoves) {
+			mapCell.gCost = 0;
+			mapCell.hCost = 0;
+			mapCell.fCost = 0;
+			mapCell.parentTileAStar = null;
+		}
+		
+		// Find A* path to the destination cell
+		PriorityQueue<MapCell> openList = new PriorityQueue<>(compareMovementCost);
+		HashSet<MapCell> closedList = new HashSet<>();
+		openList.add(enemyUnitComponent.currentCell);
+		
+		// Process while queue is not empty
+		while(!openList.isEmpty()) {
+			
+			currentCell = openList.poll();	
+			closedList.add(currentCell);
+			
+			// If we have found our destination, exit right away
+			if (currentCell.equals(destinationCell)) {
+				break;
+			}
+			
+			for (MapCell adjcell : currentCell.adjTiles) {
+				// Do not process unwalkable tiles or if the closed list contains the adjcell already
+				if (adjcell.movementCost >= 50 || closedList.contains(adjcell)){
+					continue;
+				}
+				
+				// Calculate heuristics
+				int newMovementCostToNeighbor = currentCell.gCost + adjcell.movementCost;
+				if (newMovementCostToNeighbor < adjcell.gCost || !openList.contains(adjcell)) {
+					adjcell.gCost = newMovementCostToNeighbor;
+					adjcell.hCost = movementUtilityCalculator.calculateHCost(adjcell, destinationCell);
+					adjcell.parentTileAStar = currentCell;
+					
+					// Add to openList
+					if (!openList.contains(adjcell)) {
+						openList.add(adjcell);
+					}
+				}
+			}
+		}
+		
+		// Find out which cell exists in the current unit's allowed movements
+		enemyUnitComponent.destinationCell = currentCell;
+		movementUtilityCalculator.createPathFindingQueueAStart(enemyUnitComponent.destinationCell, enemyUnit);
+		
+		int max = enemyUnitComponent.pathfindingQueue.size;
+		MapCell finalMoveCell = null;
+		for (int i = 0 ; i < max; i++) {
+			MapCell testMapCell = enemyUnitComponent.pathfindingQueue.removeFirst();
+			if (enemyUnitComponent.allPossibleMoves.contains(testMapCell)) {
+				finalMoveCell =  testMapCell;
+			}
+		}
+		movementUtilityCalculator.createPathFindingQueue(finalMoveCell, enemyUnit);
+		enemyUnitComponent.isMoving = true;
 		enemyUnit = null;
 	}
 	
@@ -144,11 +235,7 @@ public class AISystem extends EntitySystem{
 			if (allyUnitStatsComponent.health < lowestHP) {
 				currentUnitToAttack = allyUnit;
 				lowestHP = allyUnitStatsComponent.health;
-			} else if (allyUnitStatsComponent.health == lowestHP) {
-				// if HP is the same, then go after who has less defence
-				currentUnitToAttack = allyUnit;
-				lowestHP = allyUnitStatsComponent.health;
-			}
+			} // Add extra checks here
 		}
 		
 		findTileToMoveTo(currentUnitToAttack);
@@ -157,22 +244,21 @@ public class AISystem extends EntitySystem{
 	// Find Tile to Move to -> This algorithm will have to be modified for ranged units
 	private void findTileToMoveTo(Entity unitToAttack) {
 		// Check if unit is melee or ranged
-		UnitStatsComponent enemyStats = uComponentMapper.get(enemyUnit);
-		if (enemyStats.attackRange == 1) {
+		if (enemyUnitComponent.attackRange == 1) {
 			for (MapCell mapCell : uComponentMapper.get(unitToAttack).currentCell.adjTiles) {
-				if (enemyStats.allPossibleMoves.contains(mapCell)) {
+				if (enemyUnitComponent.allPossibleMoves.contains(mapCell)) {
 						if (mapCell.isOccupied) {
 							if (mapCell.occupyingUnit.equals(enemyUnit)) {
-								enemyStats.destinationCell = mapCell;
-								movementUtilityCalculator.createPathFindingQueue(enemyStats.destinationCell, enemyUnit);
-								enemyStats.isMoving = true;
+								enemyUnitComponent.destinationCell = mapCell;
+								movementUtilityCalculator.createPathFindingQueue(enemyUnitComponent.destinationCell, enemyUnit);
+								enemyUnitComponent.isMoving = true;
 								enemyUnit = null;
 								return;
 							}
 						} else {
-							enemyStats.destinationCell = mapCell;
-							movementUtilityCalculator.createPathFindingQueue(enemyStats.destinationCell, enemyUnit);
-							enemyStats.isMoving = true;
+							enemyUnitComponent.destinationCell = mapCell;
+							movementUtilityCalculator.createPathFindingQueue(enemyUnitComponent.destinationCell, enemyUnit);
+							enemyUnitComponent.isMoving = true;
 							enemyUnit = null;
 							return;
 						}

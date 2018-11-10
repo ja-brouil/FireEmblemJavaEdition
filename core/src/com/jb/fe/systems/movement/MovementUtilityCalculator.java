@@ -75,7 +75,6 @@ public class MovementUtilityCalculator {
 			processAttackTile(attackMapCell, unitStatsComponent.attackRange, unitStatsComponent, unit);
 		}
 		
-
 		// Light Squares
 		enableSquares();
 
@@ -152,7 +151,7 @@ public class MovementUtilityCalculator {
 		Queue<MapCell> openList = new Queue<MapCell>();
 
 		// Set initial tile to itself
-		initialCell.parentTile = initialCell;
+		initialCell.parentTile = initialCell; 
 		openList.addFirst(initialCell);
 
 		// Must be part of the valid tile set and not visited yet
@@ -173,8 +172,9 @@ public class MovementUtilityCalculator {
 		}
 	}
 
-	// Get Pathfinding Queue
+	// Get Pathfinding Queue || Non A* Might need to fix this later
 	public void createPathFindingQueue(MapCell destinationCell, Entity unit) {
+		
 		// Starting cell
 		UnitStatsComponent unitStatsComponent = uComponentMapper.get(unit);
 
@@ -193,6 +193,22 @@ public class MovementUtilityCalculator {
 		}
 
 		unitStatsComponent.pathfindingQueue = pathfindingQueue;
+	}
+	
+	public void createPathFindingQueueAStart(MapCell destination, Entity unit) {
+		// Clear Queue
+		pathfindingQueue.clear();
+		uComponentMapper.get(unit).pathfindingQueue.clear();
+		
+		MapCell nextCell = destination;
+		MapCell startingCell = uComponentMapper.get(unit).currentCell;
+		
+		while(!nextCell.equals(startingCell)) {
+			pathfindingQueue.addFirst(nextCell);
+			nextCell = nextCell.parentTileAStar;
+		}
+		
+		uComponentMapper.get(unit).pathfindingQueue = pathfindingQueue;
 	}
 
 	// Get Tile from All Tiles
@@ -226,5 +242,78 @@ public class MovementUtilityCalculator {
 				redStaticImage.isEnabled = false;
 			}
 		}
+	}
+	
+	/*
+	 * Calculate the cost of going to the end node
+	 */
+	public int calculateHCost(MapCell initial, MapCell destination) {
+		int startingNodeY = (int) initial.position.y / MapCell.CELL_SIZE;
+		int startingNodeX = (int) initial.position.x / MapCell.CELL_SIZE;
+		int totalVerticalCost = 0;
+		int totalHorizontalCost = 0;
+		
+		if (startingNodeX > startingNodeY) {
+			// North | South
+			int verticalMovement = 1;
+			if (destination.position.y - destination.position.y < 0) {
+				verticalMovement = -1;
+			} else if (destination.position.y - destination.position.y == 0){
+				verticalMovement = 0;
+			}
+			
+			
+			for (int i = 0; i < verticalTileAmount(initial, destination); i++) {
+				totalVerticalCost += allMapCells[startingNodeX][startingNodeY + verticalMovement].movementCost;
+			}
+			
+			// West | East
+			int horizontalMovement = 1;
+			if (destination.position.x - destination.position.x < 0) {
+				horizontalMovement = -1;
+			} else if (destination.position.x - destination.position.x == 0) {
+				horizontalMovement = 0;
+			}
+			
+
+			for (int i = 0; i < horizontalTileAmount(initial, destination); i++) {
+				totalHorizontalCost += allMapCells[startingNodeX + horizontalMovement][startingNodeY].movementCost;
+			}
+		} else {
+			// West | East
+			int horizontalMovement = 1;
+			if (destination.position.x - destination.position.x < 0) {
+				horizontalMovement = -1;
+			} else if (destination.position.x - destination.position.x == 0) {
+				horizontalMovement = 0;
+			}
+			
+			for (int i = 0; i < horizontalTileAmount(initial, destination); i++) {
+				totalHorizontalCost += allMapCells[startingNodeX + horizontalMovement][startingNodeY].movementCost;
+			}
+			
+			// North | South
+			int verticalMovement = 1;
+			if (destination.position.y - destination.position.y < 0) { 
+				verticalMovement = -1;
+			} else if (destination.position.y - destination.position.y == 0){
+				verticalMovement = 0;
+			}
+			
+			
+			for (int i = 0; i < verticalTileAmount(initial, destination); i++) {
+				totalVerticalCost += allMapCells[startingNodeX][startingNodeY + verticalMovement].movementCost;
+			}
+		}
+		
+		return totalVerticalCost + totalHorizontalCost;
+	}
+	
+	public int verticalTileAmount(MapCell initial, MapCell destination) {
+		return Math.abs(((int) (initial.position.y / MapCell.CELL_SIZE)) - ((int) (destination.position.y / MapCell.CELL_SIZE)));
+	}
+	
+	public int horizontalTileAmount(MapCell initial, MapCell destination) {
+		return Math.abs(((int) (initial.position.x / MapCell.CELL_SIZE)) - ((int) (destination.position.x / MapCell.CELL_SIZE)));
 	}
 }

@@ -6,7 +6,9 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.UnitStatsComponent;
+import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.units.UnitFactory;
@@ -50,16 +52,17 @@ public class Level {
 		unitFactory = new UnitFactory(assetManager);
 		
 		// Allies
-		engine.addEntity(unitFactory.createEirika("Eirika", "units/eirika/eirika copy.png", 2 * MapCell.CELL_SIZE,
-				2 * MapCell.CELL_SIZE, true));
+		engine.addEntity(unitFactory.createEirika("Eirika", "units/eirika/eirika copy.png", 64,
+				112, true));
 		engine.addEntity(unitFactory.createCavalierUnit("Seth", "units/cavalier/cavalierAlly copy.png", 2 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, true));
 		
 		// Enemy
 		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 4 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
 		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 11 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
 		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 12 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
-		Entity entity = unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 13 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false);
+		Entity entity = unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 96, 112, false);
 		entity.getComponent(UnitStatsComponent.class).movementSteps = 3;
+		entity.getComponent(Artifical_IntelligenceComponent.class).ai_Type = AI_TYPE.AGGRESSIVE;
 		engine.addEntity(entity);
 		
 		

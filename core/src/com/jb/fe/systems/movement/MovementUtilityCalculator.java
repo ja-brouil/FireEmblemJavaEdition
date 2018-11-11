@@ -19,9 +19,9 @@ import com.jb.fe.map.MapCell;
 public class MovementUtilityCalculator {
 
 	// Pathfinding arrays
-	public HashSet<MapCell> allPossibleMoves;
-	public Array<MapCell> attackCells;
-	public Queue<MapCell> pathfindingQueue;
+	private HashSet<MapCell> allPossibleMoves;
+	private Array<MapCell> attackCells;
+	private Queue<MapCell> pathfindingQueue;
 
 	// All Map Cells
 	private MapCell[][] allMapCells;
@@ -39,7 +39,6 @@ public class MovementUtilityCalculator {
 		attackCells = new Array<>();
 		pathfindingQueue = new Queue<>();
 		this.unitMapCellUpdater = unitMapCellUpdater;
-
 		allMapCells = level.allLevelMapCells;
 	}
 
@@ -146,7 +145,9 @@ public class MovementUtilityCalculator {
 			mapCell.parentTile = null;
 			mapCell.isVisited = false;
 		}
-
+		
+		
+		
 		// Open List for tiles to be processed
 		Queue<MapCell> openList = new Queue<MapCell>();
 
@@ -170,9 +171,10 @@ public class MovementUtilityCalculator {
 				}
 			}
 		}
+		
 	}
 
-	// Get Pathfinding Queue || Non A* Might need to fix this later
+	// Get Pathfinding Queue
 	public void createPathFindingQueue(MapCell destinationCell, Entity unit) {
 		
 		// Starting cell
@@ -315,5 +317,9 @@ public class MovementUtilityCalculator {
 	
 	public int horizontalTileAmount(MapCell initial, MapCell destination) {
 		return Math.abs(((int) (initial.position.x / MapCell.CELL_SIZE)) - ((int) (destination.position.x / MapCell.CELL_SIZE)));
+	}
+	
+	public HashSet<MapCell> getAllPossibleMoves() {
+		return allPossibleMoves;
 	}
 }

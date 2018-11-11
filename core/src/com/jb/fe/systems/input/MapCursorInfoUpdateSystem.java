@@ -154,7 +154,7 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 			}
 			
 			// Is Move in the hashset
-			if (movementUtilityCalculator.allPossibleMoves.contains(cursorMapCell)) {
+			if (movementUtilityCalculator.getAllPossibleMoves().contains(cursorMapCell)) {
 				// Start unit movement system
 				mapCursorStateComponent.unitSelected.getComponent(UnitStatsComponent.class).isMoving = true;
 				movementUtilityCalculator.createPathFindingQueue(cursorMapCell, mapCursorStateComponent.unitSelected);

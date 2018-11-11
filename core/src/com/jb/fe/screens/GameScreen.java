@@ -79,10 +79,12 @@ public class GameScreen extends ScreenAdapter{
 		mapCursorFactory = new MapCursorFactory(assetManager, soundSystem, gameCamera);
 		engine.addEntity(mapCursorFactory.createMapCursor());
 		
-		// Set First Audio
+		// Set Audio
 		musicSystem.addNewSong("Ally Battle Theme", "music/FE Level1 HD Good.mp3", assetManager);
 		musicSystem.addNewSong("Ally Battle Theme SD", "music/FE Level1 SD.mp3", assetManager);
+		musicSystem.addNewSong("Enemy Phase", "music/Enemy Turn.mp3", assetManager);
 		currentLevel.setMusic("Ally Battle Theme SD");
+		musicSystem.playCurrentSong();
 		
 		// Set Level
 		setNewMap(currentLevel);

@@ -17,6 +17,7 @@ import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.UnitStatsComponent.Unit_State;
 import com.jb.fe.systems.SystemPriorityDictionnary;
+import com.jb.fe.systems.audio.MusicSystem;
 
 /*
  * Controls experience and status of the units when they have moved and stuff.
@@ -39,6 +40,9 @@ public class TurnManager extends EntitySystem {
 	
 	// UI Elements -> Will need a manager for this later
 	private Entity mapCursor;
+	
+	// Audio
+	private MusicSystem musicSystem;
 
 	// Component Mapper
 	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
@@ -106,6 +110,11 @@ public class TurnManager extends EntitySystem {
 			for (Entity allyUnit : allyUnits) {
 				uComponentMapper.get(allyUnit).unit_State = Unit_State.CAN_DO_BOTH;
 			}
+			
+			// Set Music
+			musicSystem.stopCurrentSong();
+			musicSystem.setCurrentSong("Enemy Phase", true);
+			musicSystem.playCurrentSong();
 		} else {
 			// Enemy Phase
 			// Are we empty? Yes -> done, go to player phase | No, keep going
@@ -114,6 +123,9 @@ public class TurnManager extends EntitySystem {
 				cursorStateComponentMapper.get(mapCursor).mapCursorState = MapCursorState.MOVEMENT_ONLY;
 				aComponentMapper.get(mapCursor).currentAnimation.isDrawing = true;
 				sComponentMapper.get(mapCursor).isEnabled = true;
+				musicSystem.stopCurrentSong();
+				musicSystem.setCurrentSong("Ally Battle Theme SD", true);
+				musicSystem.playCurrentSong();
 				return;
 			}
 			
@@ -153,5 +165,6 @@ public class TurnManager extends EntitySystem {
 	public void startSystem() {
 		aiSystem = getEngine().getSystem(AISystem.class);
 		mapCursor = getEngine().getEntitiesFor(Family.all(MapCursorStateComponent.class).get()).first();
+		musicSystem = getEngine().getSystem(MusicSystem.class);
 	}
 }

@@ -209,9 +209,14 @@ public class AISystem extends EntitySystem{
 		MapCell finalMoveCell = null;
 		for (int i = 0 ; i < max; i++) {
 			MapCell testMapCell = enemyUnitComponent.pathfindingQueue.removeFirst();
-			if (enemyUnitComponent.allPossibleMoves.contains(testMapCell)) {
+			if (enemyUnitComponent.allPossibleMoves.contains(testMapCell) && !testMapCell.isOccupied) {
 				finalMoveCell =  testMapCell;
 			}
+		}
+		
+		// Prevent null errors
+		if (finalMoveCell == null) {
+			finalMoveCell = enemyUnitComponent.currentCell;
 		}
 		movementUtilityCalculator.createPathFindingQueue(finalMoveCell, enemyUnit);
 		enemyUnitComponent.isMoving = true;
@@ -221,6 +226,8 @@ public class AISystem extends EntitySystem{
 	// Healer
 	
 	// Boss
+	
+	// Patrol
 	
 	// Find Unit to attack
 	private void findUnitToAttack() {

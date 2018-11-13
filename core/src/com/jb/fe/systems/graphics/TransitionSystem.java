@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.TransitionMethodComponent;
@@ -66,7 +67,8 @@ public class TransitionSystem extends EntitySystem {
 	
 	// Deconstruct to the right side
 	private void playLeftToRight(float delta, Entity entity) {
-		StaticImageComponent staticImageComponent = sComponentMapper.get(entity);
-		
+		TransitionMethodComponent transitionMethodComponent = tComponentMapper.get(entity);
+		PositionComponent positionComponent = pComponentMapper.get(entity);
+		positionComponent.x += delta * transitionMethodComponent.speed;
 	}
 }

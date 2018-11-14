@@ -143,7 +143,7 @@ public class UnitFactory {
 		animationComponent.allAnimationObjects.get("Selected").Xoffset = -12;
 		
 		// Unit Stats
-		unitStatsComponent.movementSteps = 3;
+		unitStatsComponent.movementSteps = 8;
 		unitStatsComponent.attackRange = 1;
 		unitStatsComponent.isAlly = isAlly;
 		

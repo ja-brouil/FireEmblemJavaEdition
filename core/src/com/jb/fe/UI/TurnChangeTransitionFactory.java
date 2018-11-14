@@ -39,4 +39,5 @@ public class TurnChangeTransitionFactory {
 		transitionPhase.add(positionComponent);
 		return transitionPhase;
 	}
+
 }

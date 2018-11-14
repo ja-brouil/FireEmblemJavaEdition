@@ -113,8 +113,7 @@ public class UnitMovementSystem extends EntitySystem {
 					animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Up");
 				}
 
-				// Move Unit
-				// Smooth out over time
+				// Move Unit || Smooth out over time
 				if (Math.abs(unitPositionComponent.x - nextCell.position.x) >= 1.75f
 						|| Math.abs(unitPositionComponent.y - nextCell.position.y) >= 1.75f) {
 					unitPositionComponent.x += (nextCell.position.x - startingCell.position.x)
@@ -123,6 +122,15 @@ public class UnitMovementSystem extends EntitySystem {
 							* unitStatsComponent.animationMovementSpeed * Gdx.graphics.getDeltaTime();
 				} else {
 					// Finalize movement to prevent rounding errors
+					unitPositionComponent.x = nextCell.position.x;
+					unitPositionComponent.y = nextCell.position.y;
+					unitStatsComponent.currentCell = nextCell;
+					unitStatsComponent.pathfindingQueue.removeFirst();
+				}
+				
+				// Prevent weird crashes when FPS drops or game is paused
+				if (Math.abs(unitPositionComponent.x - nextCell.position.x) >= 17f
+						|| Math.abs(unitPositionComponent.y - nextCell.position.y) >= 17f) {
 					unitPositionComponent.x = nextCell.position.x;
 					unitPositionComponent.y = nextCell.position.y;
 					unitStatsComponent.currentCell = nextCell;
@@ -171,7 +179,7 @@ public class UnitMovementSystem extends EntitySystem {
 						mapCell.redSquare.getComponent(StaticImageComponent.class).isEnabled = false;
 					}
 					
-					// Do an up on unit map location
+					// Update all units position
 					unitMapCellUpdater.updateCellInfo();
 				}
 			}

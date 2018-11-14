@@ -58,7 +58,7 @@ public class AISystem extends EntitySystem{
 		allyUnits = new Array<Entity>();
 		enemyUnits = new Array<Entity>();
 		compareMovementCost = (MapCellA, MapCellB) -> {
-			return MapCellA.fCost - MapCellB.fCost;
+			return MapCellA.getFCost() - MapCellB.getFCost();
 		};
 	}
 
@@ -160,7 +160,6 @@ public class AISystem extends EntitySystem{
 		for (MapCell mapCell : enemyUnitComponent.allPossibleMoves) {
 			mapCell.gCost = 0;
 			mapCell.hCost = 0;
-			mapCell.fCost = 0;
 			mapCell.parentTileAStar = null;
 		}
 		
@@ -168,6 +167,7 @@ public class AISystem extends EntitySystem{
 		PriorityQueue<MapCell> openList = new PriorityQueue<>(compareMovementCost);
 		HashSet<MapCell> closedList = new HashSet<>();
 		openList.add(enemyUnitComponent.currentCell);
+		
 		
 		// Process while queue is not empty
 		while(!openList.isEmpty()) {

@@ -42,9 +42,6 @@ public class MapCursorInputHandling implements InputHandling, Component {
 	// MapCursor
 	private Entity mapCursor;
 
-	// Test for mouse
-//	private OrthographicCamera camera;
-//	private Vector3 mousePos;
 
 	public MapCursorInputHandling(MapCursorStateComponent mapCursorStateComponent, PositionComponent positionComponent,
 			SoundSystem soundSystem, Entity mapCursor, OrthographicCamera camera) {
@@ -52,14 +49,10 @@ public class MapCursorInputHandling implements InputHandling, Component {
 		this.positionComponent = positionComponent;
 		this.soundSystem = soundSystem;
 		this.mapCursor = mapCursor;
-//		this.camera = camera;
 
 		keyDelayForMovement = 0.08f;
 	}
 
-//	private Vector3 getMousePosition() {
-//		return camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-//	}
 
 	@Override
 	public void handleInput() {

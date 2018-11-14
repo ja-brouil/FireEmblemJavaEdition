@@ -12,6 +12,7 @@ import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.ZOrderComponent;
+import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.graphics.ZOrderDictionnary;
@@ -49,6 +50,7 @@ public class MapCursorFactory {
 		PositionComponent positionComponent = new PositionComponent(16,16);
 		
 		MapCursorStateComponent mapCursorStateComponent = new MapCursorStateComponent();
+		mapCursorStateComponent.mapCursorState = MapCursorState.DISABLED;
 		
 		StaticImageComponent staticImageComponent = new StaticImageComponent(assetManager, "UI/Cursor/staticCursor.png");
 		staticImageComponent.xOffset = -3.5f;

@@ -26,7 +26,7 @@ public class SquareSelectorFactory {
 		PositionComponent positionComponent = new PositionComponent(x, y);
 		StaticImageComponent blueSquareImage = new StaticImageComponent(assetManager, "UI/selected/bluedarkSelect.png", MapCell.CELL_SIZE, MapCell.CELL_SIZE);
 		blueSquareImage.alpha = SquareSelectorFactory.alpha;
-		blueSquareImage.isEnabled = true;
+		blueSquareImage.isEnabled = false;
 		
 		blueSquare.add(positionComponent);
 		blueSquare.add(blueSquareImage);
@@ -42,7 +42,7 @@ public class SquareSelectorFactory {
 		PositionComponent positionComponent = new PositionComponent(x, y);
 		StaticImageComponent redSquareImage = new StaticImageComponent(assetManager, "UI/selected/redselect.png", MapCell.CELL_SIZE, MapCell.CELL_SIZE);
 		redSquareImage.alpha = SquareSelectorFactory.alpha;
-		redSquareImage.isEnabled = true;
+		redSquareImage.isEnabled = false;
 		
 		redSquare.add(positionComponent);
 		redSquare.add(redSquareImage);

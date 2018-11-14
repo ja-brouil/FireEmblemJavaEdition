@@ -15,6 +15,7 @@ import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.UnitStatsComponent.Unit_State;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
+import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
@@ -160,7 +161,16 @@ public class UnitMovementSystem extends EntitySystem {
 						
 						aComponentMapper.get(unit).currentAnimation = aComponentMapper.get(unit).allAnimationObjects.get("Idle");
 					}
-
+					
+					// Turn off Map Cells
+					for (MapCell mapCell : unitStatsComponent.allPossibleMoves) {
+						mapCell.blueSquare.getComponent(StaticImageComponent.class).isEnabled = false;
+					}
+					
+					for (MapCell mapCell : unitStatsComponent.allOutsideAttackMoves) {
+						mapCell.redSquare.getComponent(StaticImageComponent.class).isEnabled = false;
+					}
+					
 					// Do an up on unit map location
 					unitMapCellUpdater.updateCellInfo();
 				}

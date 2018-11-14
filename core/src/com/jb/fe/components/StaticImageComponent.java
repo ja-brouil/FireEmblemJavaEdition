@@ -30,7 +30,7 @@ public class StaticImageComponent implements Component{
 			assetManager.finishLoading();
 		}
 		
-		Texture wholeImage = assetManager.get(fileLocation, Texture.class);
+		wholeImage = assetManager.get(fileLocation, Texture.class);
 		staticImage = new TextureRegion(wholeImage, wholeImage.getWidth(), wholeImage.getHeight());
 		
 		this.width = wholeImage.getWidth();
@@ -45,7 +45,7 @@ public class StaticImageComponent implements Component{
 			assetManager.finishLoading();
 		}
 		
-		Texture wholeImage = assetManager.get(fileLocation, Texture.class);
+		wholeImage = assetManager.get(fileLocation, Texture.class);
 		staticImage = new TextureRegion(wholeImage, width, height);
 		
 		this.width = staticImage.getRegionWidth();

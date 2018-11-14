@@ -75,7 +75,6 @@ public class Level {
 	
 	public void setMusic(String songName) {
 		MusicSystem musicSystem = engine.getSystem(MusicSystem.class);
-		musicSystem.setCurrentSong(songName, true);
 	}
 
 	/*

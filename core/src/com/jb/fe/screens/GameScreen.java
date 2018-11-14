@@ -82,9 +82,7 @@ public class GameScreen extends ScreenAdapter{
 		// Set Audio
 		musicSystem.addNewSong("Ally Battle Theme", "music/FE Level1 HD Good.mp3", assetManager);
 		musicSystem.addNewSong("Ally Battle Theme SD", "music/FE Level1 SD.mp3", assetManager);
-		musicSystem.addNewSong("Enemy Phase", "music/Enemy Turn.mp3", assetManager);
-		currentLevel.setMusic("Ally Battle Theme SD");
-		musicSystem.playCurrentSong();
+		musicSystem.addNewSong("Enemy Phase", "music/enemy theme.mp3", assetManager);
 		
 		// Set Level
 		setNewMap(currentLevel);
@@ -111,7 +109,7 @@ public class GameScreen extends ScreenAdapter{
 		mapCursorInfoUpdateSystem.startSystem(level);
 		unitMapCellUpdater.startSystem(level);
 		unitMovementSystem.startSystem();
-		turnManagerSystem.startSystem();
+		turnManagerSystem.startSystem(level.assetManager);
 		unitMapCellUpdater.updateCellInfo();
 	}
 }

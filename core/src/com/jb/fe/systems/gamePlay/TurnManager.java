@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
 import com.jb.fe.components.AnimationComponent;
@@ -18,6 +19,7 @@ import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.UnitStatsComponent.Unit_State;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.audio.MusicSystem;
+import com.jb.fe.systems.audio.SoundSystem;
 
 /*
  * Controls experience and status of the units when they have moved and stuff.
@@ -38,11 +40,15 @@ public class TurnManager extends EntitySystem {
 	// AI Engine
 	private AISystem aiSystem;
 	
+	// Transition
+	private EndTurnTransition endTurnTransition;
+	
 	// UI Elements -> Will need a manager for this later
 	private Entity mapCursor;
 	
 	// Audio
 	private MusicSystem musicSystem;
+	private SoundSystem soundSystem;
 
 	// Component Mapper
 	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
@@ -55,7 +61,7 @@ public class TurnManager extends EntitySystem {
 		priority = SystemPriorityDictionnary.TurnManager;
 		enemyUnits = new Queue<Entity>();
 		allyUnits = new Array<Entity>();
-		turn_Status = Turn_Status.PLAYER_TURN;
+		turn_Status = Turn_Status.TRANSITION_INTO_ALLY;
 	}
 
 	@Override
@@ -98,8 +104,8 @@ public class TurnManager extends EntitySystem {
 			}
 			
 			// All Units are done, move to the AI turn
-			this.turn_Status = Turn_Status.ENEMY_TURN;
 			cursorStateComponentMapper.get(mapCursor).mapCursorState = MapCursorState.DISABLED;
+			turn_Status = Turn_Status.TRANSITION_INTO_ENEMY;
 			aComponentMapper.get(mapCursor).currentAnimation.isDrawing = false;
 			sComponentMapper.get(mapCursor).isEnabled = false;
 			
@@ -111,21 +117,16 @@ public class TurnManager extends EntitySystem {
 				uComponentMapper.get(allyUnit).unit_State = Unit_State.CAN_DO_BOTH;
 			}
 			
-			// Set Music
+			// Stop Music
 			musicSystem.stopCurrentSong();
-			musicSystem.setCurrentSong("Enemy Phase", true);
-			musicSystem.playCurrentSong();
-		} else {
+		} else if (turn_Status.equals(Turn_Status.ENEMY_TURN)){
 			// Enemy Phase
 			// Are we empty? Yes -> done, go to player phase | No, keep going
 			if (enemyUnits.size == 0 && unitBeingProcessed == null) {
-				turn_Status = Turn_Status.PLAYER_TURN;
-				cursorStateComponentMapper.get(mapCursor).mapCursorState = MapCursorState.MOVEMENT_ONLY;
+				turn_Status = Turn_Status.TRANSITION_INTO_ALLY;
 				aComponentMapper.get(mapCursor).currentAnimation.isDrawing = true;
 				sComponentMapper.get(mapCursor).isEnabled = true;
 				musicSystem.stopCurrentSong();
-				musicSystem.setCurrentSong("Ally Battle Theme SD", true);
-				musicSystem.playCurrentSong();
 				return;
 			}
 			
@@ -142,6 +143,10 @@ public class TurnManager extends EntitySystem {
 			if (!aiComponentMapper.get(unitBeingProcessed).isProcessing) {
 				unitBeingProcessed = null;
 			}
+		} else if (turn_Status.equals(Turn_Status.TRANSITION_INTO_ALLY)) {
+			endTurnTransition.update(delta);
+		} else if (turn_Status.equals(Turn_Status.TRANSITION_INTO_ENEMY)) {
+			endTurnTransition.update(delta);
 		}
 	}
 	
@@ -155,16 +160,26 @@ public class TurnManager extends EntitySystem {
 	}
 	
 	public static enum Turn_Status {
-		PLAYER_TURN, ENEMY_TURN
+		PLAYER_TURN, ENEMY_TURN, TRANSITION_INTO_ENEMY, TRANSITION_INTO_ALLY
+	}
+	
+	public Turn_Status getTurnStatus() {
+		return turn_Status;
 	}
 	
 	public void setTurnStatus(Turn_Status turn_Status) {
 		this.turn_Status = turn_Status;
 	}
 	
-	public void startSystem() {
+	public MapCursorStateComponent getMapCursorStateComponent() {
+		return cursorStateComponentMapper.get(mapCursor);
+	}
+	
+	public void startSystem(AssetManager assetManager) {
 		aiSystem = getEngine().getSystem(AISystem.class);
 		mapCursor = getEngine().getEntitiesFor(Family.all(MapCursorStateComponent.class).get()).first();
 		musicSystem = getEngine().getSystem(MusicSystem.class);
+		soundSystem = getEngine().getSystem(SoundSystem.class);
+		endTurnTransition = new EndTurnTransition(assetManager, getEngine(), soundSystem, musicSystem, this);
 	}
 }

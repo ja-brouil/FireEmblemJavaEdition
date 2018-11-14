@@ -43,7 +43,6 @@ public class MapCell {
 	// fCost = gCost + hCost
 	public int gCost;
 	public int hCost;
-	public int fCost;
 	public MapCell parentTileAStar;
 	
 	public MapCell() {
@@ -60,7 +59,6 @@ public class MapCell {
 		isOccupied = false;
 		gCost = 0;
 		hCost = 0;
-		fCost = 0;
 		parentTileAStar = null;
 	}
 	
@@ -86,5 +84,9 @@ public class MapCell {
 		public static final int FORTRESS_AVD = 10;
 		public static final int VILLAGE_AVD = 5;
 		public static final int IMPASSABLE_AVD = 0;
+	}
+	
+	public int getFCost() {
+		return gCost + hCost;
 	}
 }

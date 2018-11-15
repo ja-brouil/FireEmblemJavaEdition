@@ -12,11 +12,11 @@ import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
-import com.jb.fe.components.UnitStatsComponent.Unit_State;
+import com.jb.fe.components.MovementStatsComponent.Unit_State;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.StaticImageComponent;
-import com.jb.fe.components.UnitStatsComponent;
+import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.audio.SoundSystem;
@@ -35,7 +35,7 @@ public class UnitMovementSystem extends EntitySystem {
 	// Mappers
 	private ComponentMapper<AnimationComponent> aComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
-	private ComponentMapper<UnitStatsComponent> sComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
+	private ComponentMapper<MovementStatsComponent> sComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	private ComponentMapper<MapCursorStateComponent> mapCursorStateComponemtMapper = ComponentMapper
 			.getFor(MapCursorStateComponent.class);
 	private ComponentMapper<SoundComponent> soundComponentMapper = ComponentMapper.getFor(SoundComponent.class);
@@ -57,23 +57,23 @@ public class UnitMovementSystem extends EntitySystem {
 	@Override
 	public void addedToEngine(Engine engine) {
 		allMovableEntities = engine.getEntitiesFor(
-				Family.all(PositionComponent.class, UnitStatsComponent.class, AnimationComponent.class).get());
+				Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class).get());
 
 		engine.addEntityListener(
-				Family.all(PositionComponent.class, UnitStatsComponent.class, AnimationComponent.class).get(),
+				Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class).get(),
 				new EntityListener() {
 
 					@Override
 					public void entityRemoved(Entity entity) {
 						allMovableEntities = engine.getEntitiesFor(
-								Family.all(PositionComponent.class, UnitStatsComponent.class, AnimationComponent.class)
+								Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class)
 										.get());
 					}
 
 					@Override
 					public void entityAdded(Entity entity) {
 						allMovableEntities = engine.getEntitiesFor(
-								Family.all(PositionComponent.class, UnitStatsComponent.class, AnimationComponent.class)
+								Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class)
 										.get());
 					}
 				});
@@ -83,7 +83,7 @@ public class UnitMovementSystem extends EntitySystem {
 	public void update(float delta) {
 		for (int i = 0; i < allMovableEntities.size(); i++) {
 			Entity unit = allMovableEntities.get(i);
-			UnitStatsComponent unitStatsComponent = sComponentMapper.get(unit);
+			MovementStatsComponent unitStatsComponent = sComponentMapper.get(unit);
 			
 			if (unitStatsComponent.isMoving) {
 				// Destination Cell and Starting Cell

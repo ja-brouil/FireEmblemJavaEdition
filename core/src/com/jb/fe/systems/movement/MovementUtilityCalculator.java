@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
-import com.jb.fe.components.UnitStatsComponent;
+import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell;
 
@@ -28,7 +28,7 @@ public class MovementUtilityCalculator {
 
 	// Component Mapper
 	public ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
-	public ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
+	public ComponentMapper<MovementStatsComponent> uComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	public ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
 
 	// Cell Updated
@@ -48,7 +48,7 @@ public class MovementUtilityCalculator {
 		unitMapCellUpdater.updateCellInfo();
 
 		// Stats on unit
-		UnitStatsComponent unitStatsComponent = uComponentMapper.get(unit);
+		MovementStatsComponent unitStatsComponent = uComponentMapper.get(unit);
 
 		// Reset Queue
 		allPossibleMoves.clear();
@@ -85,7 +85,7 @@ public class MovementUtilityCalculator {
 		unitStatsComponent.allOutsideAttackMoves = attackCells;
 	}
 
-	private void processTile(MapCell initialTile, UnitStatsComponent unitStatsComponent, int moveSteps, Entity unit) {
+	private void processTile(MapCell initialTile, MovementStatsComponent unitStatsComponent, int moveSteps, Entity unit) {
 		// Add initial tile
 		allPossibleMoves.add(initialTile);
 
@@ -100,7 +100,7 @@ public class MovementUtilityCalculator {
 			if (nextMoveCost >= 0) {
 				// Allow ally passage
 				if (adjMapCell.isOccupied && !(adjMapCell.occupyingUnit
-						.getComponent(UnitStatsComponent.class).isAlly == unitStatsComponent.isAlly)) {
+						.getComponent(MovementStatsComponent.class).isAlly == unitStatsComponent.isAlly)) {
 					continue;
 				} else {
 					processTile(adjMapCell, unitStatsComponent, nextMoveCost, unit);
@@ -111,10 +111,10 @@ public class MovementUtilityCalculator {
 	}
 
 	// Process Attack Tiles
-	private void processAttackTile(MapCell initialTile, int attackRange, UnitStatsComponent unitStatsComponent, Entity checkingUnit) {
+	private void processAttackTile(MapCell initialTile, int attackRange, MovementStatsComponent unitStatsComponent, Entity checkingUnit) {
 		
 		// Can't attack if ally unit is on the tile that you can "reach"
-		if (initialTile.isOccupied && !initialTile.occupyingUnit.equals(checkingUnit) && (initialTile.occupyingUnit.getComponent(UnitStatsComponent.class).isAlly == unitStatsComponent.isAlly)) {
+		if (initialTile.isOccupied && !initialTile.occupyingUnit.equals(checkingUnit) && (initialTile.occupyingUnit.getComponent(MovementStatsComponent.class).isAlly == unitStatsComponent.isAlly)) {
 			attackRange -= 1;
 		}
 		
@@ -130,7 +130,7 @@ public class MovementUtilityCalculator {
 					if (!adjMapCell.isOccupied) {
 						attackCells.add(adjMapCell);
 						processAttackTile(adjMapCell, nextAttackRange, unitStatsComponent, checkingUnit);
-					} else if (adjMapCell.isOccupied && !(adjMapCell.occupyingUnit.getComponent(UnitStatsComponent.class).isAlly == unitStatsComponent.isAlly)) {
+					} else if (adjMapCell.isOccupied && !(adjMapCell.occupyingUnit.getComponent(MovementStatsComponent.class).isAlly == unitStatsComponent.isAlly)) {
 						attackCells.add(adjMapCell);
 						processAttackTile(adjMapCell, nextAttackRange, unitStatsComponent, checkingUnit);
 					}
@@ -178,7 +178,7 @@ public class MovementUtilityCalculator {
 	public void createPathFindingQueue(MapCell destinationCell, Entity unit) {
 		
 		// Starting cell
-		UnitStatsComponent unitStatsComponent = uComponentMapper.get(unit);
+		MovementStatsComponent unitStatsComponent = uComponentMapper.get(unit);
 
 		// Clear Queue
 		pathfindingQueue.clear();

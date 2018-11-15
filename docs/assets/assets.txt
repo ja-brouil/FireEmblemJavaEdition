@@ -1,4 +1,5 @@
 d:assets:0:application/unknown
+b:.DS_Store:6148:application/unknown
 d:items:0:application/unknown
 i:items/Game Boy Advance - Fire Emblem The Blazing Blade - Item Icons.png:14883:image/png
 d:levels:0:application/unknown
@@ -12,6 +13,7 @@ i:levels/level2/level2.png:101820:image/png
 b:levels/level2/level2.tmx:2040:application/unknown
 b:levels/level2/level2tileset.tsx:196:application/unknown
 d:music:0:application/unknown
+a:music/enemy theme.mp3:2382504:application/unknown
 a:music/Enemy Turn.mp3:4512000:application/unknown
 a:music/FE Level1 HD Good.mp3:4795591:application/unknown
 a:music/FE Level1 HD.mp3:5112000:application/unknown

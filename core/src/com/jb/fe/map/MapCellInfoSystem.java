@@ -64,7 +64,7 @@ public class MapCellInfoSystem {
 					mapCell.position.x = tiledObject.getProperties().get("x", Float.class);
 					mapCell.position.y = tiledObject.getProperties().get("y", Float.class);
 					mapCell.cellType = CellType.Fortress;
-					mapCell.movementCost = MovementTileValues.NORMAL;
+					mapCell.movementCost = MovementTileValues.FORTRESS;
 					mapCell.defenceBonus = DefenseTileBonus.FORTRESS_DEF;
 					mapCell.avoidanceBonus = AvoidanceTileBonus.FORTRESS_AVD;
 				} else if (prop.equals("Village")) {

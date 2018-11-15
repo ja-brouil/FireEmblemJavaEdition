@@ -12,7 +12,7 @@ public final class SystemPriorityDictionnary {
 	public static final int TurnManager = 3;
 	public static final int MapCursorInfoUpdate = 4;
 	public static final int MovementUpdate = 6;
-	public static final int AttackPhase = 7;
+	public static final int CombatPhase = 7;
 	public static final int MapRender = 8;
 	public static final int TransitionRender = 9;
 	public static final int GraphicsRender = 10;

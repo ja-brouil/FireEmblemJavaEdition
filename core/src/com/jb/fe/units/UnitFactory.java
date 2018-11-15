@@ -10,6 +10,7 @@ import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.UnitStatsComponent;
+import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
 import com.jb.fe.systems.graphics.ZOrderDictionnary;
@@ -39,9 +40,13 @@ public class UnitFactory {
 		NameComponent nameComponent = new NameComponent(name);
 		PositionComponent positionComponent = new PositionComponent(x, y);
 		AnimationComponent animationComponent = new AnimationComponent();
+		MovementStatsComponent movementStatsComponent = new MovementStatsComponent();
 		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
 		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.MIDDLE_LAYER);
 		SoundComponent soundComponent = new SoundComponent();
+		
+		//  Unit stats
+		unitStatsComponent.setEirika();
 		
 		// Movement Sound
 		soundComponent.allSoundObjects.put("Movement", new SoundObject("sound/unitMovement/Light Foot Steps 1.wav", assetManager));
@@ -78,14 +83,15 @@ public class UnitFactory {
 
 
 		// Unit Stats
-		unitStatsComponent.isAlly = isAlly;
-		unitStatsComponent.attackRange = 2;
+		movementStatsComponent.isAlly = isAlly;
+		movementStatsComponent.movementSteps = 5;
 
 		// Add Components
+		Eirika.add(unitStatsComponent);
 		Eirika.add(nameComponent);
 		Eirika.add(positionComponent);
 		Eirika.add(animationComponent);
-		Eirika.add(unitStatsComponent);
+		Eirika.add(movementStatsComponent);
 		Eirika.add(zOrderComponent);
 		Eirika.add(soundComponent);
 
@@ -104,9 +110,13 @@ public class UnitFactory {
 		NameComponent nameComponent = new NameComponent(name);
 		PositionComponent positionComponent = new PositionComponent(x, y);
 		AnimationComponent animationComponent = new AnimationComponent();
+		MovementStatsComponent movementStatsComponent = new MovementStatsComponent();
 		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
 		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.MIDDLE_LAYER);
 		SoundComponent soundComponent = new SoundComponent();
+		
+		// Unit stats
+		unitStatsComponent.setCavalier();
 		
 		// Sound
 		soundComponent.allSoundObjects.put("Movement", new SoundObject("sound/unitMovement/Horse Steps.wav", assetManager));
@@ -143,9 +153,8 @@ public class UnitFactory {
 		animationComponent.allAnimationObjects.get("Selected").Xoffset = -12;
 		
 		// Unit Stats
-		unitStatsComponent.movementSteps = 8;
-		unitStatsComponent.attackRange = 1;
-		unitStatsComponent.isAlly = isAlly;
+		movementStatsComponent.movementSteps = 7;
+		movementStatsComponent.isAlly = isAlly;
 		
 		// Add AI component if not ally
 		if (!isAlly) {
@@ -156,6 +165,7 @@ public class UnitFactory {
 		
 		// Add Components
 		cavalierUnit.add(unitStatsComponent);
+		cavalierUnit.add(movementStatsComponent);
 		cavalierUnit.add(animationComponent);
 		cavalierUnit.add(positionComponent);
 		cavalierUnit.add(nameComponent);

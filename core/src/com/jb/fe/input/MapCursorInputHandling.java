@@ -14,8 +14,8 @@ import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
-import com.jb.fe.components.UnitStatsComponent;
-import com.jb.fe.components.UnitStatsComponent.Unit_State;
+import com.jb.fe.components.MovementStatsComponent;
+import com.jb.fe.components.MovementStatsComponent.Unit_State;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.audio.SoundSystem;
 
@@ -30,7 +30,7 @@ public class MapCursorInputHandling implements InputHandling, Component {
 	// Map Cursor Elements
 	private MapCursorStateComponent mapCursorStateComponent;
 	private PositionComponent positionComponent;
-	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
+	private ComponentMapper<MovementStatsComponent> uComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 
 	// Key Delay
 	private float keyDelayForMovement;
@@ -68,7 +68,7 @@ public class MapCursorInputHandling implements InputHandling, Component {
 				System.out.println("Occupying Unit: null");
 			} else {
 				System.out.println("Occupying Unit: " + mapCursorStateComponent.unitSelected.getComponent(NameComponent.class).name);
-				System.out.println("Occupying Unit Status: " + mapCursorStateComponent.unitSelected.getComponent(UnitStatsComponent.class).toString());
+				System.out.println("Occupying Unit Status: " + mapCursorStateComponent.unitSelected.getComponent(MovementStatsComponent.class).toString());
 			}
 			System.out.println("------------------------------------");
 		}

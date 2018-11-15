@@ -16,6 +16,7 @@ import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.UnitStatsComponent;
+import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.movement.MovementUtilityCalculator;
@@ -34,13 +35,14 @@ public class AISystem extends EntitySystem{
 	private MovementUtilityCalculator movementUtilityCalculator;
 	
 	// Component Mappers 
-	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
+	private ComponentMapper<MovementStatsComponent> movementComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	private ComponentMapper<Artifical_IntelligenceComponent> aiComponentMapper = ComponentMapper.getFor(Artifical_IntelligenceComponent.class);
 	private ComponentMapper<NameComponent> nameComponentMapper = ComponentMapper.getFor(NameComponent.class);
+	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
 	
 	// Processing Component
 	private Artifical_IntelligenceComponent artifical_IntelligenceComponent;
-	private UnitStatsComponent enemyUnitComponent;
+	private MovementStatsComponent enemyUnitComponent;
 	
 	// Eirika for Pathfinding Purposes
 	private Entity eirika;
@@ -64,13 +66,13 @@ public class AISystem extends EntitySystem{
 
 	@Override
 	public void addedToEngine(Engine engine) {
-		engine.addEntityListener(Family.all(UnitStatsComponent.class).get(), new EntityListener() {
+		engine.addEntityListener(Family.all(MovementStatsComponent.class,  UnitStatsComponent.class).get(), new EntityListener() {
 			
 			@Override
 			public void entityRemoved(Entity entity) {
-				allGameEntities = engine.getEntitiesFor(Family.all(UnitStatsComponent.class).get());
+				allGameEntities = engine.getEntitiesFor(Family.all(MovementStatsComponent.class, UnitStatsComponent.class).get());
 				
-				if(uComponentMapper.get(entity).isAlly) {
+				if(movementComponentMapper.get(entity).isAlly) {
 					allyUnits.removeValue(entity, true);
 				} else {
 					enemyUnits.removeValue(entity, true);
@@ -79,14 +81,14 @@ public class AISystem extends EntitySystem{
 			
 			@Override
 			public void entityAdded(Entity entity) {
-				allGameEntities = engine.getEntitiesFor(Family.all(UnitStatsComponent.class).get());
+				allGameEntities = engine.getEntitiesFor(Family.all(MovementStatsComponent.class,  UnitStatsComponent.class).get());
 				
 				// Set Eirika
 				if (nameComponentMapper.get(entity).name.equals("Eirika")) {
 					eirika = entity;
 				}
 				
-				if(uComponentMapper.get(entity).isAlly) {
+				if(movementComponentMapper.get(entity).isAlly) {
 					allyUnits.add(entity);
 				} else {
 					enemyUnits.add(entity);
@@ -106,14 +108,14 @@ public class AISystem extends EntitySystem{
 		
 		// Clear Arrays
 		reachableUnits.clear();
-		enemyUnitComponent = uComponentMapper.get(enemyUnit);
+		enemyUnitComponent = movementComponentMapper.get(enemyUnit);
 		artifical_IntelligenceComponent = aiComponentMapper.get(enemyUnit);
 		
 		// Start Unit Processing
 		artifical_IntelligenceComponent.isProcessing = true;
 		
 		for (Entity allyUnit : allyUnits) {
-			UnitStatsComponent allyUnitStatComponent = uComponentMapper.get(allyUnit);
+			MovementStatsComponent allyUnitStatComponent = movementComponentMapper.get(allyUnit);
 			if (enemyUnitComponent.allOutsideAttackMoves.contains(allyUnitStatComponent.currentCell, true)) {
 				reachableUnits.add(allyUnit);
 			}
@@ -146,7 +148,7 @@ public class AISystem extends EntitySystem{
 	 */
 	private void processAggresiveAI() {
 		// Locate where is Eirika
-		MapCell eirikaMapCell = uComponentMapper.get(eirika).currentCell;
+		MapCell eirikaMapCell = movementComponentMapper.get(eirika).currentCell;
 		MapCell destinationCell = null;
 		MapCell currentCell = null;
 		for (MapCell mapCell : eirikaMapCell.adjTiles) {
@@ -252,7 +254,7 @@ public class AISystem extends EntitySystem{
 	private void findTileToMoveTo(Entity unitToAttack) {
 		// Check if unit is melee or ranged
 		if (enemyUnitComponent.attackRange == 1) {
-			for (MapCell mapCell : uComponentMapper.get(unitToAttack).currentCell.adjTiles) {
+			for (MapCell mapCell : movementComponentMapper.get(unitToAttack).currentCell.adjTiles) {
 				if (enemyUnitComponent.allPossibleMoves.contains(mapCell)) {
 						if (mapCell.isOccupied) {
 							if (mapCell.occupyingUnit.equals(enemyUnit)) {
@@ -284,13 +286,13 @@ public class AISystem extends EntitySystem{
 	 */
 	public void sortEntities(){
 		// Clear Arrays
-		allGameEntities = getEngine().getEntitiesFor(Family.all(UnitStatsComponent.class).get());
+		allGameEntities = getEngine().getEntitiesFor(Family.all(MovementStatsComponent.class).get());
 		allyUnits.clear();
 		enemyUnits.clear();
 		
 		// Sort entities based on alliance
 		for (Entity gameUnit : allGameEntities) {
-			UnitStatsComponent unitStatsComponent = uComponentMapper.get(gameUnit);
+			MovementStatsComponent unitStatsComponent = movementComponentMapper.get(gameUnit);
 			if (unitStatsComponent.isAlly) {
 				allyUnits.add(gameUnit);
 			} else {

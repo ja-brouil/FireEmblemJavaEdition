@@ -14,9 +14,9 @@ import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.StaticImageComponent;
-import com.jb.fe.components.UnitStatsComponent;
+import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
-import com.jb.fe.components.UnitStatsComponent.Unit_State;
+import com.jb.fe.components.MovementStatsComponent.Unit_State;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
@@ -51,7 +51,7 @@ public class TurnManager extends EntitySystem {
 	private SoundSystem soundSystem;
 
 	// Component Mapper
-	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
+	private ComponentMapper<MovementStatsComponent> uComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	private ComponentMapper<Artifical_IntelligenceComponent> aiComponentMapper = ComponentMapper.getFor(Artifical_IntelligenceComponent.class);
 	private ComponentMapper<MapCursorStateComponent> cursorStateComponentMapper = ComponentMapper.getFor(MapCursorStateComponent.class);
 	private ComponentMapper<AnimationComponent> aComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
@@ -66,11 +66,11 @@ public class TurnManager extends EntitySystem {
 
 	@Override
 	public void addedToEngine(Engine engine) {
-		engine.addEntityListener(Family.all(UnitStatsComponent.class).get(), new EntityListener() {
+		engine.addEntityListener(Family.all(MovementStatsComponent.class).get(), new EntityListener() {
 
 			@Override
 			public void entityRemoved(Entity entity) {
-				allGameUnits = engine.getEntitiesFor(Family.all(UnitStatsComponent.class).get());
+				allGameUnits = engine.getEntitiesFor(Family.all(MovementStatsComponent.class).get());
 
 				if (uComponentMapper.get(entity).isAlly) {
 					allyUnits.removeValue(entity, true);
@@ -81,7 +81,7 @@ public class TurnManager extends EntitySystem {
 
 			@Override
 			public void entityAdded(Entity entity) {
-				allGameUnits = engine.getEntitiesFor(Family.all(UnitStatsComponent.class).get());
+				allGameUnits = engine.getEntitiesFor(Family.all(MovementStatsComponent.class).get());
 
 				if (uComponentMapper.get(entity).isAlly) {
 					allyUnits.add(entity);

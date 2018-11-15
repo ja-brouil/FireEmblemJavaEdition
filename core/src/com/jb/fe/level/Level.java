@@ -7,10 +7,8 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
-import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
 import com.jb.fe.map.MapCell;
-import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.units.UnitFactory;
 
 public class Level {
@@ -57,13 +55,10 @@ public class Level {
 		engine.addEntity(unitFactory.createCavalierUnit("Seth", "units/cavalier/cavalierAlly copy.png", 2 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, true));
 		
 		// Enemy
-		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 4 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
 		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 11 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
-		engine.addEntity(unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 12 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
-		Entity entity = unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 96, 112, false);
-		entity.getComponent(UnitStatsComponent.class).movementSteps = 3;
-		entity.getComponent(Artifical_IntelligenceComponent.class).ai_Type = AI_TYPE.AGGRESSIVE;
-		engine.addEntity(entity);
+		Entity aggresiveAI = unitFactory.createCavalierUnit("Evil Seth", "units/cavalier/cavalierAllyRed.png", 12 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false);
+		aggresiveAI.getComponent(Artifical_IntelligenceComponent.class).ai_Type = AI_TYPE.AGGRESSIVE;
+		engine.addEntity(aggresiveAI);
 		
 		
 		// Set Map Bounderies
@@ -71,10 +66,6 @@ public class Level {
 		
 		// Start MapCell Array
 		allLevelMapCells = new MapCell[mapWidthLimit / MapCell.CELL_SIZE][mapHeightLimit / MapCell.CELL_SIZE];
-	}
-	
-	public void setMusic(String songName) {
-		MusicSystem musicSystem = engine.getSystem(MusicSystem.class);
 	}
 
 	/*

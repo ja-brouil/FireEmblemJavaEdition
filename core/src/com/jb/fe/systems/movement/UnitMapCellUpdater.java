@@ -9,7 +9,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.PositionComponent;
-import com.jb.fe.components.UnitStatsComponent;
+import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell;
 
@@ -23,7 +23,7 @@ public class UnitMapCellUpdater extends EntitySystem{
 	
 	// Unit Stats
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
-	private ComponentMapper<UnitStatsComponent> unitStatsMapper = ComponentMapper.getFor(UnitStatsComponent.class);
+	private ComponentMapper<MovementStatsComponent> unitStatsMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	
 	public UnitMapCellUpdater() {
 		// This should only be called when needed
@@ -33,18 +33,18 @@ public class UnitMapCellUpdater extends EntitySystem{
 	// Listeners
 	@Override
 	public void addedToEngine(Engine engine) {
-		allGameEntities =  engine.getEntitiesFor(Family.all(PositionComponent.class, UnitStatsComponent.class, AnimationComponent.class).get());
+		allGameEntities =  engine.getEntitiesFor(Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class).get());
 		
-		engine.addEntityListener(Family.all(PositionComponent.class, UnitStatsComponent.class, AnimationComponent.class).get(), new EntityListener() {
+		engine.addEntityListener(Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class).get(), new EntityListener() {
 			
 			@Override
 			public void entityRemoved(Entity entity) {
-				allGameEntities =  engine.getEntitiesFor(Family.all(PositionComponent.class, UnitStatsComponent.class, AnimationComponent.class).get());
+				allGameEntities =  engine.getEntitiesFor(Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class).get());
 			}
 			
 			@Override
 			public void entityAdded(Entity entity) {
-				allGameEntities =  engine.getEntitiesFor(Family.all(PositionComponent.class, UnitStatsComponent.class, AnimationComponent.class).get());
+				allGameEntities =  engine.getEntitiesFor(Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class).get());
 			}
 		});
 	}
@@ -63,7 +63,7 @@ public class UnitMapCellUpdater extends EntitySystem{
 		// Update Units + Reset Moving Variable
 		for (Entity unit : allGameEntities) {
 			PositionComponent unitPositionComponent = pComponentMapper.get(unit);
-			UnitStatsComponent unitStatsComponent = unitStatsMapper.get(unit);
+			MovementStatsComponent unitStatsComponent = unitStatsMapper.get(unit);
 			
 			// Get Cell coordinates
 			int x = (int) unitPositionComponent.x / MapCell.CELL_SIZE;
@@ -79,7 +79,7 @@ public class UnitMapCellUpdater extends EntitySystem{
 	
 	// Get all Game Units
 	public void getAllGameUnits() {
-		allGameEntities = getEngine().getEntitiesFor(Family.all(PositionComponent.class, UnitStatsComponent.class, AnimationComponent.class).get());	
+		allGameEntities = getEngine().getEntitiesFor(Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class).get());	
 	}
 	
 	// Set Tiles

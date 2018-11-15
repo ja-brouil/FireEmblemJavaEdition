@@ -13,7 +13,7 @@ import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.StaticImageComponent;
-import com.jb.fe.components.UnitStatsComponent;
+import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
@@ -33,7 +33,7 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 	// Retrievers
 	private ComponentMapper<AnimationComponent> animationComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
 	private ComponentMapper<MapCursorStateComponent> mapCursorComponentMapper = ComponentMapper.getFor(MapCursorStateComponent.class);
-	private ComponentMapper<UnitStatsComponent> unitStatComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
+	private ComponentMapper<MovementStatsComponent> unitStatComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	private ComponentMapper<StaticImageComponent> staticImageComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	
@@ -57,12 +57,12 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 			
 			@Override
 			public void entityRemoved(Entity entity) {
-				allGameUnits = engine.getEntitiesFor(Family.all(AnimationComponent.class, UnitStatsComponent.class).get());
+				allGameUnits = engine.getEntitiesFor(Family.all(AnimationComponent.class, MovementStatsComponent.class).get());
 			}
 			
 			@Override
 			public void entityAdded(Entity entity) {
-				allGameUnits = engine.getEntitiesFor(Family.all(AnimationComponent.class, UnitStatsComponent.class).get());
+				allGameUnits = engine.getEntitiesFor(Family.all(AnimationComponent.class, MovementStatsComponent.class).get());
 			}
 		});
 	}
@@ -83,7 +83,7 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 			
 			for (Entity unit : allGameUnits) {
 				AnimationComponent unitAnimation = animationComponentMapper.get(unit);
-				UnitStatsComponent unitStatsComponent = unitStatComponentMapper.get(unit);
+				MovementStatsComponent unitStatsComponent = unitStatComponentMapper.get(unit);
 				PositionComponent positionComponent = pComponentMapper.get(unit);
 				// Reset
 				unitAnimation.currentAnimation = unitAnimation.allAnimationObjects.get("Idle");
@@ -115,7 +115,7 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 			staticImageComponentMapper.get(mapCursor).isEnabled = false;
 			
 			// Only units that are allies can be selected!
-			UnitStatsComponent unitStatsComponent = unitStatComponentMapper.get(mapCursorStateComponent.unitSelected);
+			MovementStatsComponent unitStatsComponent = unitStatComponentMapper.get(mapCursorStateComponent.unitSelected);
 			if (unitStatsComponent.isAlly) {
 				// Set Animation
 				AnimationComponent unitAnimation = animationComponentMapper.get(mapCursorStateComponent.unitSelected);
@@ -138,7 +138,7 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 		// Check Valid Move
 		else if (mapCursorStateComponent.mapCursorState.equals(MapCursorState.VALID_MOVE_CHECK)) {
 			// Is the unit 'selected' an ally?
-			UnitStatsComponent unitStatsComponent = unitStatComponentMapper.get(mapCursorStateComponent.unitSelected);
+			MovementStatsComponent unitStatsComponent = unitStatComponentMapper.get(mapCursorStateComponent.unitSelected);
 			if (!unitStatsComponent.isAlly) {
 				soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Invalid"));
 				mapCursorStateComponent.mapCursorState = MapCursorState.MOVEMENT_ONLY;
@@ -156,7 +156,7 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 			// Is Move in the hashset
 			if (movementUtilityCalculator.getAllPossibleMoves().contains(cursorMapCell)) {
 				// Start unit movement system
-				mapCursorStateComponent.unitSelected.getComponent(UnitStatsComponent.class).isMoving = true;
+				mapCursorStateComponent.unitSelected.getComponent(MovementStatsComponent.class).isMoving = true;
 				movementUtilityCalculator.createPathFindingQueue(cursorMapCell, mapCursorStateComponent.unitSelected);
 				mapCursorStateComponent.mapCursorState = MapCursorState.DISABLED;
 				

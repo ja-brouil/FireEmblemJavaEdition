@@ -65,6 +65,7 @@ public class MapCell {
 	public static class MovementTileValues {
 		public static final int NORMAL = 1;
 		public static final int FOREST = 2;
+		public static final int FORTRESS = 2;
 		public static final int IMPASSABLE = 100;
 	}
 	

@@ -13,6 +13,8 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Array;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
+import com.jb.fe.components.InventoryComponent;
+import com.jb.fe.components.ItemComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.UnitStatsComponent;
@@ -39,6 +41,8 @@ public class AISystem extends EntitySystem{
 	private ComponentMapper<Artifical_IntelligenceComponent> aiComponentMapper = ComponentMapper.getFor(Artifical_IntelligenceComponent.class);
 	private ComponentMapper<NameComponent> nameComponentMapper = ComponentMapper.getFor(NameComponent.class);
 	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
+	private ComponentMapper<InventoryComponent> invComponentMapper = ComponentMapper.getFor(InventoryComponent.class);
+	private ComponentMapper<ItemComponent> iComponentMapper = ComponentMapper.getFor(ItemComponent.class);
 	
 	// Processing Component
 	private Artifical_IntelligenceComponent artifical_IntelligenceComponent;

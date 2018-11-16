@@ -6,6 +6,7 @@ import com.jb.fe.audio.SoundObject;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.AnimationObject;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
+import com.jb.fe.components.InventoryComponent;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
@@ -14,26 +15,11 @@ import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
 import com.jb.fe.systems.graphics.ZOrderDictionnary;
+import com.jb.fe.systems.items.ItemFactory;
 
-/*
- * This creates player units
- */
 public class UnitFactory {
 
-	// Asset Manager
-	private AssetManager assetManager;
-
-	// Sound Effects
-	// TO DO
-
-	public UnitFactory(AssetManager assetManager) {
-		this.assetManager = assetManager;
-	}
-
-	/*
-	 * Create Eirika
-	 */
-	public Entity createEirika(String name, String animationFileLocation, float x, float y, boolean isAlly) {
+	public static Entity createEirika(AssetManager assetManager, String name, String animationFileLocation, float x, float y, boolean isAlly) {
 		Entity Eirika = new Entity();
 
 		// Components
@@ -44,6 +30,7 @@ public class UnitFactory {
 		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
 		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.MIDDLE_LAYER);
 		SoundComponent soundComponent = new SoundComponent();
+		InventoryComponent inventoryComponent = new InventoryComponent();
 		
 		//  Unit stats
 		unitStatsComponent.setEirika();
@@ -81,10 +68,12 @@ public class UnitFactory {
 		animationComponent.allAnimationObjects.get("Idle").Xoffset = -3;
 		animationComponent.allAnimationObjects.get("Selected").Xoffset = -2;
 
-
 		// Unit Stats
-		movementStatsComponent.isAlly = isAlly;
 		movementStatsComponent.movementSteps = 5;
+		
+		// Inventory
+		inventoryComponent.inventory[0] = ItemFactory.createWeapon("Iron Sword");
+		inventoryComponent.selectedItem = inventoryComponent.inventory[0];
 
 		// Add Components
 		Eirika.add(unitStatsComponent);
@@ -98,12 +87,7 @@ public class UnitFactory {
 		return Eirika;
 	}
 
-	/**
-	 * Creates a cavalier unit
-	 * 
-	 * @return
-	 */
-	public Entity createCavalierUnit(String name, String animationFileLocation, float x, float y, boolean isAlly) {
+	public static Entity createCavalierUnit(AssetManager assetManager, String name, String animationFileLocation, float x, float y, boolean isAlly) {
 		Entity cavalierUnit = new Entity();
 
 		// Components
@@ -114,6 +98,7 @@ public class UnitFactory {
 		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
 		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.MIDDLE_LAYER);
 		SoundComponent soundComponent = new SoundComponent();
+		InventoryComponent inventoryComponent = new InventoryComponent();
 		
 		// Unit stats
 		unitStatsComponent.setCavalier();
@@ -162,6 +147,10 @@ public class UnitFactory {
 			aiComponent.ai_Type = AI_TYPE.PASSIVE;
 			cavalierUnit.add(aiComponent);
 		}
+		
+		// Inventory Component
+		inventoryComponent.inventory[0] = ItemFactory.createWeapon("Iron Sword");
+		inventoryComponent.selectedItem = inventoryComponent.inventory[0];
 		
 		// Add Components
 		cavalierUnit.add(unitStatsComponent);

@@ -8,18 +8,21 @@ import com.badlogic.gdx.utils.Queue;
 import com.jb.fe.map.MapCell;
 
 public class MovementStatsComponent implements Component {
-
-	// Attack Range
-	public int attackRange;
 	
 	// Movement
 	public int movementSteps;
 	public float animationMovementSpeed;
+	
+	// Tile
 	public MapCell currentCell;
 	public MapCell destinationCell;
+	
+	// Pathfinding Algorithm ARrays
 	public HashSet<MapCell> allPossibleMoves;
 	public Array<MapCell> allOutsideAttackMoves;
 	public Queue<MapCell> pathfindingQueue;
+	
+	// Animation system
 	public boolean isMoving;
 	
 	// Attack Status
@@ -36,7 +39,6 @@ public class MovementStatsComponent implements Component {
 		allOutsideAttackMoves = new Array<>();
 		pathfindingQueue = new Queue<MapCell>();
 		movementSteps = 4;
-		attackRange = 1;
 		isAlly = true;
 		currentCell = null;
 		isMoving = false;

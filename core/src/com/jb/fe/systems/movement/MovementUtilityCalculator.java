@@ -8,6 +8,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
+import com.jb.fe.components.InventoryComponent;
+import com.jb.fe.components.ItemComponent;
 import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell;
@@ -27,9 +29,11 @@ public class MovementUtilityCalculator {
 	private MapCell[][] allMapCells;
 
 	// Component Mapper
-	public ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
-	public ComponentMapper<MovementStatsComponent> uComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
-	public ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
+	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
+	private ComponentMapper<MovementStatsComponent> uComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
+	private ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
+	private ComponentMapper<InventoryComponent> invComponentMapper = ComponentMapper.getFor(InventoryComponent.class);
+	private ComponentMapper<ItemComponent> iComponentMapper = ComponentMapper.getFor(ItemComponent.class);
 
 	// Cell Updated
 	private UnitMapCellUpdater unitMapCellUpdater;
@@ -49,6 +53,7 @@ public class MovementUtilityCalculator {
 
 		// Stats on unit
 		MovementStatsComponent unitStatsComponent = uComponentMapper.get(unit);
+		InventoryComponent inventoryComponent = invComponentMapper.get(unit);
 
 		// Reset Queue
 		allPossibleMoves.clear();
@@ -71,7 +76,7 @@ public class MovementUtilityCalculator {
 		// Process Movement and Attack Tiles
 		processTile(getMapCell(unit), unitStatsComponent, unitStatsComponent.movementSteps, unit);
 		for (MapCell attackMapCell : allPossibleMoves) {
-			processAttackTile(attackMapCell, unitStatsComponent.attackRange, unitStatsComponent, unit);
+			processAttackTile(attackMapCell, iComponentMapper.get(inventoryComponent.selectedItem).maxRange, unitStatsComponent, unit);
 		}
 		
 		// Light Squares

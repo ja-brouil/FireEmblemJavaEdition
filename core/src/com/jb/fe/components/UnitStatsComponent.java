@@ -15,6 +15,7 @@ public class UnitStatsComponent implements Component{
 	public int luck;		// critical hit rate, adds to avoidance rate
 	public int def;			// physical damage defence
 	public int res;			// magical damage defence
+	public int consti;		// allows to weild heavier weapons
 	
 	// Class
 	public ClassList unitClass;
@@ -38,6 +39,7 @@ public class UnitStatsComponent implements Component{
 		luck = 5;
 		def = 3;
 		res = 1;
+		consti = 5;
 	}
 	
 	// Cavalier
@@ -51,6 +53,7 @@ public class UnitStatsComponent implements Component{
 		luck = 2;
 		def = 6;
 		res = 1;
+		consti = 9;
 	}
 	
 	// Knight

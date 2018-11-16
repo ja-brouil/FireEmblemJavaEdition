@@ -257,7 +257,7 @@ public class AISystem extends EntitySystem{
 	// Find Tile to Move to -> This algorithm will have to be modified for ranged units
 	private void findTileToMoveTo(Entity unitToAttack) {
 		// Check if unit is melee or ranged
-		if (enemyUnitComponent.attackRange == 1) {
+		if (iComponentMapper.get(invComponentMapper.get(unitToAttack).selectedItem).maxRange == 1) {
 			for (MapCell mapCell : movementComponentMapper.get(unitToAttack).currentCell.adjTiles) {
 				if (enemyUnitComponent.allPossibleMoves.contains(mapCell)) {
 						if (mapCell.isOccupied) {

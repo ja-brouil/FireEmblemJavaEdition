@@ -83,6 +83,7 @@ public class UnitFactory {
 		Eirika.add(movementStatsComponent);
 		Eirika.add(zOrderComponent);
 		Eirika.add(soundComponent);
+		Eirika.add(inventoryComponent);
 
 		return Eirika;
 	}
@@ -160,6 +161,7 @@ public class UnitFactory {
 		cavalierUnit.add(nameComponent);
 		cavalierUnit.add(zOrderComponent);
 		cavalierUnit.add(soundComponent);
+		cavalierUnit.add(inventoryComponent);
 
 		return cavalierUnit;
 	}

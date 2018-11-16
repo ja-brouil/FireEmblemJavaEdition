@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.jb.fe.components.InventoryComponent;
 import com.jb.fe.components.ItemComponent;
-import com.jb.fe.components.ItemComponent.ItemType;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 
@@ -44,6 +43,14 @@ public class CombatSystem extends EntitySystem{
 		return false;
 	}
 	
+	public void calculateHitChance() {
+		
+	}
+	
+	public void calculateCritChance() {
+		
+	}
+	
 	// Utility functions
 	public void getComponents() {
 		attackingUnitStats = uComponentMapper.get(attackingUnit);
@@ -64,26 +71,14 @@ public class CombatSystem extends EntitySystem{
 		this.attackingItem = null;
 	}
 	
-	public WeaponBonusStatus hasWeaponBonus() {
-		// Bow
-		if (attackingItem.itemType.equals(ItemType.BOW)) {
-			return WeaponBonusStatus.NEUTRAL;
+	public int getWeaponBonus() {
+		if (attackingItem.itemType.strongAgainst.equals(defendingItem.itemType.itemClass)) {
+			return 1;
 		}
 		
-		// Neutral
-		if (attackingItem.itemType.equals(defendingItem.itemType)) {
-			return WeaponBonusStatus.NEUTRAL;
+		if (defendingItem.itemType.strongAgainst.equals(attackingItem.itemType.itemClass)) {
+			return -1;
 		}
-		
-		// Strong
-		
-		
-		// Weak
-		return WeaponBonusStatus.WEAK;
-		
-	}
-	
-	public enum WeaponBonusStatus {
-		BONUS, WEAK, NEUTRAL
+		return 0;
 	}
 }

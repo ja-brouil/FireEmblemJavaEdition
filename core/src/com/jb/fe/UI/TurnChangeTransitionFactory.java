@@ -32,7 +32,6 @@ public class TurnChangeTransitionFactory {
 		staticImageComponent.width = 240;
 		soundComponent.allSoundObjects.put("Transition", new SoundObject("sound/Next Turn.wav", assetManager));
 		
-		
 		transitionPhase.add(soundComponent);
 		transitionPhase.add(zOrderComponent);
 		transitionPhase.add(staticImageComponent);

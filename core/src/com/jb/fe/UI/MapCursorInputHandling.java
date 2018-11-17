@@ -1,21 +1,18 @@
-package com.jb.fe.input;
+package com.jb.fe.UI;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-//import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-//import com.badlogic.gdx.math.Vector3;
 import com.jb.fe.components.InputComponent.InputHandling;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
+import com.jb.fe.components.MovementStatsComponent;
+import com.jb.fe.components.MovementStatsComponent.Unit_State;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
-import com.jb.fe.components.MovementStatsComponent;
-import com.jb.fe.components.MovementStatsComponent.Unit_State;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.audio.SoundSystem;
 
@@ -25,7 +22,7 @@ import com.jb.fe.systems.audio.SoundSystem;
  *
  */
 
-public class MapCursorInputHandling implements InputHandling, Component {
+public class MapCursorInputHandling implements InputHandling{
 
 	// Map Cursor Elements
 	private MapCursorStateComponent mapCursorStateComponent;
@@ -41,7 +38,6 @@ public class MapCursorInputHandling implements InputHandling, Component {
 
 	// MapCursor
 	private Entity mapCursor;
-
 
 	public MapCursorInputHandling(MapCursorStateComponent mapCursorStateComponent, PositionComponent positionComponent,
 			SoundSystem soundSystem, Entity mapCursor, OrthographicCamera camera) {

@@ -4,31 +4,33 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
+import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.StaticImageComponent;
-import com.jb.fe.components.MovementStatsComponent;
+import com.jb.fe.components.UIComponent.UpdateUI;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell;
-import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.gamePlay.AISystem;
 import com.jb.fe.systems.movement.MovementUtilityCalculator;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 
-public class MapCursorInfoUpdateSystem extends EntitySystem{
+public class MapCursorInfoUpdate implements UpdateUI{
 
 	// Entites Required
 	private Entity mapCursor;
 	
 	// Game Unit Array
 	private ImmutableArray<Entity> allGameUnits;
+	
+	// Level
+	private Level level;
 	
 	// Retrievers
 	private ComponentMapper<AnimationComponent> animationComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
@@ -45,14 +47,8 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 	
 	// Sound
 	private SoundSystem soundSystem;
-	
-	public MapCursorInfoUpdateSystem() {
-		priority = SystemPriorityDictionnary.MapCursorInfoUpdate;
-	}
-	
-	
-	@Override
-	public void addedToEngine(Engine engine) {
+
+	public void addEntityListener(Engine engine) {
 		engine.addEntityListener(Family.all(AnimationComponent.class).get(), new EntityListener() {
 			
 			@Override
@@ -68,7 +64,10 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 	}
 	
 	@Override
-	public void update(float delta) {
+	public void updateUI(float delta) {
+		// Prevent out of bounds
+		preventOutOfBounds();
+		
 		// Set Units to Selected
 		MapCursorStateComponent mapCursorStateComponent = mapCursorComponentMapper.get(mapCursor);
 		
@@ -179,11 +178,34 @@ public class MapCursorInfoUpdateSystem extends EntitySystem{
 		}
 	}
 	
-	public void startSystem(Level level) {
-		mapCursor = getEngine().getEntitiesFor(Family.all(MapCursorStateComponent.class).get()).first();
-		unitMapCellUpdater = getEngine().getSystem(UnitMapCellUpdater.class);
+	private void preventOutOfBounds() {
+		PositionComponent positionComponent = pComponentMapper.get(mapCursor);
+		AnimationComponent animationComponent = animationComponentMapper.get(mapCursor);
+		
+		if (positionComponent.x < 0) {
+			positionComponent.x = 0;
+		}
+		
+		if (positionComponent.x > level.mapWidthLimit - (animationComponent.currentAnimation.width * 2)) {
+			positionComponent.x = level.mapWidthLimit - (animationComponent.currentAnimation.width * 2);
+		}
+		
+		if (positionComponent.y < 0) {
+			positionComponent.y = 0;
+		}
+		
+		if (positionComponent.y > level.mapHeightLimit - animationComponent.currentAnimation.height) {
+			positionComponent.y = level.mapHeightLimit - animationComponent.currentAnimation.height;
+		}
+	}
+	
+	public void startSystem(Level level, Engine engine, Entity mapCursor) {
+		this.level = level;
+		this.mapCursor = mapCursor;
+		unitMapCellUpdater = engine.getSystem(UnitMapCellUpdater.class);
 		movementUtilityCalculator = new MovementUtilityCalculator(level, unitMapCellUpdater);
-		soundSystem = getEngine().getSystem(SoundSystem.class);
-		getEngine().getSystem(AISystem.class).setMovementCalculator(movementUtilityCalculator);
+		soundSystem = engine.getSystem(SoundSystem.class);
+		engine.getSystem(AISystem.class).setMovementCalculator(movementUtilityCalculator);
+		addEntityListener(engine);
 	}
 }

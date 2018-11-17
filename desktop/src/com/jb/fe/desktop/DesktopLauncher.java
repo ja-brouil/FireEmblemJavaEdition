@@ -26,6 +26,10 @@ public class DesktopLauncher {
 		config.foregroundFPS = 60;
 		config.backgroundFPS = -1;
 		
+		// Icon
+		config.audioDeviceBufferCount *= 2;
+		config.audioDeviceSimultaneousSources *= 2;
+		
 		// Windows
 		config.vSyncEnabled = false;
 		

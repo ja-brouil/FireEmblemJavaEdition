@@ -1,8 +1,10 @@
-package com.jb.fe.input;
+package com.jb.fe.UI;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.jb.fe.UI.actionMenu.ActionMenuUpdate;
 import com.jb.fe.audio.SoundObject;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.AnimationObject;
@@ -11,16 +13,21 @@ import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.StaticImageComponent;
+import com.jb.fe.components.UIComponent;
+import com.jb.fe.components.UITextComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
+import com.jb.fe.components.NameComponent;
+import com.jb.fe.level.Level;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.graphics.ZOrderDictionnary;
+import com.jb.fe.systems.input.MapCursorInfoUpdate;
 
 /*
  * Creates a map cursor for the main battlefield
  */
-public class MapCursorFactory {
+public class UIFactory {
 	
 	// Graphic Variables
 	private AssetManager assetManager;
@@ -31,13 +38,13 @@ public class MapCursorFactory {
 	// Camera
 	private OrthographicCamera camera;
 	
-	public MapCursorFactory(AssetManager assetManager, SoundSystem soundSystem, OrthographicCamera camera) {
+	public UIFactory(AssetManager assetManager, SoundSystem soundSystem, OrthographicCamera camera) {
 		this.assetManager = assetManager;
 		this.soundSystem = soundSystem;
 		this.camera = camera;
 	}
 	
-	public Entity createMapCursor() {
+	public Entity createMapCursor(Level level, Engine engine) {
 		Entity mapCursor = new Entity();
 		
 		// Components
@@ -66,8 +73,19 @@ public class MapCursorFactory {
 		
 		InputComponent inputComponent = new InputComponent();
 		inputComponent.inputHandling = new MapCursorInputHandling(mapCursorStateComponent, positionComponent, soundSystem, mapCursor, camera);
+		inputComponent.isEnabled = true;
+		
+		UIComponent uiComponent = new UIComponent();
+		MapCursorInfoUpdate mapCursorInfoUpdate = new MapCursorInfoUpdate();
+		mapCursorInfoUpdate.startSystem(level, engine, mapCursor);
+		uiComponent.updateUI = mapCursorInfoUpdate;
+		uiComponent.isEnabled = true;
+		
+		NameComponent nameComponent = new NameComponent("Map Cursor");
 		
 		// Add components
+		mapCursor.add(nameComponent);
+		mapCursor.add(uiComponent);
 		mapCursor.add(animationComponent);
 		mapCursor.add(positionComponent);
 		mapCursor.add(mapCursorStateComponent);
@@ -76,5 +94,39 @@ public class MapCursorFactory {
 		mapCursor.add(zOrderComponent);
 		mapCursor.add(soundComponent);
 		return mapCursor;
+	}
+	
+	public Entity createActionMenu() {
+		Entity actionMenu = new Entity();
+		
+		// Components
+		NameComponent nameComponent = new NameComponent("Action Menu");
+		
+		PositionComponent positionComponent = new PositionComponent();
+		
+		InputComponent inputComponent = new InputComponent();
+		
+		UIComponent uiComponent = new UIComponent();
+		uiComponent.updateUI = new ActionMenuUpdate(actionMenu);
+		
+		UITextComponent uiTextComponent = new UITextComponent();
+		uiTextComponent.textArray.add("Attack");
+		uiTextComponent.textArray.add("Items");
+		uiTextComponent.textArray.add("Trade");
+		uiTextComponent.textArray.add("Wait");
+		
+		// Add Components
+		actionMenu.add(nameComponent);
+		actionMenu.add(positionComponent);
+		actionMenu.add(uiTextComponent);
+		
+		return actionMenu;
+	}
+	
+	public Entity createDamagePreview() {
+		Entity damagePreview = new Entity();
+		
+		
+		return damagePreview;
 	}
 }

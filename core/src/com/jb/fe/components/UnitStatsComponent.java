@@ -20,6 +20,11 @@ public class UnitStatsComponent implements Component{
 	// Class
 	public ClassList unitClass;
 	
+	// Bonuses
+	public int bonusCrit;
+	public int bonusDodge;
+	public int bonusHit;
+	
 	// Unit Level
 	public int Level;
 	public int currentExperience;
@@ -40,6 +45,9 @@ public class UnitStatsComponent implements Component{
 		def = 3;
 		res = 1;
 		consti = 5;
+		bonusCrit = 5;
+		bonusDodge = 5;
+		bonusHit = 5;
 	}
 	
 	// Cavalier
@@ -54,11 +62,14 @@ public class UnitStatsComponent implements Component{
 		def = 6;
 		res = 1;
 		consti = 9;
+		bonusCrit = 0;
+		bonusDodge = 0;
+		bonusHit = 0;
 	}
 	
 	// Knight
 	public void setKnight() {
-		
+		// TO DO
 	}
 	
 	public static enum ClassList {

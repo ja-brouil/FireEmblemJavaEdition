@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.jb.fe.UI.actionMenu.ActionMenuUpdate;
 import com.jb.fe.audio.SoundObject;
 import com.jb.fe.components.AnimationComponent;
@@ -42,6 +43,10 @@ public class UIFactory {
 		this.assetManager = assetManager;
 		this.soundSystem = soundSystem;
 		this.camera = camera;
+		
+		// Upload font to asset Manager
+		assetManager.load("UI/font/main font.fnt", BitmapFont.class);
+		assetManager.finishLoading();
 	}
 	
 	public Entity createMapCursor(Level level, Engine engine) {

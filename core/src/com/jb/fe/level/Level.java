@@ -69,14 +69,4 @@ public class Level {
 		mapWidthLimit = levelMap.getProperties().get("width", Integer.class) * MapCell.CELL_SIZE;
 		mapHeightLimit = levelMap.getProperties().get("height", Integer.class) * MapCell.CELL_SIZE;
 	}
-
-	public void addNewAlly() {
-		// To do
-		System.out.println(engine + " Added new ally to engine!");
-	}
-
-	public void addNewEnemy() {
-		// to do
-		System.out.println(engine + " Added new enemy to engine!");
-	}
 }

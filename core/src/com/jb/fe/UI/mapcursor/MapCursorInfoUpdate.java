@@ -1,4 +1,4 @@
-package com.jb.fe.systems.input;
+package com.jb.fe.UI.mapcursor;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -10,6 +10,7 @@ import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.MovementStatsComponent;
+import com.jb.fe.components.MovementStatsComponent.Unit_State;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.StaticImageComponent;
@@ -78,18 +79,15 @@ public class MapCursorInfoUpdate implements UpdateUI{
 			movementUtilityCalculator.resetMovementAlgorithms();
 			mapCursorStateComponent.unitSelected = null;
 			
-			PositionComponent mapCursorPositionComponent = pComponentMapper.get(mapCursor);
-			
 			for (Entity unit : allGameUnits) {
 				AnimationComponent unitAnimation = animationComponentMapper.get(unit);
-				MovementStatsComponent unitStatsComponent = unitStatComponentMapper.get(unit);
-				PositionComponent positionComponent = pComponentMapper.get(unit);
+				MovementStatsComponent movementStatsComponent = unitStatComponentMapper.get(unit);
 				// Reset
 				unitAnimation.currentAnimation = unitAnimation.allAnimationObjects.get("Idle");
 
-				if (positionComponent.x == mapCursorPositionComponent.x && positionComponent.y == mapCursorPositionComponent.y) {
+				if (unit.getComponent(MovementStatsComponent.class).currentCell.equals(movementUtilityCalculator.getMapCell(mapCursor))) {
 					// Select only ally units for movement purposes
-					if (unitStatsComponent.isAlly) {
+					if (movementStatsComponent.isAlly && movementStatsComponent.unit_State.equals(Unit_State.CAN_DO_BOTH)) {
 						unitAnimation.currentAnimation = unitAnimation.allAnimationObjects.get("Hovering");
 						animationComponentMapper.get(mapCursor).currentAnimation.isDrawing = false;
 						staticImageComponentMapper.get(mapCursor).isEnabled = true;

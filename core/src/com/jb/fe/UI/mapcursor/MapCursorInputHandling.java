@@ -1,4 +1,4 @@
-package com.jb.fe.UI;
+package com.jb.fe.UI.mapcursor;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;

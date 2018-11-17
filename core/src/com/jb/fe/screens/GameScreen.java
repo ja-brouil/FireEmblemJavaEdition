@@ -13,7 +13,6 @@ import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.gamePlay.AISystem;
 import com.jb.fe.systems.gamePlay.TurnManager;
-import com.jb.fe.systems.graphics.RenderSystem;
 import com.jb.fe.systems.input.UIManager;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 import com.jb.fe.systems.movement.UnitMovementSystem;
@@ -32,7 +31,6 @@ public class GameScreen extends ScreenAdapter{
 	// Systems Required
 	private MapRenderSystem mapRenderSystem;
 	private MapCellInfoSystem mapCellInfoSystem;
-	private RenderSystem animationSystem;
 	private UnitMapCellUpdater unitMapCellUpdater;
 	private UnitMovementSystem unitMovementSystem;
 	private TurnManager turnManagerSystem;
@@ -45,7 +43,6 @@ public class GameScreen extends ScreenAdapter{
 		// Start Systems
 		mapRenderSystem = new MapRenderSystem(gameCamera, spriteBatch);
 		mapCellInfoSystem = new MapCellInfoSystem(assetManager, engine);
-		animationSystem = new RenderSystem(spriteBatch);
 		unitMapCellUpdater = new UnitMapCellUpdater();
 		unitMovementSystem = new UnitMovementSystem();
 		turnManagerSystem = new TurnManager();
@@ -54,7 +51,6 @@ public class GameScreen extends ScreenAdapter{
 		
 		// Add Systems to the Engine
 		engine.addSystem(mapRenderSystem);
-		engine.addSystem(animationSystem);
 		engine.addSystem(unitMapCellUpdater);
 		engine.addSystem(unitMovementSystem);
 		engine.addSystem(soundSystem);

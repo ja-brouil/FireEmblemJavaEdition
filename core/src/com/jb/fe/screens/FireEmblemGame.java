@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.graphics.RenderSystem;
+import com.jb.fe.systems.graphics.TextRenderer;
 
 /*
  * Preload stage happens here. This is for every system that is required for the entire game
@@ -35,6 +37,12 @@ public class FireEmblemGame extends Game {
 	// Audio
 	private SoundSystem soundSystem;
 	private MusicSystem musicSystem;
+	
+	// Text System
+	private TextRenderer textRenderer;
+	
+	// Render System
+	private RenderSystem renderSystem;
 
 	// Screens
 	private HashMap<String, ScreenAdapter> allGameScreens;
@@ -43,7 +51,6 @@ public class FireEmblemGame extends Game {
 	private Engine engine;
 
 	public FireEmblemGame() {}
-
 
 	public void create() {
 
@@ -65,6 +72,12 @@ public class FireEmblemGame extends Game {
 		// Audio
 		musicSystem = new MusicSystem();
 		soundSystem = new SoundSystem();
+		
+		// Systems requires for all screens
+		renderSystem = new RenderSystem(spriteBatch);
+		textRenderer = new TextRenderer(spriteBatch, assetManager);
+		engine.addSystem(renderSystem);
+		engine.addSystem(textRenderer);
 
 		// Screens
 		allGameScreens = new HashMap<>();

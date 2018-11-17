@@ -27,7 +27,7 @@ public class UIManager extends EntitySystem {
 	private ComponentMapper<NameComponent> nComponentMapper = ComponentMapper.getFor(NameComponent.class);
 	
 	public UIManager() {
-		priority = SystemPriorityDictionnary.InputHandle;
+		priority = SystemPriorityDictionnary.HandleInputAndUI;
 	}
 	
 	@Override

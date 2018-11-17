@@ -166,7 +166,7 @@ public class UnitMovementSystem extends EntitySystem {
 					} else {
 						Artifical_IntelligenceComponent artifical_IntelligenceComponent = aiComponentMapper.get(unit);
 						artifical_IntelligenceComponent.isProcessing = false;
-						
+					
 						aComponentMapper.get(unit).currentAnimation = aComponentMapper.get(unit).allAnimationObjects.get("Idle");
 					}
 					

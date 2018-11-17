@@ -4,26 +4,26 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.jb.fe.UI.actionMenu.ActionMenuUpdate;
+import com.jb.fe.UI.mapcursor.MapCursorInfoUpdate;
+import com.jb.fe.UI.mapcursor.MapCursorInputHandling;
 import com.jb.fe.audio.SoundObject;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.AnimationObject;
 import com.jb.fe.components.InputComponent;
 import com.jb.fe.components.MapCursorStateComponent;
+import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
+import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.StaticImageComponent;
+import com.jb.fe.components.TextComponent;
 import com.jb.fe.components.UIComponent;
-import com.jb.fe.components.UITextComponent;
 import com.jb.fe.components.ZOrderComponent;
-import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
-import com.jb.fe.components.NameComponent;
 import com.jb.fe.level.Level;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.graphics.ZOrderDictionnary;
-import com.jb.fe.systems.input.MapCursorInfoUpdate;
 
 /*
  * Creates a map cursor for the main battlefield
@@ -43,10 +43,6 @@ public class UIFactory {
 		this.assetManager = assetManager;
 		this.soundSystem = soundSystem;
 		this.camera = camera;
-		
-		// Upload font to asset Manager
-		assetManager.load("UI/font/main font.fnt", BitmapFont.class);
-		assetManager.finishLoading();
 	}
 	
 	public Entity createMapCursor(Level level, Engine engine) {
@@ -114,16 +110,18 @@ public class UIFactory {
 		UIComponent uiComponent = new UIComponent();
 		uiComponent.updateUI = new ActionMenuUpdate(actionMenu);
 		
-		UITextComponent uiTextComponent = new UITextComponent();
+		TextComponent uiTextComponent = new TextComponent();
 		uiTextComponent.textArray.add("Attack");
 		uiTextComponent.textArray.add("Items");
 		uiTextComponent.textArray.add("Trade");
 		uiTextComponent.textArray.add("Wait");
+		uiTextComponent.isDrawing = true;
 		
 		// Add Components
 		actionMenu.add(nameComponent);
 		actionMenu.add(positionComponent);
 		actionMenu.add(uiTextComponent);
+		actionMenu.add(inputComponent);
 		
 		return actionMenu;
 	}

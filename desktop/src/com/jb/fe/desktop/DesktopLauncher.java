@@ -22,11 +22,11 @@ public class DesktopLauncher {
 		config.x = -1;
 		config.y = -1;
 		
-		// Attempt to run at 60 fps
+		// Attempt to run at 60 FPS
 		config.foregroundFPS = 60;
 		config.backgroundFPS = -1;
 		
-		// Icon
+		// Audio
 		config.audioDeviceBufferCount *= 2;
 		config.audioDeviceSimultaneousSources *= 2;
 		

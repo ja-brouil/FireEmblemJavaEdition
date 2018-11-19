@@ -60,14 +60,14 @@ public class ActionMenuInput implements InputHandling {
 		
 		// Up
 		if (Gdx.input.isKeyPressed(Keys.UP)) {
-			pComponentMapper.get(hand).y += 17;
+			pComponentMapper.get(hand).y += 15;
 			uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Movement"));
 			currentDelayTime = 0;
 		}
 		
 		// Down
 		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-			pComponentMapper.get(hand).y -= 17;
+			pComponentMapper.get(hand).y -= 15;
 			uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Movement"));
 			currentDelayTime = 0;
 		}

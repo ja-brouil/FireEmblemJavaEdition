@@ -163,7 +163,7 @@ public class UIFactory {
 		staticImageComponent.isEnabled = false;
 		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.UI_TOP_LAYER);
 		
-		PositionComponent positionComponent = new PositionComponent(0, 70);
+		PositionComponent positionComponent = new PositionComponent(0, 76);
 		NameComponent nameComponent = new NameComponent("Hand Selector");
 		
 		hand.add(staticImageComponent);

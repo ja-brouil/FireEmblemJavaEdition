@@ -15,11 +15,8 @@ public class InfoBoxHandUpdateSystem extends EntitySystem{
 	
 	// Boxes
 	
-	// Hand
-	private Entity hand;
-	
 	public InfoBoxHandUpdateSystem(Entity hand) {
-		this.hand = hand;
+		
 	}
 	
 	@Override

@@ -19,10 +19,13 @@ public class ActionMenuUpdate implements UpdateUI {
 	private ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
 	private ComponentMapper<TextComponent> tComponentMapper = ComponentMapper.getFor(TextComponent.class);
 	
+	private Action_Menu_Options currentOptionSelected;
+	
 	public ActionMenuUpdate(UIComponent uiComponent, Entity actionMenu, Entity hand) {
 		this.uiComponent = uiComponent;
 		this.actionMenu = actionMenu;
 		this.hand = hand;
+		currentOptionSelected = Action_Menu_Options.Wait;
 	};
 	
 	@Override
@@ -30,7 +33,8 @@ public class ActionMenuUpdate implements UpdateUI {
 		// Set Position
 		PositionComponent actionMenuPositionComponent = pComponentMapper.get(actionMenu);
 		PositionComponent selectedUnit = pComponentMapper.get(uiComponent.currentEntity);
-		pComponentMapper.get(hand).x = actionMenuPositionComponent.x - 3;
+		PositionComponent handPosition = pComponentMapper.get(hand); 
+		handPosition.x = actionMenuPositionComponent.x - 5;
 		
 		// Change this to camera view once camera has been implemented
 		if (selectedUnit.x <= FireEmblemGame.WIDTH / 2) {
@@ -47,9 +51,23 @@ public class ActionMenuUpdate implements UpdateUI {
 			textComponent.textArray.get(i).y = actionMenuPositionComponent.y + (i * 15) + 16;
 		}
 		
+		// Prevent Hand from going out of bounds
+		preventHandOutOfBounds(handPosition);
+		
 		// Set Size depending on options
 		// add size change here
 		sComponentMapper.get(actionMenu).isEnabled = true;
+	}
+	
+	private void preventHandOutOfBounds(PositionComponent positionComponent) {
+		if (positionComponent.y < 76) {
+			positionComponent.y = 121;
+			currentOptionSelected = null;
+		}
+		
+		if (positionComponent.y > 121) {
+			positionComponent.y = 76;
+		}
 	}
 	
 	public static enum Action_Menu_Options {

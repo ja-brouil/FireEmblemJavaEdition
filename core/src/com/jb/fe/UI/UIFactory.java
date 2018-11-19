@@ -121,7 +121,7 @@ public class UIFactory {
 		TextComponent uiTextComponent = new TextComponent();
 		uiTextComponent.textFontSize = 0.25f;
 		uiTextComponent.textArray.ordered = true;
-		uiTextComponent.textArray.add(new TextObject(0, 200, "Wait"), new TextObject(0, 150, "Trade"), new TextObject(0, 100, "Items"),new TextObject(0, 50, "Attack"));
+		uiTextComponent.textArray.add(new TextObject(0, 200, "Wait"), new TextObject(0, 150, "Trade"), new TextObject(0, 100, "Items"),new TextObject(0, 50, "Action"));
 		uiTextComponent.isDrawing = false;
 		
 		UIComponent uiComponent = new UIComponent(uiManager, soundSystem);

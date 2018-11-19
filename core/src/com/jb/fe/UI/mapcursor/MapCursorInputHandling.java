@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.jb.fe.components.InputComponent.InputHandling;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.MovementStatsComponent;
@@ -13,6 +12,7 @@ import com.jb.fe.components.MovementStatsComponent.Unit_State;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
+import com.jb.fe.components.UIComponent.InputHandling;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.audio.SoundSystem;
 
@@ -68,7 +68,6 @@ public class MapCursorInputHandling implements InputHandling{
 			}
 			System.out.println("------------------------------------");
 		}
-		
 		
 		// Movement only
 		if (mapCursorStateComponent.mapCursorState.equals(MapCursorStateComponent.MapCursorState.MOVEMENT_ONLY)) {

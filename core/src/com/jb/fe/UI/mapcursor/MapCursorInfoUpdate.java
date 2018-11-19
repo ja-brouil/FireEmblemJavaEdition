@@ -14,6 +14,7 @@ import com.jb.fe.components.MovementStatsComponent.Unit_State;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.StaticImageComponent;
+import com.jb.fe.components.UIComponent;
 import com.jb.fe.components.UIComponent.UpdateUI;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell;
@@ -74,6 +75,10 @@ public class MapCursorInfoUpdate implements UpdateUI{
 		
 		// Movement
 		if (mapCursorStateComponent.mapCursorState.equals(MapCursorState.MOVEMENT_ONLY)) {
+			
+			// Allow movement
+			mapCursor.getComponent(UIComponent.class).inputIsEnabled = true;
+			mapCursor.getComponent(UIComponent.class).updateIsEnabled = true;
 			
 			// Deselect Unit
 			movementUtilityCalculator.resetMovementAlgorithms();
@@ -154,6 +159,7 @@ public class MapCursorInfoUpdate implements UpdateUI{
 			if (movementUtilityCalculator.getAllPossibleMoves().contains(cursorMapCell)) {
 				// Start unit movement system
 				mapCursorStateComponent.unitSelected.getComponent(MovementStatsComponent.class).isMoving = true;
+				unitStatsComponent.previousCell = unitStatsComponent.currentCell;
 				movementUtilityCalculator.createPathFindingQueue(cursorMapCell, mapCursorStateComponent.unitSelected);
 				mapCursorStateComponent.mapCursorState = MapCursorState.DISABLED;
 				

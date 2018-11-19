@@ -1,6 +1,7 @@
 package com.jb.fe.screens;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,7 +14,7 @@ import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.gamePlay.AISystem;
 import com.jb.fe.systems.gamePlay.TurnManager;
-import com.jb.fe.systems.input.UIManager;
+import com.jb.fe.systems.inputAndUI.UIManager;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 import com.jb.fe.systems.movement.UnitMovementSystem;
 
@@ -26,7 +27,7 @@ public class GameScreen extends ScreenAdapter{
 	private Level currentLevel;
 	
 	// User Interface
-	private UIFactory mapCursorFactory;
+	private UIFactory UIFactory;
 	
 	// Systems Required
 	private MapRenderSystem mapRenderSystem;
@@ -64,8 +65,12 @@ public class GameScreen extends ScreenAdapter{
 		currentLevel.startLevel();
 		
 		// User Interface
-		mapCursorFactory = new UIFactory(assetManager, soundSystem, gameCamera);
-		engine.addEntity(mapCursorFactory.createMapCursor(currentLevel, engine));
+		UIFactory = new UIFactory(assetManager, soundSystem, gameCamera, uiManager);
+		Entity mapCursor = UIFactory.createMapCursor(currentLevel, engine);
+		Entity actionMenu = UIFactory.createActionMenu(unitMovementSystem, unitMapCellUpdater, engine);
+		uiManager.startSystem();
+		engine.addEntity(mapCursor);
+		engine.addEntity(actionMenu);
 		
 		// Set Audio
 		musicSystem.addNewSong("Ally Battle Theme", "music/FE Level1 HD Good.mp3", assetManager);
@@ -88,10 +93,9 @@ public class GameScreen extends ScreenAdapter{
 	public void setNewMap(Level level) {
 		mapRenderSystem.setCurrentLevel(level);
 		mapCellInfoSystem.processTiles(level);
-		uiManager.startSystem(level);
 		unitMapCellUpdater.startSystem(level);
-		unitMovementSystem.startSystem();
-		turnManagerSystem.startSystem(level.assetManager);
+		unitMovementSystem.startSystem(uiManager);
+		turnManagerSystem.startSystem(level.assetManager, uiManager);
 		unitMapCellUpdater.updateCellInfo();
 	}
 }

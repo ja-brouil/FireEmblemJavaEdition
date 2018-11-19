@@ -15,6 +15,7 @@ public class MovementStatsComponent implements Component {
 	
 	// Tile
 	public MapCell currentCell;
+	public MapCell previousCell;
 	public MapCell destinationCell;
 	
 	// Pathfinding Algorithm ARrays
@@ -42,7 +43,7 @@ public class MovementStatsComponent implements Component {
 		isAlly = true;
 		currentCell = null;
 		isMoving = false;
-		animationMovementSpeed = 4f;
+		animationMovementSpeed = 8f;
 		
 		// Unit State
 		unit_State = Unit_State.CAN_DO_BOTH;

@@ -4,13 +4,13 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.jb.fe.UI.actionMenu.ActionMenuInput;
 import com.jb.fe.UI.actionMenu.ActionMenuUpdate;
 import com.jb.fe.UI.mapcursor.MapCursorInfoUpdate;
 import com.jb.fe.UI.mapcursor.MapCursorInputHandling;
 import com.jb.fe.audio.SoundObject;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.AnimationObject;
-import com.jb.fe.components.InputComponent;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.NameComponent;
@@ -24,9 +24,12 @@ import com.jb.fe.level.Level;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.graphics.ZOrderDictionnary;
+import com.jb.fe.systems.inputAndUI.UIManager;
+import com.jb.fe.systems.movement.UnitMapCellUpdater;
+import com.jb.fe.systems.movement.UnitMovementSystem;
 
 /*
- * Creates a map cursor for the main battlefield
+ * Main Battlefield UI Factory
  */
 public class UIFactory {
 	
@@ -39,10 +42,18 @@ public class UIFactory {
 	// Camera
 	private OrthographicCamera camera;
 	
-	public UIFactory(AssetManager assetManager, SoundSystem soundSystem, OrthographicCamera camera) {
+	// UI Manager
+	private UIManager uiManager;
+	
+	// UI Entities
+	private Entity mapCursor;
+	private Entity hand;
+	
+	public UIFactory(AssetManager assetManager, SoundSystem soundSystem, OrthographicCamera camera, UIManager uiManager) {
 		this.assetManager = assetManager;
 		this.soundSystem = soundSystem;
 		this.camera = camera;
+		this.uiManager = uiManager;
 	}
 	
 	public Entity createMapCursor(Level level, Engine engine) {
@@ -72,15 +83,13 @@ public class UIFactory {
 		soundComponent.allSoundObjects.put("Invalid", new SoundObject("sound/Not Allowed.mp3", assetManager));
 		soundComponent.allSoundObjects.put("Select Unit", new SoundObject("sound/selectUnit.wav", assetManager));
 		
-		InputComponent inputComponent = new InputComponent();
-		inputComponent.inputHandling = new MapCursorInputHandling(mapCursorStateComponent, positionComponent, soundSystem, mapCursor, camera);
-		inputComponent.isEnabled = true;
-		
-		UIComponent uiComponent = new UIComponent();
+		UIComponent uiComponent = new UIComponent(uiManager, soundSystem);
 		MapCursorInfoUpdate mapCursorInfoUpdate = new MapCursorInfoUpdate();
 		mapCursorInfoUpdate.startSystem(level, engine, mapCursor);
 		uiComponent.updateUI = mapCursorInfoUpdate;
-		uiComponent.isEnabled = true;
+		uiComponent.inputHandling = new MapCursorInputHandling(mapCursorStateComponent, positionComponent, soundSystem, mapCursor, camera);
+		uiComponent.inputIsEnabled = true;
+		uiComponent.updateIsEnabled = true;
 		
 		NameComponent nameComponent = new NameComponent("Map Cursor");
 		
@@ -90,39 +99,53 @@ public class UIFactory {
 		mapCursor.add(animationComponent);
 		mapCursor.add(positionComponent);
 		mapCursor.add(mapCursorStateComponent);
-		mapCursor.add(inputComponent);
 		mapCursor.add(staticImageComponent);
 		mapCursor.add(zOrderComponent);
 		mapCursor.add(soundComponent);
+		
+		uiManager.setMapCursor(mapCursor);
+		this.mapCursor = mapCursor;
 		return mapCursor;
 	}
 	
-	public Entity createActionMenu() {
+	public Entity createActionMenu(UnitMovementSystem unitMovementSystem, UnitMapCellUpdater unitMapCellUpdater, Engine engine) {
 		Entity actionMenu = new Entity();
+		// Create Hand
+		createHand(engine);
 		
 		// Components
 		NameComponent nameComponent = new NameComponent("Action Menu");
 		
-		PositionComponent positionComponent = new PositionComponent();
-		
-		InputComponent inputComponent = new InputComponent();
-		
-		UIComponent uiComponent = new UIComponent();
-		uiComponent.updateUI = new ActionMenuUpdate(actionMenu);
+		PositionComponent positionComponent = new PositionComponent(0, 70);
 		
 		TextComponent uiTextComponent = new TextComponent();
-		uiTextComponent.textArray.add("Attack");
-		uiTextComponent.textArray.add("Items");
-		uiTextComponent.textArray.add("Trade");
-		uiTextComponent.textArray.add("Wait");
-		uiTextComponent.isDrawing = true;
+		uiTextComponent.textFontSize = 0.25f;
+		uiTextComponent.textArray.ordered = true;
+		uiTextComponent.textArray.add(new TextObject(0, 200, "Wait"), new TextObject(0, 150, "Trade"), new TextObject(0, 100, "Items"),new TextObject(0, 50, "Attack"));
+		uiTextComponent.isDrawing = false;
+		
+		UIComponent uiComponent = new UIComponent(uiManager, soundSystem);
+		uiComponent.updateUI = new ActionMenuUpdate(uiComponent, actionMenu, hand);
+		uiComponent.inputHandling = new ActionMenuInput(mapCursor, actionMenu, hand, unitMapCellUpdater, uiComponent);
+		uiComponent.inputIsEnabled = false;
+		uiComponent.updateIsEnabled = false;
+		
+		StaticImageComponent actionMenuStaticImage = new StaticImageComponent(assetManager, "UI/endturnbox/endturnbox.png");
+		actionMenuStaticImage.isEnabled = false;
+		actionMenuStaticImage.width = FireEmblemGame.WIDTH / 5;
+		actionMenuStaticImage.height = 70;
+		
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.TOP_LAYER);
 		
 		// Add Components
 		actionMenu.add(nameComponent);
 		actionMenu.add(positionComponent);
 		actionMenu.add(uiTextComponent);
-		actionMenu.add(inputComponent);
+		actionMenu.add(uiComponent);
+		actionMenu.add(actionMenuStaticImage);
+		actionMenu.add(zOrderComponent);
 		
+		uiManager.setActionMenu(actionMenu);
 		return actionMenu;
 	}
 	
@@ -131,5 +154,23 @@ public class UIFactory {
 		
 		
 		return damagePreview;
+	}
+	
+	public void createHand(Engine engine) {
+		Entity hand = new Entity();
+		// Components
+		StaticImageComponent staticImageComponent = new StaticImageComponent(assetManager, "UI/cursor/hand.png");
+		staticImageComponent.isEnabled = false;
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.UI_TOP_LAYER);
+		
+		PositionComponent positionComponent = new PositionComponent(0, 70);
+		NameComponent nameComponent = new NameComponent("Hand Selector");
+		
+		hand.add(staticImageComponent);
+		hand.add(positionComponent);
+		hand.add(nameComponent);
+		hand.add(zOrderComponent);
+		this.hand = hand;
+		engine.addEntity(hand);
 	}
 }

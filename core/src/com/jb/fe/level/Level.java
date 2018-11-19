@@ -50,7 +50,7 @@ public class Level {
 		
 		// Enemy
 		engine.addEntity(UnitFactory.createCavalierUnit(assetManager,"Evil Seth", "units/cavalier/cavalierAllyRed.png", 11 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
-		Entity aggresiveAI = UnitFactory.createCavalierUnit(assetManager, "Evil Seth", "units/cavalier/cavalierAllyRed.png", 12 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false);
+		Entity aggresiveAI = UnitFactory.createCavalierUnit(assetManager, "Evil Seth", "units/cavalier/cavalierAllyRed.png", 5 * MapCell.CELL_SIZE, 9 * MapCell.CELL_SIZE, false);
 		aggresiveAI.getComponent(Artifical_IntelligenceComponent.class).ai_Type = AI_TYPE.AGGRESSIVE;
 		engine.addEntity(aggresiveAI);
 		

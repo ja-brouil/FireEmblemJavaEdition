@@ -10,4 +10,5 @@ public final class ZOrderDictionnary {
 	public static int BACKGROUND = 0;
 	public static int MIDDLE_LAYER = 1;
 	public static int TOP_LAYER = 2;
+	public static int UI_TOP_LAYER = 3;
 }

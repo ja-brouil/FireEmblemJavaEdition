@@ -10,16 +10,15 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
-import com.jb.fe.components.MapCursorStateComponent;
-import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
+import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.MovementStatsComponent.Unit_State;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.StaticImageComponent;
-import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.inputAndUI.UIManager;
 
 /**
  * Controls the unit movements
@@ -31,19 +30,16 @@ public class UnitMovementSystem extends EntitySystem {
 
 	// All Entities
 	private ImmutableArray<Entity> allMovableEntities;
+	
+	// Ui Manager
+	private UIManager uiManager;
 
 	// Mappers
 	private ComponentMapper<AnimationComponent> aComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<MovementStatsComponent> sComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
-	private ComponentMapper<MapCursorStateComponent> mapCursorStateComponemtMapper = ComponentMapper
-			.getFor(MapCursorStateComponent.class);
 	private ComponentMapper<SoundComponent> soundComponentMapper = ComponentMapper.getFor(SoundComponent.class);
 	private ComponentMapper<Artifical_IntelligenceComponent> aiComponentMapper = ComponentMapper.getFor(Artifical_IntelligenceComponent.class);
-
-	// Map Cursor and UI elements
-	private Entity mapCursor;
-
 	// System for Unit Update
 	private UnitMapCellUpdater unitMapCellUpdater;
 	
@@ -86,6 +82,9 @@ public class UnitMovementSystem extends EntitySystem {
 			MovementStatsComponent unitStatsComponent = sComponentMapper.get(unit);
 			
 			if (unitStatsComponent.isMoving) {
+				// Pause UI
+				uiManager.setPauseStatus(true);
+				
 				// Destination Cell and Starting Cell
 				MapCell startingCell = unitStatsComponent.currentCell;
 				MapCell nextCell = unitStatsComponent.pathfindingQueue.first();
@@ -143,31 +142,26 @@ public class UnitMovementSystem extends EntitySystem {
 				// Reset Movement back to the cursor if the queue is empty || this must be modified for AI movement as well
 				if (unitStatsComponent.pathfindingQueue.size == 0) {
 					unitStatsComponent.isMoving = false;
-					MapCursorStateComponent mapCursorStateComponent = mapCursorStateComponemtMapper.get(mapCursor);
-					PositionComponent mapPositionComponent = pComponentMapper.get(mapCursor);
-					AnimationComponent cursorAnimation = aComponentMapper.get(mapCursor);
 					
 					// Ally Unit Reset | Enemy Unit Reset
 					if (unitStatsComponent.isAlly) {
-						// Enable Cursor Again (This should be set to action menu with unit)
-						mapCursorStateComponent.mapCursorState = MapCursorState.MOVEMENT_ONLY;
 						
 						// Set Correct Animation Status -> Modify this later if unit did an action
 						aComponentMapper.get(unit).currentAnimation = aComponentMapper.get(unit).allAnimationObjects.get("Idle");
 						
 						// Set Unit to Done status -> This needs to be changed to check later if you did an action first.
-						unitStatsComponent.unit_State = Unit_State.DONE;
+						unitStatsComponent.unit_State = Unit_State.CAN_DO_ACTION;
 						
-						// Move Cursor to where the new unit is now
-						mapPositionComponent.x = unitPositionComponent.x;
-						mapPositionComponent.y = unitPositionComponent.y;
-						cursorAnimation.currentAnimation.isDrawing = true;
+						// Resume UI
+						uiManager.setPauseStatus(false);
+						uiManager.startActionMenu(unit);
 						
 					} else {
 						Artifical_IntelligenceComponent artifical_IntelligenceComponent = aiComponentMapper.get(unit);
 						artifical_IntelligenceComponent.isProcessing = false;
 					
 						aComponentMapper.get(unit).currentAnimation = aComponentMapper.get(unit).allAnimationObjects.get("Idle");
+						uiManager.setPauseStatus(false);
 					}
 					
 					// Turn off Map Cells
@@ -187,8 +181,8 @@ public class UnitMovementSystem extends EntitySystem {
 		}
 	}
 
-	public void startSystem() {
-		mapCursor = getEngine().getEntitiesFor(Family.all(MapCursorStateComponent.class).get()).first();
+	public void startSystem(UIManager uiManager) {
+		this.uiManager = uiManager;
 		unitMapCellUpdater = getEngine().getSystem(UnitMapCellUpdater.class);
 		soundSystem = getEngine().getSystem(SoundSystem.class);
 	}

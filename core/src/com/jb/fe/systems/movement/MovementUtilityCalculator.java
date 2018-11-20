@@ -27,9 +27,11 @@ public class MovementUtilityCalculator {
 
 	// All Map Cells
 	private MapCell[][] allMapCells;
+	public static MapCell[][] allMapCellsStatic;
 
 	// Component Mapper
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
+	private static ComponentMapper<PositionComponent> ppComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<MovementStatsComponent> uComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	private ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
 	private ComponentMapper<InventoryComponent> invComponentMapper = ComponentMapper.getFor(InventoryComponent.class);
@@ -44,6 +46,7 @@ public class MovementUtilityCalculator {
 		pathfindingQueue = new Queue<>();
 		this.unitMapCellUpdater = unitMapCellUpdater;
 		allMapCells = level.allLevelMapCells;
+		allMapCellsStatic = level.allLevelMapCells;
 	}
 
 	// Get All possible Moves
@@ -225,6 +228,14 @@ public class MovementUtilityCalculator {
 		int y = (int) unitPositionComponent.y / MapCell.CELL_SIZE;
 
 		return allMapCells[x][y];
+	}
+	
+	public static MapCell getMapCellStatic(Entity unit) {
+		PositionComponent positionComponent = ppComponentMapper.get(unit);
+		int x = (int) positionComponent.x / MapCell.CELL_SIZE;
+		int y = (int) positionComponent.y / MapCell.CELL_SIZE;
+		
+		return allMapCellsStatic[x][y];
 	}
 
 	// Enable Squares

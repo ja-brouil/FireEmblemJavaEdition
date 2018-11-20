@@ -30,6 +30,13 @@ public class MapCursorStateComponent implements Component {
 	}
 
 	public MapCursorState mapCursorState;
+	
+	// MapCursor Quadrant
+	public static enum MAP_CURSOR_QUADRANT {
+		TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT;
+	}
+	
+	public MAP_CURSOR_QUADRANT mapCursorQuandrant = MAP_CURSOR_QUADRANT.TOP_LEFT;
 
 	public MapCursorStateComponent() {
 		mapCursorState = MapCursorState.MOVEMENT_ONLY;

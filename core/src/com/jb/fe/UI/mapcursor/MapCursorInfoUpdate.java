@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.MapCursorStateComponent;
+import com.jb.fe.components.MapCursorStateComponent.MAP_CURSOR_QUADRANT;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.MovementStatsComponent.Unit_State;
@@ -18,6 +19,7 @@ import com.jb.fe.components.UIComponent;
 import com.jb.fe.components.UIComponent.UpdateUI;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell;
+import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.gamePlay.AISystem;
 import com.jb.fe.systems.movement.MovementUtilityCalculator;
@@ -75,6 +77,21 @@ public class MapCursorInfoUpdate implements UpdateUI{
 		
 		// Movement
 		if (mapCursorStateComponent.mapCursorState.equals(MapCursorState.MOVEMENT_ONLY)) {
+			
+			// Get Quadrant for info box movement
+			if (pComponentMapper.get(mapCursor).x >= (FireEmblemGame.WIDTH / 2)) {
+				if (pComponentMapper.get(mapCursor).y >= (FireEmblemGame.HEIGHT / 2)) {
+					mapCursorStateComponent.mapCursorQuandrant = MAP_CURSOR_QUADRANT.TOP_RIGHT;
+				} else {
+					mapCursorStateComponent.mapCursorQuandrant = MAP_CURSOR_QUADRANT.BOTTOM_RIGHT;
+				}
+			} else {
+				if (pComponentMapper.get(mapCursor).y < (FireEmblemGame.HEIGHT / 2)) {
+					mapCursorStateComponent.mapCursorQuandrant = MAP_CURSOR_QUADRANT.BOTTOM_LEFT;
+				} else {
+					mapCursorStateComponent.mapCursorQuandrant = MAP_CURSOR_QUADRANT.TOP_LEFT;
+				}
+			}
 			
 			// Allow movement
 			mapCursor.getComponent(UIComponent.class).inputIsEnabled = true;

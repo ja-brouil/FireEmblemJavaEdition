@@ -11,7 +11,7 @@ import com.jb.fe.systems.SystemPriorityDictionnary;
  * @author james
  *
  */
-public class UIManager extends EntitySystem {
+public class ActionMenuMapCursorManager extends EntitySystem {
 	
 	// UI Elements for Battle field
 	private Entity mapcursor;
@@ -23,7 +23,7 @@ public class UIManager extends EntitySystem {
 	
 	private ComponentMapper<UIComponent> uComponentMapper = ComponentMapper.getFor(UIComponent.class);
 	
-	public UIManager() {
+	public ActionMenuMapCursorManager() {
 		priority = SystemPriorityDictionnary.HandleInputAndUI;
 		pauseUI = false;
 	}

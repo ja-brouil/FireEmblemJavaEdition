@@ -48,7 +48,7 @@ public class MapCellInfoSystem {
 			if (prop.equals("")) {
 				mapCell.position.x = tiledObject.getProperties().get("x", Float.class);
 				mapCell.position.y = tiledObject.getProperties().get("y", Float.class);
-				mapCell.tileName = prop;
+				mapCell.tileName = "Plains";
 				mapCell.cellType = CellType.Grass;
 				mapCell.movementCost = MovementTileValues.NORMAL;
 				mapCell.defenceBonus = DefenseTileBonus.GRASS_DEF;
@@ -81,7 +81,7 @@ public class MapCellInfoSystem {
 				} else if (prop.equals("Impassable")) {
 					mapCell.position.x = tiledObject.getProperties().get("x", Float.class);
 					mapCell.position.y = tiledObject.getProperties().get("y", Float.class);
-					mapCell.tileName = prop;
+					mapCell.tileName = "--";
 					mapCell.cellType = CellType.Impassable;
 					mapCell.movementCost = MovementTileValues.IMPASSABLE;
 					mapCell.defenceBonus = DefenseTileBonus.IMPASSABLE_DEF;

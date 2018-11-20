@@ -18,7 +18,7 @@ import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.audio.SoundSystem;
-import com.jb.fe.systems.inputAndUI.UIManager;
+import com.jb.fe.systems.inputAndUI.ActionMenuMapCursorManager;
 
 /**
  * Controls the unit movements
@@ -32,7 +32,7 @@ public class UnitMovementSystem extends EntitySystem {
 	private ImmutableArray<Entity> allMovableEntities;
 	
 	// Ui Manager
-	private UIManager uiManager;
+	private ActionMenuMapCursorManager uiManager;
 
 	// Mappers
 	private ComponentMapper<AnimationComponent> aComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
@@ -146,9 +146,6 @@ public class UnitMovementSystem extends EntitySystem {
 					// Ally Unit Reset | Enemy Unit Reset
 					if (unitStatsComponent.isAlly) {
 						
-						// Set Correct Animation Status -> Modify this later if unit did an action
-						aComponentMapper.get(unit).currentAnimation = aComponentMapper.get(unit).allAnimationObjects.get("Idle");
-						
 						// Set Unit to Done status -> This needs to be changed to check later if you did an action first.
 						unitStatsComponent.unit_State = Unit_State.CAN_DO_ACTION;
 						
@@ -181,7 +178,7 @@ public class UnitMovementSystem extends EntitySystem {
 		}
 	}
 
-	public void startSystem(UIManager uiManager) {
+	public void startSystem(ActionMenuMapCursorManager uiManager) {
 		this.uiManager = uiManager;
 		unitMapCellUpdater = getEngine().getSystem(UnitMapCellUpdater.class);
 		soundSystem = getEngine().getSystem(SoundSystem.class);

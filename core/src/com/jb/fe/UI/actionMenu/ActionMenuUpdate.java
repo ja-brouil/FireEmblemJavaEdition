@@ -122,6 +122,9 @@ public class ActionMenuUpdate implements UpdateUI {
 		mapCursor.getComponent(MapCursorStateComponent.class).mapCursorState = MapCursorState.MOVEMENT_ONLY;
 		aComponentMapper.get(mapCursor).currentAnimation.isDrawing = true;
 		
+		// Finish animation
+		aComponentMapper.get(uiComponent.currentEntity).currentAnimation = aComponentMapper.get(uiComponent.currentEntity).allAnimationObjects.get("Idle");
+		
 		// Play accept sound
 		uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));
 		

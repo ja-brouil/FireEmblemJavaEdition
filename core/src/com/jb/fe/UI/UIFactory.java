@@ -24,7 +24,7 @@ import com.jb.fe.level.Level;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.graphics.ZOrderDictionnary;
-import com.jb.fe.systems.inputAndUI.UIManager;
+import com.jb.fe.systems.inputAndUI.ActionMenuMapCursorManager;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 import com.jb.fe.systems.movement.UnitMovementSystem;
 
@@ -43,13 +43,13 @@ public class UIFactory {
 	private OrthographicCamera camera;
 	
 	// UI Manager
-	private UIManager uiManager;
+	private ActionMenuMapCursorManager uiManager;
 	
 	// UI Entities
 	private Entity mapCursor;
 	private Entity hand;
 	
-	public UIFactory(AssetManager assetManager, SoundSystem soundSystem, OrthographicCamera camera, UIManager uiManager) {
+	public UIFactory(AssetManager assetManager, SoundSystem soundSystem, OrthographicCamera camera, ActionMenuMapCursorManager uiManager) {
 		this.assetManager = assetManager;
 		this.soundSystem = soundSystem;
 		this.camera = camera;
@@ -132,6 +132,7 @@ public class UIFactory {
 		uiComponent.updateIsEnabled = false;
 		
 		StaticImageComponent actionMenuStaticImage = new StaticImageComponent(assetManager, "UI/endturnbox/endturnbox.png");
+		actionMenuStaticImage.alpha = 0.8f;
 		actionMenuStaticImage.isEnabled = false;
 		actionMenuStaticImage.width = FireEmblemGame.WIDTH / 5;
 		actionMenuStaticImage.height = 70;
@@ -164,7 +165,7 @@ public class UIFactory {
 		staticImageComponent.isEnabled = false;
 		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.UI_TOP_LAYER);
 		
-		PositionComponent positionComponent = new PositionComponent(0, 121);
+		PositionComponent positionComponent = new PositionComponent(-100, 121);
 		NameComponent nameComponent = new NameComponent("Hand Selector");
 		
 		hand.add(staticImageComponent);

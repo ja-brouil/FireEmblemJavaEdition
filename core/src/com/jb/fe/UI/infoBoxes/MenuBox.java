@@ -1,14 +1,20 @@
 package com.jb.fe.UI.infoBoxes;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.jb.fe.components.MapCursorStateComponent;
 
 public abstract class MenuBox {
 	
 	// Keep Track of the map cursor
 	protected Entity mapCursor;
+	protected ComponentMapper<MapCursorStateComponent> mComponentMapper = ComponentMapper.getFor(MapCursorStateComponent.class);
+	
+	// For engine
+	protected Entity boxEntity;
 	
 	// Screen Position
 	public static enum SCREEN_POSITION {
@@ -30,5 +36,9 @@ public abstract class MenuBox {
 		this.mapCursor = mapCursor;
 		this.assetManager = assetManager;
 		this.engine = engine;
+	}
+	
+	public Entity getBoxEntity() {
+		return boxEntity;
 	}
 }

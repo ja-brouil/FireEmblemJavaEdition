@@ -9,7 +9,9 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.jb.fe.UI.TextObject;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.TextComponent;
 import com.jb.fe.systems.SystemPriorityDictionnary;
@@ -24,14 +26,18 @@ public class TextRenderer extends EntitySystem{
 	
 	// Main font
 	private BitmapFont mainFont;
+	private GlyphLayout glyphLayout;
 	
 	public TextRenderer(SpriteBatch spriteBatch, AssetManager assetManager) {
 		priority = SystemPriorityDictionnary.TextRenderer;
 		this.spriteBatch = spriteBatch;
+		
 		assetManager.load("UI/font/outline.fnt", BitmapFont.class);
 		assetManager.finishLoading();
+		
 		mainFont = assetManager.get("UI/font/outline.fnt", BitmapFont.class);
 		mainFont.setUseIntegerPositions(false);
+		glyphLayout = new GlyphLayout();
 	}
 	
 	@Override
@@ -61,10 +67,12 @@ public class TextRenderer extends EntitySystem{
 			TextComponent textComponent = tComponentMapper.get(textEntity);
 			if (textComponent.isDrawing) {
 				for (int i = 0; i < textComponent.textArray.size; i++) {
-					if (textComponent.textArray.get(i).isEnabled) {
-						mainFont.getData().setScale(textComponent.textArray.get(i).textFontSize);
-						mainFont.setColor(textComponent.textArray.get(i).textColor);
-						mainFont.draw(spriteBatch, textComponent.textArray.get(i).text, textComponent.textArray.get(i).x, textComponent.textArray.get(i).y);
+					TextObject textObject = textComponent.textArray.get(i);
+					if (textObject.isEnabled) {
+						mainFont.getData().setScale(textObject.textFontSize);
+						mainFont.setColor(textObject.textColor);
+						glyphLayout.setText(mainFont, textObject.text, mainFont.getColor(), 2f, textObject.alignment, false);
+						mainFont.draw(spriteBatch, glyphLayout, textObject.x, textObject.y);
 					}
 				}
 			}

@@ -3,7 +3,7 @@ package com.jb.fe.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.jb.fe.systems.audio.SoundSystem;
-import com.jb.fe.systems.inputAndUI.UIManager;
+import com.jb.fe.systems.inputAndUI.ActionMenuMapCursorManager;
 
 public class UIComponent implements Component {
 
@@ -12,17 +12,22 @@ public class UIComponent implements Component {
 	public UpdateUI updateUI;
 	public InputHandling inputHandling;
 	
-	public UIManager uiManager;
+	public ActionMenuMapCursorManager uiManager;
 	
 	public Entity currentEntity;
 	
 	public SoundSystem soundSystem;
 	
-	public UIComponent(UIManager uiManager, SoundSystem soundSystem) {
+	public UIComponent(ActionMenuMapCursorManager uiManager, SoundSystem soundSystem) {
 		this.soundSystem = soundSystem;
 		this.uiManager = uiManager;
 		updateIsEnabled = true;
 		inputIsEnabled = true;
+	}
+	
+	public UIComponent() {
+		updateIsEnabled = false;
+		inputIsEnabled = false;
 	}
 	
 	public interface UpdateUI {

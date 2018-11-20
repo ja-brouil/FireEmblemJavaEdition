@@ -20,7 +20,7 @@ import com.jb.fe.components.MovementStatsComponent.Unit_State;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
-import com.jb.fe.systems.inputAndUI.UIManager;
+import com.jb.fe.systems.inputAndUI.ActionMenuMapCursorManager;
 
 /*
  * Controls experience and status of the units when they have moved and stuff.
@@ -45,7 +45,7 @@ public class TurnManager extends EntitySystem {
 	private EndTurnTransition endTurnTransition;
 	
 	// UI Elements -> Will need a manager for this later
-	private UIManager uiManager;
+	private ActionMenuMapCursorManager uiManager;
 	
 	// Audio
 	private MusicSystem musicSystem;
@@ -176,7 +176,7 @@ public class TurnManager extends EntitySystem {
 		return cursorStateComponentMapper.get(uiManager.getMapCursor());
 	}
 	
-	public void startSystem(AssetManager assetManager, UIManager uiManager) {
+	public void startSystem(AssetManager assetManager, ActionMenuMapCursorManager uiManager) {
 		aiSystem = getEngine().getSystem(AISystem.class);
 		this.uiManager = uiManager;
 		musicSystem = getEngine().getSystem(MusicSystem.class);

@@ -119,13 +119,14 @@ public class UIFactory {
 		PositionComponent positionComponent = new PositionComponent(0, 70);
 		
 		TextComponent uiTextComponent = new TextComponent();
-		uiTextComponent.textFontSize = 0.25f;
-		uiTextComponent.textArray.ordered = true;
-		uiTextComponent.textArray.add(new TextObject(0, 200, "Wait"), new TextObject(0, 150, "Trade"), new TextObject(0, 100, "Items"),new TextObject(0, 50, "Action"));
+		uiTextComponent.textArray.addFirst(new TextObject(0, 50, "Action", 0.25f));
+		uiTextComponent.textArray.addFirst(new TextObject(0, 100, "Items", 0.25f));
+		uiTextComponent.textArray.addFirst(new TextObject(0, 150, "Trade", 0.25f));
+		uiTextComponent.textArray.addFirst(new TextObject(0, 200, "Wait", 0.25f));
 		uiTextComponent.isDrawing = false;
 		
 		UIComponent uiComponent = new UIComponent(uiManager, soundSystem);
-		uiComponent.updateUI = new ActionMenuUpdate(uiComponent, actionMenu, hand);
+		uiComponent.updateUI = new ActionMenuUpdate(uiComponent, actionMenu, hand, mapCursor);
 		uiComponent.inputHandling = new ActionMenuInput(mapCursor, actionMenu, hand, unitMapCellUpdater, uiComponent);
 		uiComponent.inputIsEnabled = false;
 		uiComponent.updateIsEnabled = false;
@@ -163,7 +164,7 @@ public class UIFactory {
 		staticImageComponent.isEnabled = false;
 		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.UI_TOP_LAYER);
 		
-		PositionComponent positionComponent = new PositionComponent(0, 76);
+		PositionComponent positionComponent = new PositionComponent(0, 121);
 		NameComponent nameComponent = new NameComponent("Hand Selector");
 		
 		hand.add(staticImageComponent);

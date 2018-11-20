@@ -48,6 +48,7 @@ public class MapCellInfoSystem {
 			if (prop.equals("")) {
 				mapCell.position.x = tiledObject.getProperties().get("x", Float.class);
 				mapCell.position.y = tiledObject.getProperties().get("y", Float.class);
+				mapCell.tileName = prop;
 				mapCell.cellType = CellType.Grass;
 				mapCell.movementCost = MovementTileValues.NORMAL;
 				mapCell.defenceBonus = DefenseTileBonus.GRASS_DEF;
@@ -56,6 +57,7 @@ public class MapCellInfoSystem {
 				if (prop.equals("Forest")) {
 					mapCell.position.x = tiledObject.getProperties().get("x", Float.class);
 					mapCell.position.y = tiledObject.getProperties().get("y", Float.class);
+					mapCell.tileName = prop;
 					mapCell.cellType = CellType.Forest;
 					mapCell.movementCost = MovementTileValues.FOREST;
 					mapCell.defenceBonus = DefenseTileBonus.FOREST_DEF;
@@ -63,6 +65,7 @@ public class MapCellInfoSystem {
 				} else if (prop.equals("Fortress")) {
 					mapCell.position.x = tiledObject.getProperties().get("x", Float.class);
 					mapCell.position.y = tiledObject.getProperties().get("y", Float.class);
+					mapCell.tileName = prop;
 					mapCell.cellType = CellType.Fortress;
 					mapCell.movementCost = MovementTileValues.FORTRESS;
 					mapCell.defenceBonus = DefenseTileBonus.FORTRESS_DEF;
@@ -70,6 +73,7 @@ public class MapCellInfoSystem {
 				} else if (prop.equals("Village")) {
 					mapCell.position.x = tiledObject.getProperties().get("x", Float.class);
 					mapCell.position.y = tiledObject.getProperties().get("y", Float.class);
+					mapCell.tileName = prop;
 					mapCell.cellType = CellType.Village;
 					mapCell.movementCost = MovementTileValues.NORMAL;
 					mapCell.defenceBonus = DefenseTileBonus.VILLAGE_DEF;
@@ -77,6 +81,7 @@ public class MapCellInfoSystem {
 				} else if (prop.equals("Impassable")) {
 					mapCell.position.x = tiledObject.getProperties().get("x", Float.class);
 					mapCell.position.y = tiledObject.getProperties().get("y", Float.class);
+					mapCell.tileName = prop;
 					mapCell.cellType = CellType.Impassable;
 					mapCell.movementCost = MovementTileValues.IMPASSABLE;
 					mapCell.defenceBonus = DefenseTileBonus.IMPASSABLE_DEF;
@@ -84,6 +89,7 @@ public class MapCellInfoSystem {
 				}  else if (prop.equals("Throne")) {
 					mapCell.position.x = tiledObject.getProperties().get("x", Float.class);
 					mapCell.position.y = tiledObject.getProperties().get("y", Float.class);
+					mapCell.tileName = prop;
 					mapCell.cellType = CellType.Grass;
 					mapCell.movementCost = MovementTileValues.NORMAL;
 					mapCell.defenceBonus = DefenseTileBonus.THRONE_DEF;

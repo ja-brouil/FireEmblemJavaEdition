@@ -14,6 +14,7 @@ import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.gamePlay.AISystem;
 import com.jb.fe.systems.gamePlay.TurnManager;
+import com.jb.fe.systems.inputAndUI.InfoBoxUpdate;
 import com.jb.fe.systems.inputAndUI.UIManager;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 import com.jb.fe.systems.movement.UnitMovementSystem;
@@ -37,6 +38,7 @@ public class GameScreen extends ScreenAdapter{
 	private TurnManager turnManagerSystem;
 	private AISystem aiSystem;
 	private UIManager uiManager;
+	private InfoBoxUpdate infoBoxUpdate;
 	
 	public GameScreen(MusicSystem musicSystem, SoundSystem soundSystem, Engine engine, AssetManager assetManager, SpriteBatch spriteBatch, OrthographicCamera gameCamera) {
 		this.engine = engine;
@@ -49,6 +51,7 @@ public class GameScreen extends ScreenAdapter{
 		turnManagerSystem = new TurnManager();
 		aiSystem = new AISystem();
 		uiManager = new UIManager();
+		infoBoxUpdate = new InfoBoxUpdate();
 		
 		// Add Systems to the Engine
 		engine.addSystem(mapRenderSystem);
@@ -68,6 +71,7 @@ public class GameScreen extends ScreenAdapter{
 		UIFactory = new UIFactory(assetManager, soundSystem, gameCamera, uiManager);
 		Entity mapCursor = UIFactory.createMapCursor(currentLevel, engine);
 		Entity actionMenu = UIFactory.createActionMenu(unitMovementSystem, unitMapCellUpdater, engine);
+		
 		uiManager.startSystem();
 		engine.addEntity(mapCursor);
 		engine.addEntity(actionMenu);

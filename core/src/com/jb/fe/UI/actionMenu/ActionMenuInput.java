@@ -4,6 +4,8 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.jb.fe.UI.actionMenu.ActionMenuUpdate.Action_Menu_Options;
+import com.jb.fe.UI.actionMenu.ActionMenuUpdate.Action_Menu_State;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
@@ -32,6 +34,11 @@ public class ActionMenuInput implements InputHandling {
 	// Map Cell Updater
 	private UnitMapCellUpdater unitMapCellUpdater;
 	
+	// Option
+	private Action_Menu_Options currentOptionSelected;
+	private Action_Menu_Options[] allOptions;
+	private int indexOption;
+	
 	// Component Mappers
 	private ComponentMapper<MovementStatsComponent> mComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
@@ -48,6 +55,14 @@ public class ActionMenuInput implements InputHandling {
 		this.hand = hand;
 		this.unitMapCellUpdater = unitMapCellUpdater;
 		delayTime = 0.08f;
+		
+		allOptions = new Action_Menu_Options[4];
+		allOptions[0] = Action_Menu_Options.Action;
+		allOptions[1] = Action_Menu_Options.Items;
+		allOptions[2] = Action_Menu_Options.Trade;
+		allOptions[3] = Action_Menu_Options.Wait;
+		indexOption = 0;
+		currentOptionSelected = allOptions[indexOption];
 	}
 	
 	@Override
@@ -61,38 +76,35 @@ public class ActionMenuInput implements InputHandling {
 		// Up
 		if (Gdx.input.isKeyPressed(Keys.UP)) {
 			pComponentMapper.get(hand).y += 15;
-			uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Movement"));
 			currentDelayTime = 0;
+			if (indexOption - 1 < 0) {
+				indexOption = 0;
+				currentOptionSelected = allOptions[indexOption];
+			} else {
+				uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Movement"));
+				indexOption--;
+				currentOptionSelected = allOptions[indexOption];
+			}
 		}
 		
 		// Down
 		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
 			pComponentMapper.get(hand).y -= 15;
-			uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Movement"));
 			currentDelayTime = 0;
+			if (indexOption + 1 > allOptions.length - 1) {
+				indexOption = allOptions.length - 1;
+				currentOptionSelected = allOptions[indexOption];
+			} else {
+				uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Movement"));
+				indexOption++;
+				currentOptionSelected = allOptions[indexOption];
+			}
 		}
 		
 		// A Button
 		if (Gdx.input.isKeyPressed(Keys.Z)) {
-			// For now just accept -> Need to add other functions later
-			entityToProcess = uiComponent.currentEntity;
-			entityToProcess.getComponent(MovementStatsComponent.class).unit_State = Unit_State.DONE;
-			
-			// Map Cursor
-			mapCursor.getComponent(MapCursorStateComponent.class).mapCursorState = MapCursorState.MOVEMENT_ONLY;
-			aComponentMapper.get(mapCursor).currentAnimation.isDrawing = true;
-			
-			// Play accept sound
-			uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));
-			
-			// This
-			sComponentMapper.get(actionMenu).isEnabled = false;
-			sComponentMapper.get(hand).isEnabled = false;
-			actionMenu.getComponent(TextComponent.class).isDrawing = false;
-			uiComponent.inputIsEnabled = false;
-			uiComponent.updateIsEnabled = false;
-			uiComponent.uiManager.setCurrentUI(mapCursor);
-			
+			ActionMenuUpdate.action_Menu_State = Action_Menu_State.Process;
+			ActionMenuUpdate.curren_Action_Menu_Options = currentOptionSelected;
 			currentDelayTime = 0;
 		}
 		

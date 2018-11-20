@@ -9,6 +9,9 @@ public class MapCell {
 	// Cell Size
 	public static final int CELL_SIZE = 16;
 	
+	// Tile Name
+	public String tileName;
+	
 	// Coordinates
 	public PositionComponent position;
 	
@@ -60,6 +63,7 @@ public class MapCell {
 		gCost = 0;
 		hCost = 0;
 		parentTileAStar = null;
+		tileName = "PlaceHolder";
 	}
 	
 	public static class MovementTileValues {

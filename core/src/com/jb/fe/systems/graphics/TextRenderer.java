@@ -60,10 +60,10 @@ public class TextRenderer extends EntitySystem{
 		for  (Entity textEntity : allTextEntities) {
 			TextComponent textComponent = tComponentMapper.get(textEntity);
 			if (textComponent.isDrawing) {
-				mainFont.getData().setScale(textComponent.textFontSize);
-				mainFont.setColor(textComponent.textColor);
 				for (int i = 0; i < textComponent.textArray.size; i++) {
 					if (textComponent.textArray.get(i).isEnabled) {
+						mainFont.getData().setScale(textComponent.textArray.get(i).textFontSize);
+						mainFont.setColor(textComponent.textArray.get(i).textColor);
 						mainFont.draw(spriteBatch, textComponent.textArray.get(i).text, textComponent.textArray.get(i).x, textComponent.textArray.get(i).y);
 					}
 				}

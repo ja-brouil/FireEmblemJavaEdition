@@ -8,14 +8,14 @@ import com.badlogic.ashley.core.EntitySystem;
  * @author JamesBrouillet
  *
  */
-public class InfoBoxHandUpdateSystem extends EntitySystem{
+public class InfoBoxUpdate extends EntitySystem{
 
 	// UI elements
 	private Entity mapCursor;
 	
 	// Boxes
 	
-	public InfoBoxHandUpdateSystem(Entity hand) {
+	public InfoBoxUpdate() {
 		
 	}
 	

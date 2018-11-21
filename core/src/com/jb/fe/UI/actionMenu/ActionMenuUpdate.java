@@ -40,6 +40,7 @@ public class ActionMenuUpdate implements UpdateUI {
 	@Override
 	public void updateUI(float delta) {
 		if (action_Menu_State.equals(Action_Menu_State.Idle)) {
+			sComponentMapper.get(hand).isEnabled = true;
 			// Set Position
 			PositionComponent actionMenuPositionComponent = pComponentMapper.get(actionMenu);
 			PositionComponent selectedUnit = pComponentMapper.get(uiComponent.currentEntity);
@@ -68,6 +69,7 @@ public class ActionMenuUpdate implements UpdateUI {
 			// add size change here
 			sComponentMapper.get(actionMenu).isEnabled = true;
 		} else if (action_Menu_State.equals(Action_Menu_State.Process)) {
+			sComponentMapper.get(hand).isEnabled = false;
 			doAction(curren_Action_Menu_Options, mapCursor);
 		}
 	}

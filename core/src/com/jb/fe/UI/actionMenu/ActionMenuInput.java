@@ -67,7 +67,7 @@ public class ActionMenuInput implements InputHandling {
 	
 	@Override
 	public void handleInput() {
-		sComponentMapper.get(hand).isEnabled = true;
+		//sComponentMapper.get(hand).isEnabled = true;
 		currentDelayTime += Gdx.graphics.getDeltaTime();
 		if (currentDelayTime < delayTime) {
 			return;
@@ -102,7 +102,7 @@ public class ActionMenuInput implements InputHandling {
 		}
 		
 		// A Button
-		if (Gdx.input.isKeyPressed(Keys.Z)) {
+		if (Gdx.input.isKeyJustPressed(Keys.Z)) {
 			ActionMenuUpdate.action_Menu_State = Action_Menu_State.Process;
 			ActionMenuUpdate.curren_Action_Menu_Options = currentOptionSelected;
 			currentDelayTime = 0;

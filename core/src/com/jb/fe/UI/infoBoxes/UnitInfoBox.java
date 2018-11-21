@@ -153,9 +153,9 @@ public class UnitInfoBox extends MenuBox {
 				positionComponent.x = 4;
 				positionComponent.y = 4;
 			} else if (mComponentMapper.get(mapCursor).mapCursorQuandrant.equals(MAP_CURSOR_QUADRANT.TOP_RIGHT)) {
-				sPosition = SCREEN_POSITION.BOTTOM_LEFT;
-				positionComponent.x = 4;
-				positionComponent.y = 4;
+				sPosition = SCREEN_POSITION.TOP_LEFT;
+				positionComponent.x = 3;
+				positionComponent.y = FireEmblemGame.HEIGHT - 40;
 			} else if (mComponentMapper.get(mapCursor).mapCursorQuandrant.equals(MAP_CURSOR_QUADRANT.BOTTOM_LEFT)) {
 				sPosition = SCREEN_POSITION.TOP_LEFT;
 				positionComponent.x = 3;

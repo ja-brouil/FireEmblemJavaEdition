@@ -29,6 +29,7 @@ public class Level {
 	public int mapHeightLimit;
 
 	// Victory/Defeat condition
+	public VictoryCondition victoryCondition;
 
 	public Level(String mapFileLocation, AssetManager assetManager, Engine engine) {
 		this.engine = engine;
@@ -45,12 +46,12 @@ public class Level {
 		
 		// Allies
 		engine.addEntity(UnitFactory.createEirika(assetManager, "Eirika", "units/eirika/eirika copy.png", 64,
-				112, true));
-		engine.addEntity(UnitFactory.createCavalierUnit(assetManager, "Seth", "units/cavalier/cavalierAlly copy.png", 2 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, true));
+				112, true, engine));
+		engine.addEntity(UnitFactory.createCavalierUnit(assetManager, "Seth", "units/cavalier/cavalierAlly copy.png", 2 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, true, engine));
 		
 		// Enemy
-		engine.addEntity(UnitFactory.createCavalierUnit(assetManager,"Evil Seth", "units/cavalier/cavalierAllyRed.png", 11 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false));
-		Entity aggresiveAI = UnitFactory.createCavalierUnit(assetManager, "Evil Seth", "units/cavalier/cavalierAllyRed.png", 5 * MapCell.CELL_SIZE, 9 * MapCell.CELL_SIZE, false);
+		engine.addEntity(UnitFactory.createCavalierUnit(assetManager,"Evil Seth", "units/cavalier/cavalierAllyRed.png", 11 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false, engine));
+		Entity aggresiveAI = UnitFactory.createCavalierUnit(assetManager, "Evil Seth", "units/cavalier/cavalierAllyRed.png", 5 * MapCell.CELL_SIZE, 9 * MapCell.CELL_SIZE, false, engine);
 		aggresiveAI.getComponent(Artifical_IntelligenceComponent.class).ai_Type = AI_TYPE.AGGRESSIVE;
 		engine.addEntity(aggresiveAI);
 		
@@ -60,6 +61,9 @@ public class Level {
 		
 		// Start MapCell Array
 		allLevelMapCells = new MapCell[mapWidthLimit / MapCell.CELL_SIZE][mapHeightLimit / MapCell.CELL_SIZE];
+		
+		// Start Victory Condition
+		victoryCondition = new VictoryCondition();
 	}
 
 	/*

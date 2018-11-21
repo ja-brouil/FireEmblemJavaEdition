@@ -6,8 +6,10 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.jb.fe.UI.UIFactory;
+import com.jb.fe.UI.factories.UIFactory;
 import com.jb.fe.UI.infoBoxes.TerrainInfoBox;
+import com.jb.fe.UI.infoBoxes.UnitInfoBox;
+import com.jb.fe.UI.infoBoxes.VictoryInfoBox;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCellInfoSystem;
 import com.jb.fe.map.MapRenderSystem;
@@ -80,7 +82,11 @@ public class GameScreen extends ScreenAdapter{
 		
 		// Info Boxes
 		TerrainInfoBox terrainInfoBox = new TerrainInfoBox(mapCursor, assetManager, engine);
+		VictoryInfoBox victoryInfoBox = new VictoryInfoBox(mapCursor, assetManager, engine, currentLevel);
+		UnitInfoBox unitInfoBox = new UnitInfoBox(mapCursor, assetManager, engine);
+		infoBoxUpdate.getAllBattleFieldMenuBoxes().add(unitInfoBox);
 		infoBoxUpdate.getAllBattleFieldMenuBoxes().add(terrainInfoBox);
+		infoBoxUpdate.getAllBattleFieldMenuBoxes().add(victoryInfoBox);
 		
 		// Set Audio
 		musicSystem.addNewSong("Ally Battle Theme", "music/FE Level1 HD Good.mp3", assetManager);

@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
-import com.jb.fe.UI.SquareSelectorFactory;
+import com.jb.fe.UI.squareSelectors.SquareSelectorFactory;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell.AvoidanceTileBonus;
 import com.jb.fe.map.MapCell.CellType;
@@ -78,10 +78,10 @@ public class MapCellInfoSystem {
 					mapCell.movementCost = MovementTileValues.NORMAL;
 					mapCell.defenceBonus = DefenseTileBonus.VILLAGE_DEF;
 					mapCell.avoidanceBonus = AvoidanceTileBonus.VILLAGE_AVD;
-				} else if (prop.equals("Impassable")) {
+				} else if (prop.equals("Castle")) {
 					mapCell.position.x = tiledObject.getProperties().get("x", Float.class);
 					mapCell.position.y = tiledObject.getProperties().get("y", Float.class);
-					mapCell.tileName = "--";
+					mapCell.tileName = prop;
 					mapCell.cellType = CellType.Impassable;
 					mapCell.movementCost = MovementTileValues.IMPASSABLE;
 					mapCell.defenceBonus = DefenseTileBonus.IMPASSABLE_DEF;
@@ -94,6 +94,30 @@ public class MapCellInfoSystem {
 					mapCell.movementCost = MovementTileValues.NORMAL;
 					mapCell.defenceBonus = DefenseTileBonus.THRONE_DEF;
 					mapCell.avoidanceBonus = AvoidanceTileBonus.THRONE_AVD;
+				} else if (prop.equals("Cliff")) {
+					mapCell.position.x = tiledObject.getProperties().get("x", Float.class);
+					mapCell.position.y = tiledObject.getProperties().get("y", Float.class);
+					mapCell.tileName = prop;
+					mapCell.cellType = CellType.Impassable;
+					mapCell.movementCost = MovementTileValues.IMPASSABLE;
+					mapCell.defenceBonus = DefenseTileBonus.IMPASSABLE_DEF;
+					mapCell.avoidanceBonus = AvoidanceTileBonus.IMPASSABLE_AVD;
+				} else if (prop.equals("Mountain")) {
+					mapCell.position.x = tiledObject.getProperties().get("x", Float.class);
+					mapCell.position.y = tiledObject.getProperties().get("y", Float.class);
+					mapCell.tileName = prop;
+					mapCell.cellType = CellType.Impassable;
+					mapCell.movementCost = MovementTileValues.IMPASSABLE;
+					mapCell.defenceBonus = DefenseTileBonus.IMPASSABLE_DEF;
+					mapCell.avoidanceBonus = AvoidanceTileBonus.IMPASSABLE_AVD;
+				} else if (prop.equals("Sea")) {
+					mapCell.position.x = tiledObject.getProperties().get("x", Float.class);
+					mapCell.position.y = tiledObject.getProperties().get("y", Float.class);
+					mapCell.tileName = prop;
+					mapCell.cellType = CellType.Impassable;
+					mapCell.movementCost = MovementTileValues.IMPASSABLE;
+					mapCell.defenceBonus = DefenseTileBonus.IMPASSABLE_DEF;
+					mapCell.avoidanceBonus = AvoidanceTileBonus.IMPASSABLE_AVD;
 				}
 				
 			}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.0" orientation="orthogonal" renderorder="left-up" width="16" height="10" tilewidth="16" tileheight="16" infinite="0" nextobjectid="475">
+<map version="1.0" tiledversion="1.1.0" orientation="orthogonal" renderorder="left-up" width="16" height="10" tilewidth="16" tileheight="16" infinite="0" nextobjectid="476">
  <tileset firstgid="1" source="level1tileset"/>
  <layer name="Background" width="16" height="10">
   <data encoding="csv">
@@ -33,37 +33,37 @@
   </object>
   <object id="313" x="48" y="144" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Mountain"/>
    </properties>
   </object>
   <object id="314" x="64" y="144" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Mountain"/>
    </properties>
   </object>
   <object id="315" x="80" y="144" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Mountain"/>
    </properties>
   </object>
   <object id="316" x="96" y="144" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Mountain"/>
    </properties>
   </object>
   <object id="317" x="112" y="144" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Mountain"/>
    </properties>
   </object>
   <object id="318" x="128" y="144" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Mountain"/>
    </properties>
   </object>
   <object id="319" x="144" y="144" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Mountain"/>
    </properties>
   </object>
   <object id="320" x="160" y="144" width="16" height="16">
@@ -138,17 +138,17 @@
   </object>
   <object id="334" x="112" y="128" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Mountain"/>
    </properties>
   </object>
   <object id="335" x="96" y="128" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Mountain"/>
    </properties>
   </object>
   <object id="336" x="80" y="128" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Mountain"/>
    </properties>
   </object>
   <object id="337" x="48" y="128" width="16" height="16">
@@ -158,7 +158,7 @@
   </object>
   <object id="338" x="64" y="128" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Mountain"/>
    </properties>
   </object>
   <object id="339" x="32" y="128" width="16" height="16">
@@ -178,7 +178,7 @@
   </object>
   <object id="342" x="0" y="112" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="343" x="16" y="112" width="16" height="16">
@@ -203,12 +203,12 @@
   </object>
   <object id="347" x="80" y="112" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Mountain"/>
    </properties>
   </object>
   <object id="348" x="96" y="112" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Mountain"/>
    </properties>
   </object>
   <object id="349" x="112" y="112" width="16" height="16">
@@ -328,12 +328,12 @@
   </object>
   <object id="374" x="0" y="96" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="375" x="0" y="80" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="376" x="16" y="80" width="16" height="16">
@@ -423,12 +423,12 @@
   </object>
   <object id="393" x="208" y="64" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="394" x="192" y="64" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="395" x="176" y="64" width="16" height="16">
@@ -443,7 +443,7 @@
   </object>
   <object id="397" x="144" y="64" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="398" x="128" y="64" width="16" height="16">
@@ -488,7 +488,7 @@
   </object>
   <object id="406" x="0" y="64" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="407" x="0" y="48" width="16" height="16">
@@ -518,12 +518,12 @@
   </object>
   <object id="412" x="80" y="48" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="413" x="96" y="48" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="415" x="112" y="48" width="16" height="16">
@@ -543,62 +543,62 @@
   </object>
   <object id="418" x="160" y="48" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="419" x="176" y="48" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="420" x="192" y="48" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="421" x="208" y="48" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="422" x="224" y="48" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="423" x="240" y="48" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="424" x="224" y="32" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="425" x="240" y="32" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="426" x="208" y="32" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="427" x="192" y="32" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="428" x="176" y="32" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="429" x="160" y="32" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="430" x="144" y="32" width="16" height="16">
@@ -623,7 +623,7 @@
   </object>
   <object id="435" x="80" y="32" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="436" x="64" y="32" width="16" height="16">
@@ -658,22 +658,22 @@
   </object>
   <object id="442" x="16" y="16" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Castle"/>
    </properties>
   </object>
   <object id="443" x="32" y="16" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Castle"/>
    </properties>
   </object>
   <object id="444" x="48" y="16" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Castle"/>
    </properties>
   </object>
   <object id="445" x="64" y="16" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="446" x="80" y="16" width="16" height="16">
@@ -698,77 +698,77 @@
   </object>
   <object id="450" x="144" y="16" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="451" x="160" y="16" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="452" x="176" y="16" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="453" x="192" y="16" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="454" x="208" y="16" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="455" x="224" y="16" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="456" x="240" y="16" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="457" x="240" y="0" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="458" x="224" y="0" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="459" x="208" y="0" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value=""/>
    </properties>
   </object>
   <object id="460" x="192" y="0" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="461" x="176" y="0" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="462" x="160" y="0" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="463" x="144" y="0" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Sea"/>
    </properties>
   </object>
   <object id="464" x="128" y="0" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="465" x="112" y="0" width="16" height="16">
@@ -788,22 +788,22 @@
   </object>
   <object id="468" x="64" y="0" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Cliff"/>
    </properties>
   </object>
   <object id="469" x="48" y="0" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Castle"/>
    </properties>
   </object>
   <object id="470" x="32" y="0" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Castle"/>
    </properties>
   </object>
   <object id="471" x="16" y="0" width="16" height="16">
    <properties>
-    <property name="TileType" value="Impassable"/>
+    <property name="TileType" value="Castle"/>
    </properties>
   </object>
   <object id="473" x="0" y="0" width="16" height="16">

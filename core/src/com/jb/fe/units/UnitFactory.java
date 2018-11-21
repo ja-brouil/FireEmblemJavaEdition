@@ -1,5 +1,6 @@
 package com.jb.fe.units;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.jb.fe.audio.SoundObject;
@@ -14,26 +15,33 @@ import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
-import com.jb.fe.systems.graphics.ZOrderDictionnary;
+import com.jb.fe.components.IconComponent;
+import com.jb.fe.systems.graphics.ZOrderLevel;
 import com.jb.fe.systems.items.ItemFactory;
 
 public class UnitFactory {
 
-	public static Entity createEirika(AssetManager assetManager, String name, String animationFileLocation, float x, float y, boolean isAlly) {
+	public static Entity createEirika(AssetManager assetManager, String name, String animationFileLocation, float x, float y, boolean isAlly, Engine engine) {
 		Entity Eirika = new Entity();
-
+		
 		// Components
 		NameComponent nameComponent = new NameComponent(name);
 		PositionComponent positionComponent = new PositionComponent(x, y);
 		AnimationComponent animationComponent = new AnimationComponent();
 		MovementStatsComponent movementStatsComponent = new MovementStatsComponent();
 		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
-		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.MIDDLE_LAYER);
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderLevel.MIDDLE_LAYER);
 		SoundComponent soundComponent = new SoundComponent();
 		InventoryComponent inventoryComponent = new InventoryComponent();
+		IconComponent iconComponent = new IconComponent();
+		
+		// Icon
+		Entity icon = IconFactory.createUnitIcon(assetManager, "units/eirika/eirikaPortrait.png", engine);
+		iconComponent.iconEntity = icon;
 		
 		//  Unit stats
 		unitStatsComponent.setEirika();
+		unitStatsComponent.health = 6;
 		
 		// Movement Sound
 		soundComponent.allSoundObjects.put("Movement", new SoundObject("sound/unitMovement/Light Foot Steps 1.wav", assetManager));
@@ -84,11 +92,12 @@ public class UnitFactory {
 		Eirika.add(zOrderComponent);
 		Eirika.add(soundComponent);
 		Eirika.add(inventoryComponent);
+		Eirika.add(iconComponent);
 
 		return Eirika;
 	}
 
-	public static Entity createCavalierUnit(AssetManager assetManager, String name, String animationFileLocation, float x, float y, boolean isAlly) {
+	public static Entity createCavalierUnit(AssetManager assetManager, String name, String animationFileLocation, float x, float y, boolean isAlly, Engine engine) {
 		Entity cavalierUnit = new Entity();
 
 		// Components
@@ -97,9 +106,14 @@ public class UnitFactory {
 		AnimationComponent animationComponent = new AnimationComponent();
 		MovementStatsComponent movementStatsComponent = new MovementStatsComponent();
 		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
-		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderDictionnary.MIDDLE_LAYER);
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderLevel.MIDDLE_LAYER);
 		SoundComponent soundComponent = new SoundComponent();
 		InventoryComponent inventoryComponent = new InventoryComponent();
+		IconComponent iconComponent = new IconComponent();
+		
+		// Icon
+		Entity icon = IconFactory.createUnitIcon(assetManager, "units/cavalier/sethPortrait.png", engine);
+		iconComponent.iconEntity = icon;
 		
 		// Unit stats
 		unitStatsComponent.setCavalier();
@@ -145,6 +159,7 @@ public class UnitFactory {
 		// Add AI component if not ally
 		if (!isAlly) {
 			Artifical_IntelligenceComponent aiComponent = new Artifical_IntelligenceComponent();
+			nameComponent.name = "Red Empire";
 			aiComponent.ai_Type = AI_TYPE.PASSIVE;
 			cavalierUnit.add(aiComponent);
 		}
@@ -162,6 +177,7 @@ public class UnitFactory {
 		cavalierUnit.add(zOrderComponent);
 		cavalierUnit.add(soundComponent);
 		cavalierUnit.add(inventoryComponent);
+		cavalierUnit.add(iconComponent);
 
 		return cavalierUnit;
 	}

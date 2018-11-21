@@ -11,7 +11,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.jb.fe.UI.TextObject;
+import com.jb.fe.UI.Text.TextObject;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.TextComponent;
 import com.jb.fe.systems.SystemPriorityDictionnary;

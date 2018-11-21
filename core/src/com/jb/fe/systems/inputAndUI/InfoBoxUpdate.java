@@ -61,6 +61,7 @@ public class InfoBoxUpdate extends EntitySystem{
 			uiComponentMapper.get(battlefieldBox.getBoxEntity()).updateIsEnabled = false;
 			sComponentMapper.get(battlefieldBox.getBoxEntity()).isEnabled = false;
 			tComponentMapper.get(battlefieldBox.getBoxEntity()).isDrawing = false;
+			battlefieldBox.turnOff();
 		}
 	}
 	
@@ -69,6 +70,7 @@ public class InfoBoxUpdate extends EntitySystem{
 			uiComponentMapper.get(battlefieldBox.getBoxEntity()).updateIsEnabled = true;
 			sComponentMapper.get(battlefieldBox.getBoxEntity()).isEnabled = true;
 			tComponentMapper.get(battlefieldBox.getBoxEntity()).isDrawing = true;
+			battlefieldBox.turnOff();
 		}
 	}
 	

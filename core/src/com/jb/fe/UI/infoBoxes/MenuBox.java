@@ -36,9 +36,13 @@ public abstract class MenuBox {
 		this.mapCursor = mapCursor;
 		this.assetManager = assetManager;
 		this.engine = engine;
+		
+		boxEntity = new Entity();
 	}
 	
 	public Entity getBoxEntity() {
 		return boxEntity;
 	}
+	
+	public void turnOff() {};
 }

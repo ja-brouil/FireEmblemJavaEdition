@@ -79,7 +79,7 @@ public class MapCell {
 		public static final int FOREST_DEF = 1;
 		public static final int FORTRESS_DEF = 2;
 		public static final int VILLAGE_DEF = 1;
-		public static final int IMPASSABLE_DEF = 1;
+		public static final int IMPASSABLE_DEF = 0;
 	}
 	
 	public static class AvoidanceTileBonus {

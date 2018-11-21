@@ -162,7 +162,7 @@ public class UIFactory {
 	public void createHand(Engine engine) {
 		Entity hand = new Entity();
 		// Components
-		StaticImageComponent staticImageComponent = new StaticImageComponent(assetManager, "UI/cursor/hand.png");
+		StaticImageComponent staticImageComponent = new StaticImageComponent(assetManager, "UI/Cursor/hand.png");
 		staticImageComponent.isEnabled = false;
 		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderLevel.UI_LOWER_LAYER);
 		

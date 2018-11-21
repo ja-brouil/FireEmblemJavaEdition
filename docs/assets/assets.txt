@@ -75,7 +75,7 @@ i:UI/terrainInfo/terrainInfoBox.png:25418:image/png
 d:UI/unitInfo:0:application/unknown
 i:UI/unitInfo/emptyHealthBar.png:33941:image/png
 i:UI/unitInfo/fullHealthBar.png:33941:image/png
-i:UI/unitInfo/unitInfoBox.png:25126:image/png
+i:UI/unitInfo/unitInfoBox.png:6613:image/png
 d:UI/unused:0:application/unknown
 b:UI/unused/Main Font2.ttf:8736:application/unknown
 d:UI/victoryBox:0:application/unknown

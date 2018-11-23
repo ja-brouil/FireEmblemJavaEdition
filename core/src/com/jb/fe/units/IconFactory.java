@@ -6,7 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.ZOrderComponent;
-import com.jb.fe.systems.graphics.ZOrderLevel;
+import com.jb.fe.systems.graphics.ZOrder;
 
 public class IconFactory {
 
@@ -19,7 +19,7 @@ public class IconFactory {
 		staticImageComponent.width = staticImageComponent.wholeImage.getWidth();
 		staticImageComponent.height = 44 - 15;
 		PositionComponent positionComponent = new PositionComponent(-500, -500);
-		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderLevel.UI_MIDDLE_LAYER);
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.UI_MIDDLE_LAYER);
 		
 		unitIcon.add(staticImageComponent);
 		unitIcon.add(positionComponent);

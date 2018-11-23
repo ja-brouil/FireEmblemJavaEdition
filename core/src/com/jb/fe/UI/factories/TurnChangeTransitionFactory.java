@@ -8,7 +8,7 @@ import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.screens.FireEmblemGame;
-import com.jb.fe.systems.graphics.ZOrderLevel;
+import com.jb.fe.systems.graphics.ZOrder;
 
 public class TurnChangeTransitionFactory {
 
@@ -24,7 +24,7 @@ public class TurnChangeTransitionFactory {
 		PositionComponent positionComponent = new PositionComponent();
 		StaticImageComponent staticImageComponent = new StaticImageComponent(assetManager, fileLocation);
 		SoundComponent soundComponent = new SoundComponent();
-		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderLevel.TOP_LAYER);
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.TOP_LAYER);
 		
 		positionComponent.y = (FireEmblemGame.HEIGHT / 2) - (staticImageComponent.wholeImage.getHeight() / 2);
 		staticImageComponent.isEnabled = false;

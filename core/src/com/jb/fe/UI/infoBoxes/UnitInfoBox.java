@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Align;
+import com.jb.fe.UI.MenuBox;
 import com.jb.fe.UI.Text.TextObject;
 import com.jb.fe.components.IconComponent;
 import com.jb.fe.components.MapCursorStateComponent.MAP_CURSOR_QUADRANT;
@@ -18,7 +19,7 @@ import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.components.UIComponent.UpdateUI;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.screens.FireEmblemGame;
-import com.jb.fe.systems.graphics.ZOrderLevel;
+import com.jb.fe.systems.graphics.ZOrder;
 
 public class UnitInfoBox extends MenuBox {
 
@@ -76,7 +77,7 @@ public class UnitInfoBox extends MenuBox {
 		backgroundStaticImageComponent.alpha = 0.8f;
 		backgroundStaticImageComponent.width = 90;
 		backgroundStaticImageComponent.height = 40;
-		backgroundZorder = new ZOrderComponent(ZOrderLevel.UI_LOWER_LAYER);
+		backgroundZorder = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
 		
 		uiComponent = new UIComponent();
 		uiComponent.updateIsEnabled = true;
@@ -106,7 +107,7 @@ public class UnitInfoBox extends MenuBox {
 		emptyHPStaticImage.width = 40;
 		emptyHPStaticImage.height = 5;
 		
-		emptyHPZorder = new ZOrderComponent(ZOrderLevel.UI_MIDDLE_LAYER);
+		emptyHPZorder = new ZOrderComponent(ZOrder.UI_MIDDLE_LAYER);
 		
 		emptyHPBar.add(emptyHPPositionComponent);
 		emptyHPBar.add(emptyHPStaticImage);
@@ -122,7 +123,7 @@ public class UnitInfoBox extends MenuBox {
 		healthyStaticImage.width = 5;
 		healthyStaticImage.height = 5;
 		
-		healthyZOrder = new ZOrderComponent(ZOrderLevel.UI_TOP_LAYER);
+		healthyZOrder = new ZOrderComponent(ZOrder.UI_TOP_LAYER);
 
 		healthyHPBar.add(healthyPositionComponent);
 		healthyHPBar.add(healthyStaticImage);

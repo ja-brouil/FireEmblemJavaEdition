@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.Align;
 import com.jb.fe.components.MapCursorStateComponent.MAP_CURSOR_QUADRANT;
+import com.jb.fe.UI.MenuBox;
 import com.jb.fe.UI.Text.TextObject;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
@@ -13,7 +14,7 @@ import com.jb.fe.components.TextComponent;
 import com.jb.fe.components.UIComponent;
 import com.jb.fe.components.UIComponent.UpdateUI;
 import com.jb.fe.components.ZOrderComponent;
-import com.jb.fe.systems.graphics.ZOrderLevel;
+import com.jb.fe.systems.graphics.ZOrder;
 import com.jb.fe.systems.movement.MovementUtilityCalculator;
 
 public class TerrainInfoBox extends MenuBox {
@@ -60,7 +61,7 @@ public class TerrainInfoBox extends MenuBox {
 		staticImageComponent = new StaticImageComponent(assetManager, "UI/terrainInfo/terrainInfoBox.png");
 		staticImageComponent.isEnabled = true;
 		staticImageComponent.alpha = 0.8f;
-		zOrderComponent = new ZOrderComponent(ZOrderLevel.UI_LOWER_LAYER);
+		zOrderComponent = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
 		
 		// Update
 		UIComponent uiComponent = new UIComponent();

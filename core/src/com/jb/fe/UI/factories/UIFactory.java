@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.jb.fe.UI.Text.TextObject;
 import com.jb.fe.UI.actionMenu.ActionMenuInput;
 import com.jb.fe.UI.actionMenu.ActionMenuUpdate;
+import com.jb.fe.UI.inventory.InventoryMenuBox;
 import com.jb.fe.UI.mapcursor.MapCursorInfoUpdate;
 import com.jb.fe.UI.mapcursor.MapCursorInputHandling;
 import com.jb.fe.audio.SoundObject;
@@ -24,7 +25,7 @@ import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.level.Level;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.SoundSystem;
-import com.jb.fe.systems.graphics.ZOrderLevel;
+import com.jb.fe.systems.graphics.ZOrder;
 import com.jb.fe.systems.inputAndUI.ActionMenuMapCursorManager;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 import com.jb.fe.systems.movement.UnitMovementSystem;
@@ -75,7 +76,7 @@ public class UIFactory {
 		StaticImageComponent staticImageComponent = new StaticImageComponent(assetManager, "UI/Cursor/staticCursor.png");
 		staticImageComponent.xOffset = -3.5f;
 		
-		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderLevel.TOP_LAYER);
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.TOP_LAYER);
 		
 		SoundComponent soundComponent = new SoundComponent();
 		soundComponent.allSoundObjects.put("Accept", new SoundObject("sound/accept.wav", assetManager));
@@ -138,7 +139,7 @@ public class UIFactory {
 		actionMenuStaticImage.width = FireEmblemGame.WIDTH / 5;
 		actionMenuStaticImage.height = 70;
 		
-		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderLevel.TOP_LAYER);
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.TOP_LAYER);
 		
 		// Add Components
 		actionMenu.add(nameComponent);
@@ -152,19 +153,12 @@ public class UIFactory {
 		return actionMenu;
 	}
 	
-	public Entity createDamagePreview() {
-		Entity damagePreview = new Entity();
-		
-		
-		return damagePreview;
-	}
-	
 	public void createHand(Engine engine) {
 		Entity hand = new Entity();
 		// Components
 		StaticImageComponent staticImageComponent = new StaticImageComponent(assetManager, "UI/Cursor/hand.png");
 		staticImageComponent.isEnabled = false;
-		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderLevel.UI_LOWER_LAYER);
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
 		
 		PositionComponent positionComponent = new PositionComponent(-100, 121);
 		NameComponent nameComponent = new NameComponent("Hand Selector");
@@ -175,5 +169,10 @@ public class UIFactory {
 		hand.add(zOrderComponent);
 		this.hand = hand;
 		engine.addEntity(hand);
+	}
+	
+	public void createInventoryMenu(Engine engine) {
+		InventoryMenuBox inventoryMenuBox = new InventoryMenuBox(assetManager, engine);
+		engine.addEntity(inventoryMenuBox.getBoxEntity());
 	}
 }

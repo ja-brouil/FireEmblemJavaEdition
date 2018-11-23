@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.Align;
+import com.jb.fe.UI.MenuBox;
 import com.jb.fe.UI.Text.TextObject;
 import com.jb.fe.components.MapCursorStateComponent.MAP_CURSOR_QUADRANT;
 import com.jb.fe.components.NameComponent;
@@ -15,7 +16,7 @@ import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.components.UIComponent.UpdateUI;
 import com.jb.fe.level.Level;
 import com.jb.fe.level.VictoryCondition.VictoryConditionType;
-import com.jb.fe.systems.graphics.ZOrderLevel;
+import com.jb.fe.systems.graphics.ZOrder;
 
 public class VictoryInfoBox extends MenuBox {
 
@@ -41,7 +42,7 @@ public class VictoryInfoBox extends MenuBox {
 		staticImageComponent.width = 55;
 		staticImageComponent.height = 15;
 		staticImageComponent.alpha = 0.8f;
-		zOrderComponent = new ZOrderComponent(ZOrderLevel.UI_LOWER_LAYER);
+		zOrderComponent = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
 		
 		textComponent = new TextComponent();
 		textComponent.textArray.addFirst(new TextObject(positionComponent.x, positionComponent.y, victoryString));

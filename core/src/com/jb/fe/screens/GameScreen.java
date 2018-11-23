@@ -75,6 +75,7 @@ public class GameScreen extends ScreenAdapter{
 		UIFactory = new UIFactory(assetManager, soundSystem, gameCamera, uiManager);
 		Entity mapCursor = UIFactory.createMapCursor(currentLevel, engine);
 		Entity actionMenu = UIFactory.createActionMenu(unitMovementSystem, unitMapCellUpdater, engine);
+		UIFactory.createInventoryMenu(engine);
 		
 		uiManager.startSystem();
 		engine.addEntity(mapCursor);

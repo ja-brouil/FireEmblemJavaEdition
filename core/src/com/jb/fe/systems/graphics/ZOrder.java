@@ -1,9 +1,9 @@
 package com.jb.fe.systems.graphics;
 
-public final class ZOrderLevel {
+public final class ZOrder {
 	
 	// Do not start
-	private ZOrderLevel() {}
+	private ZOrder() {}
 	
 	// Add more if needed
 	// Z Order 0 = first, higher number = later

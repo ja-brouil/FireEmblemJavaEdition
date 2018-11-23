@@ -6,7 +6,7 @@ import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.map.MapCell;
-import com.jb.fe.systems.graphics.ZOrderLevel;
+import com.jb.fe.systems.graphics.ZOrder;
 
 public class SquareSelectorFactory {
 	
@@ -22,7 +22,7 @@ public class SquareSelectorFactory {
 	public Entity createBlueSquare(float x, float y) {
 		Entity blueSquare = new Entity();
 		
-		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderLevel.BACKGROUND);
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.BACKGROUND);
 		PositionComponent positionComponent = new PositionComponent(x, y);
 		StaticImageComponent blueSquareImage = new StaticImageComponent(assetManager, "UI/selected/bluedarkSelect.png", MapCell.CELL_SIZE, MapCell.CELL_SIZE);
 		blueSquareImage.alpha = SquareSelectorFactory.alpha;
@@ -38,7 +38,7 @@ public class SquareSelectorFactory {
 	public Entity createRedSquare(float x, float y) {
 		Entity redSquare = new Entity();
 		
-		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderLevel.BACKGROUND);
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.BACKGROUND);
 		PositionComponent positionComponent = new PositionComponent(x, y);
 		StaticImageComponent redSquareImage = new StaticImageComponent(assetManager, "UI/selected/redselect.png", MapCell.CELL_SIZE, MapCell.CELL_SIZE);
 		redSquareImage.alpha = SquareSelectorFactory.alpha;

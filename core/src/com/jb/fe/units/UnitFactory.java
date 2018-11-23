@@ -16,7 +16,7 @@ import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
 import com.jb.fe.components.IconComponent;
-import com.jb.fe.systems.graphics.ZOrderLevel;
+import com.jb.fe.systems.graphics.ZOrder;
 import com.jb.fe.systems.items.ItemFactory;
 
 public class UnitFactory {
@@ -30,7 +30,7 @@ public class UnitFactory {
 		AnimationComponent animationComponent = new AnimationComponent();
 		MovementStatsComponent movementStatsComponent = new MovementStatsComponent();
 		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
-		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderLevel.MIDDLE_LAYER);
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.MIDDLE_LAYER);
 		SoundComponent soundComponent = new SoundComponent();
 		InventoryComponent inventoryComponent = new InventoryComponent();
 		IconComponent iconComponent = new IconComponent();
@@ -106,7 +106,7 @@ public class UnitFactory {
 		AnimationComponent animationComponent = new AnimationComponent();
 		MovementStatsComponent movementStatsComponent = new MovementStatsComponent();
 		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
-		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrderLevel.MIDDLE_LAYER);
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.MIDDLE_LAYER);
 		SoundComponent soundComponent = new SoundComponent();
 		InventoryComponent inventoryComponent = new InventoryComponent();
 		IconComponent iconComponent = new IconComponent();

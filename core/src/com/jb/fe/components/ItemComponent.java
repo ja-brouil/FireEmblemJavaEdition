@@ -9,7 +9,7 @@ public class ItemComponent implements Component{
 	public boolean isUsable; // Can be used by current class
 	
 	public int uses; 				// durability
-	public int might;				// effectiveness
+	public int might;				// effectiveness | damage
 	public int weight;				// affects chance to dodge
 	public int hit;					// base hit chance
 	public int crit;				// base crit chance

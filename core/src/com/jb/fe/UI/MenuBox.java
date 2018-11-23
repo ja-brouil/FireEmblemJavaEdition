@@ -1,10 +1,9 @@
-package com.jb.fe.UI.infoBoxes;
+package com.jb.fe.UI;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.jb.fe.components.MapCursorStateComponent;
 
 public abstract class MenuBox {
@@ -23,9 +22,6 @@ public abstract class MenuBox {
 	
 	protected SCREEN_POSITION sPosition;
 	
-	// Font
-	protected BitmapFont mainFont;
-	
 	// Asset Manager
 	protected AssetManager assetManager;
 	
@@ -40,9 +36,17 @@ public abstract class MenuBox {
 		boxEntity = new Entity();
 	}
 	
+	public MenuBox(AssetManager assetManager, Engine engine) {
+		this.assetManager = assetManager;
+		this.engine = engine;
+		
+		boxEntity = new Entity();
+	}
+	
 	public Entity getBoxEntity() {
 		return boxEntity;
 	}
 	
+	// Override this to turn this off
 	public void turnOff() {};
 }

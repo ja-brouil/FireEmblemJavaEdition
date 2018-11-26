@@ -2,6 +2,7 @@ package com.jb.fe.UI.actionMenu;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.jb.fe.UI.inventory.InventoryMenuBox;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
@@ -21,6 +22,7 @@ public class ActionMenuUpdate implements UpdateUI {
 	private Entity actionMenu;
 	private Entity hand;
 	private Entity mapCursor;
+	private InventoryMenuBox inventoryMenuBox;
 	
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
@@ -30,11 +32,12 @@ public class ActionMenuUpdate implements UpdateUI {
 	public static Action_Menu_State action_Menu_State = Action_Menu_State.Idle;
 	public static Action_Menu_Options curren_Action_Menu_Options;
 	
-	public ActionMenuUpdate(UIComponent uiComponent, Entity actionMenu, Entity hand, Entity mapCursor) {
+	public ActionMenuUpdate(UIComponent uiComponent, Entity actionMenu, Entity hand, Entity mapCursor, InventoryMenuBox inventoryMenuBox) {
 		this.uiComponent = uiComponent;
 		this.actionMenu = actionMenu;
 		this.hand = hand;
 		this.mapCursor = mapCursor;
+		this.inventoryMenuBox = inventoryMenuBox;
 	};
 	
 	@Override
@@ -86,7 +89,7 @@ public class ActionMenuUpdate implements UpdateUI {
 	
 	public void doAction(Action_Menu_Options action_Menu_Options, Entity mapCursor) {
 		if (action_Menu_Options.equals(Action_Menu_Options.Action)) {
-			processAction(mapCursor);
+			processAction();
 		} else if (action_Menu_Options.equals(Action_Menu_Options.Items)) {
 			processItems(mapCursor);
 		} else if (action_Menu_Options.equals(Action_Menu_Options.Trade)) {
@@ -96,9 +99,13 @@ public class ActionMenuUpdate implements UpdateUI {
 		}
 	}
 	
-	private void processAction(Entity mapCursor) {
-		System.out.println("ACTION SELECTED!");
-		turnOffMenu(mapCursor);
+	private void processAction() {
+		turnOff();
+		inventoryMenuBox.setUnit(uiComponent.currentEntity);
+		uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));
+		uiComponent.uiManager.setCurrentUI(inventoryMenuBox.getBoxEntity());
+		uiComponent.uiManager.getCurrentUIComponent().getComponent(UIComponent.class).inputIsEnabled = true;
+		uiComponent.uiManager.getCurrentUIComponent().getComponent(UIComponent.class).updateIsEnabled = true;
 	}
 	
 	private void processTrade(Entity mapCursor) {
@@ -130,14 +137,17 @@ public class ActionMenuUpdate implements UpdateUI {
 		// Play accept sound
 		uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));
 		
-		// This
+		turnOff();
+		uiComponent.uiManager.setCurrentUI(mapCursor);
+		action_Menu_State = Action_Menu_State.Idle;
+	}
+	
+	public void turnOff() {
 		sComponentMapper.get(actionMenu).isEnabled = false;
 		sComponentMapper.get(hand).isEnabled = false;
 		actionMenu.getComponent(TextComponent.class).isDrawing = false;
 		uiComponent.inputIsEnabled = false;
 		uiComponent.updateIsEnabled = false;
-		uiComponent.uiManager.setCurrentUI(mapCursor);
-		action_Menu_State = Action_Menu_State.Idle;
 	}
 	
 	public static enum Action_Menu_Options {
@@ -146,5 +156,9 @@ public class ActionMenuUpdate implements UpdateUI {
 	
 	public static enum Action_Menu_State {
 		Idle, Process
+	}
+	
+	public void setInventoryMenu(InventoryMenuBox inventoryMenuBox) {
+		this.inventoryMenuBox = inventoryMenuBox;
 	}
 }

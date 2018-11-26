@@ -19,6 +19,7 @@ import com.jb.fe.components.IconComponent;
 import com.jb.fe.systems.graphics.ZOrder;
 import com.jb.fe.systems.items.ItemFactory;
 
+// Fix diamond of the box later
 public class UnitFactory {
 
 	public static Entity createEirika(AssetManager assetManager, String name, String animationFileLocation, float x, float y, boolean isAlly, Engine engine) {
@@ -80,7 +81,7 @@ public class UnitFactory {
 		movementStatsComponent.movementSteps = 5;
 		
 		// Inventory
-		inventoryComponent.inventory[0] = ItemFactory.createWeapon("Iron Sword");
+		inventoryComponent.addItem(ItemFactory.createWeapon("Test Weapon 1"));
 		inventoryComponent.selectedItem = inventoryComponent.inventory[0];
 
 		// Add Components
@@ -165,7 +166,7 @@ public class UnitFactory {
 		}
 		
 		// Inventory Component
-		inventoryComponent.inventory[0] = ItemFactory.createWeapon("Iron Sword");
+		inventoryComponent.addItem(ItemFactory.createWeapon("Iron Sword"));
 		inventoryComponent.selectedItem = inventoryComponent.inventory[0];
 		
 		// Add Components

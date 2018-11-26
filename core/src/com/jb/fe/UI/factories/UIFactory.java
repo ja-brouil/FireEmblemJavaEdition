@@ -26,7 +26,7 @@ import com.jb.fe.level.Level;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.graphics.ZOrder;
-import com.jb.fe.systems.inputAndUI.ActionMenuMapCursorManager;
+import com.jb.fe.systems.inputAndUI.UIManager;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 import com.jb.fe.systems.movement.UnitMovementSystem;
 
@@ -45,13 +45,15 @@ public class UIFactory {
 	private OrthographicCamera camera;
 	
 	// UI Manager
-	private ActionMenuMapCursorManager uiManager;
+	private UIManager uiManager;
 	
 	// UI Entities
 	private Entity mapCursor;
 	private Entity hand;
+	private Entity actionMenu;
+	private InventoryMenuBox inventoryMenuBox;
 	
-	public UIFactory(AssetManager assetManager, SoundSystem soundSystem, OrthographicCamera camera, ActionMenuMapCursorManager uiManager) {
+	public UIFactory(AssetManager assetManager, SoundSystem soundSystem, OrthographicCamera camera, UIManager uiManager) {
 		this.assetManager = assetManager;
 		this.soundSystem = soundSystem;
 		this.camera = camera;
@@ -112,8 +114,6 @@ public class UIFactory {
 	
 	public Entity createActionMenu(UnitMovementSystem unitMovementSystem, UnitMapCellUpdater unitMapCellUpdater, Engine engine) {
 		Entity actionMenu = new Entity();
-		// Create Hand
-		createHand(engine);
 		
 		// Components
 		NameComponent nameComponent = new NameComponent("Action Menu");
@@ -128,7 +128,7 @@ public class UIFactory {
 		uiTextComponent.isDrawing = false;
 		
 		UIComponent uiComponent = new UIComponent(uiManager, soundSystem);
-		uiComponent.updateUI = new ActionMenuUpdate(uiComponent, actionMenu, hand, mapCursor);
+		uiComponent.updateUI = new ActionMenuUpdate(uiComponent, actionMenu, hand, mapCursor, inventoryMenuBox);
 		uiComponent.inputHandling = new ActionMenuInput(mapCursor, actionMenu, hand, unitMapCellUpdater, uiComponent);
 		uiComponent.inputIsEnabled = false;
 		uiComponent.updateIsEnabled = false;
@@ -160,7 +160,7 @@ public class UIFactory {
 		staticImageComponent.isEnabled = false;
 		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
 		
-		PositionComponent positionComponent = new PositionComponent(-100, 121);
+		PositionComponent positionComponent = new PositionComponent(-100, 181);
 		NameComponent nameComponent = new NameComponent("Hand Selector");
 		
 		hand.add(staticImageComponent);
@@ -172,7 +172,7 @@ public class UIFactory {
 	}
 	
 	public void createInventoryMenu(Engine engine) {
-		InventoryMenuBox inventoryMenuBox = new InventoryMenuBox(assetManager, engine);
+		inventoryMenuBox = new InventoryMenuBox(assetManager, engine, hand, actionMenu);
 		engine.addEntity(inventoryMenuBox.getBoxEntity());
 	}
 }

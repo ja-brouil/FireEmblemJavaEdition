@@ -18,7 +18,7 @@ import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.audio.SoundSystem;
-import com.jb.fe.systems.inputAndUI.ActionMenuMapCursorManager;
+import com.jb.fe.systems.inputAndUI.UIManager;
 
 /**
  * Controls the unit movements
@@ -32,7 +32,7 @@ public class UnitMovementSystem extends EntitySystem {
 	private ImmutableArray<Entity> allMovableEntities;
 	
 	// Ui Manager
-	private ActionMenuMapCursorManager uiManager;
+	private UIManager uiManager;
 
 	// Mappers
 	private ComponentMapper<AnimationComponent> aComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
@@ -178,7 +178,7 @@ public class UnitMovementSystem extends EntitySystem {
 		}
 	}
 
-	public void startSystem(ActionMenuMapCursorManager uiManager) {
+	public void startSystem(UIManager uiManager) {
 		this.uiManager = uiManager;
 		unitMapCellUpdater = getEngine().getSystem(UnitMapCellUpdater.class);
 		soundSystem = getEngine().getSystem(SoundSystem.class);

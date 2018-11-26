@@ -17,7 +17,8 @@ import com.jb.fe.systems.graphics.ZOrder;
 public class InventoryMenuBox extends MenuBox{
 
 	public UIComponent uiComponent;
-
+	public InventoryBoxUpdate inventoryBoxUpdate;
+	
 	// Item Box Info
 	private Entity itemInvInfoBox;
 	private StaticImageComponent itemInventoryBoxImage;
@@ -31,14 +32,14 @@ public class InventoryMenuBox extends MenuBox{
 	private ZOrderComponent zOrderComponentStats;
 	private TextComponent itemStatsTextComponent;
 	
-	public InventoryMenuBox(AssetManager assetManager, Engine engine) {
+	public InventoryMenuBox(AssetManager assetManager, Engine engine, Entity hand, Entity actionMenu) {
 		super(assetManager, engine);
 		
 		// Inventory Info
 		itemInvInfoBox = new Entity();
 		itemInventoryBoxImage = new StaticImageComponent(assetManager, "UI/itemBox/itemBox.png");
-		itemInventoryBoxImage.isEnabled = true;
-		itemInventoryBoxImage.width = 80;
+		itemInventoryBoxImage.isEnabled = false;
+		itemInventoryBoxImage.width = 90;
 		itemInventoryBoxImage.height = 120;
 		
 		itemInvPositionComponent = new PositionComponent(10,40);
@@ -46,14 +47,14 @@ public class InventoryMenuBox extends MenuBox{
 		zOrderComponentInv = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
 		
 		itemBoxTextComponent = new TextComponent();
-		itemBoxTextComponent.isDrawing = true;
+		itemBoxTextComponent.isDrawing = false;
 		// Both of these are placeholders
-		itemBoxTextComponent.textArray.addFirst(new TextObject(itemInvPositionComponent.x + 30, itemInvPositionComponent.y + 23, "Iron Sword", 0.2f, Align.left));
-		itemBoxTextComponent.textArray.addFirst(new TextObject(itemInvPositionComponent.x + 30, itemInvPositionComponent.y + 38, "Rapier", 0.2f, Align.left));
-		itemBoxTextComponent.textArray.addFirst(new TextObject(itemInvPositionComponent.x + 30, itemInvPositionComponent.y + 53, "Iron Sword", 0.2f, Align.left));
-		itemBoxTextComponent.textArray.addFirst(new TextObject(itemInvPositionComponent.x + 30, itemInvPositionComponent.y + 68, "Rapier", 0.2f, Align.left));
-		itemBoxTextComponent.textArray.addFirst(new TextObject(itemInvPositionComponent.x + 30, itemInvPositionComponent.y + 83, "Iron Sword", 0.2f, Align.left));
-		itemBoxTextComponent.textArray.addFirst(new TextObject(itemInvPositionComponent.x + 30, itemInvPositionComponent.y + 98, "Rapier", 0.2f, Align.left));
+		itemBoxTextComponent.textArray.addLast(new TextObject(itemInvPositionComponent.x + 30, itemInvPositionComponent.y + 23, "Iron Sword", 0.2f, Align.left));
+		itemBoxTextComponent.textArray.addLast(new TextObject(itemInvPositionComponent.x + 30, itemInvPositionComponent.y + 38, "Rapier", 0.2f, Align.left));
+		itemBoxTextComponent.textArray.addLast(new TextObject(itemInvPositionComponent.x + 30, itemInvPositionComponent.y + 53, "Bow", 0.2f, Align.left));
+		itemBoxTextComponent.textArray.addLast(new TextObject(itemInvPositionComponent.x + 30, itemInvPositionComponent.y + 68, "Staff", 0.2f, Align.left));
+		itemBoxTextComponent.textArray.addLast(new TextObject(itemInvPositionComponent.x + 30, itemInvPositionComponent.y + 83, "Tome", 0.2f, Align.left));
+		itemBoxTextComponent.textArray.addLast(new TextObject(itemInvPositionComponent.x + 30, itemInvPositionComponent.y + 98, "Spear", 0.2f, Align.left));
 		
 		itemInvInfoBox.add(itemInventoryBoxImage);
 		itemInvInfoBox.add(itemInvPositionComponent);
@@ -63,7 +64,7 @@ public class InventoryMenuBox extends MenuBox{
 		
 		// Item Info Box
 		itemStatsInfoImage = new StaticImageComponent(assetManager, "UI/itemBox/itemBox.png");
-		itemStatsInfoImage.isEnabled = true;
+		itemStatsInfoImage.isEnabled = false;
 		itemStatsInfoImage.width = 80;
 		itemStatsInfoImage.height = 60;
 		
@@ -71,7 +72,7 @@ public class InventoryMenuBox extends MenuBox{
 		
 		zOrderComponentStats = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
 		itemStatsTextComponent = new TextComponent();
-		itemStatsTextComponent.isDrawing = true;
+		itemStatsTextComponent.isDrawing = false;
 		// Placeholder testx
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 33, itemStatsInfoPosition.y + 48, "Affin", 0.2f, Align.center));
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 8, itemStatsInfoPosition.y + 34, "Atk 10", 0.2f, Align.left));
@@ -79,12 +80,16 @@ public class InventoryMenuBox extends MenuBox{
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 42, itemStatsInfoPosition.y + 34, "Crit 5", 0.2f, Align.left));
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 42, itemStatsInfoPosition.y + 14, "Uses 50", 0.2f, Align.left));
 		
+		uiComponent = new UIComponent();
+		inventoryBoxUpdate = new InventoryBoxUpdate(this, uiComponent, actionMenu, hand);
+		uiComponent.updateUI = inventoryBoxUpdate;
+		uiComponent.inputHandling = new InventoryInputHandle(hand);
+		
 		boxEntity.add(itemStatsInfoImage);
 		boxEntity.add(itemStatsInfoPosition);
 		boxEntity.add(zOrderComponentStats);
 		boxEntity.add(itemStatsTextComponent);
-		
-		turnOn();
+		boxEntity.add(uiComponent);
 	}
 
 	public TextComponent getItemBoxTextComponent() {
@@ -93,6 +98,22 @@ public class InventoryMenuBox extends MenuBox{
 	
 	public TextComponent getItemStatsTextComponent() {
 		return itemStatsTextComponent;
+	}
+	
+	public StaticImageComponent getStaticImageComponent() {
+		return itemInventoryBoxImage;
+	}
+	
+	public PositionComponent getPositionComponentItemBox() {
+		return itemInvPositionComponent;
+	}
+	
+	public Entity getItemInvBoxEntity() {
+		return itemInvInfoBox;
+	}
+	
+	public void setUnit(Entity unit) {
+		inventoryBoxUpdate.setUnit(unit);
 	}
 	
 	@Override

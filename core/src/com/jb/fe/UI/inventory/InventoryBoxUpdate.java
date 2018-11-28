@@ -33,7 +33,7 @@ public class InventoryBoxUpdate implements UpdateUI{
 
 	@Override
 	public void updateUI(float delta) {
-		
+		setTextInfo();
 	}
 	
 	public void setUnit(Entity unit) {
@@ -65,9 +65,9 @@ public class InventoryBoxUpdate implements UpdateUI{
 	}
 	
 	public void setTextInfo() {
-		inventoryMenuBox.getItemStatsTextComponent().textArray.get(1).text = "Atk " + Integer.toString(itemComponentMapper.get(inventoryComponent.selectedItem).might);
+		inventoryMenuBox.getItemStatsTextComponent().textArray.get(3).text = "Atk " + Integer.toString(itemComponentMapper.get(inventoryComponent.selectedItem).might);
 		inventoryMenuBox.getItemStatsTextComponent().textArray.get(2).text = "Hit " + Integer.toString(itemComponentMapper.get(inventoryComponent.selectedItem).hit);
-		inventoryMenuBox.getItemStatsTextComponent().textArray.get(3).text = "Crit " + Integer.toString(itemComponentMapper.get(inventoryComponent.selectedItem).crit);
-		inventoryMenuBox.getItemStatsTextComponent().textArray.get(4).text = "Uses " + Integer.toString(itemComponentMapper.get(inventoryComponent.selectedItem).uses);
+		inventoryMenuBox.getItemStatsTextComponent().textArray.get(1).text = "Crit " + Integer.toString(itemComponentMapper.get(inventoryComponent.selectedItem).crit);
+		inventoryMenuBox.getItemStatsTextComponent().textArray.get(0).text = "Uses " + Integer.toString(itemComponentMapper.get(inventoryComponent.selectedItem).uses);
 	}
 }

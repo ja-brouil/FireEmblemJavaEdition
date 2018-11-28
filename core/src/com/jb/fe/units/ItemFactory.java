@@ -1,4 +1,4 @@
-package com.jb.fe.systems.items;
+package com.jb.fe.units;
 
 import com.badlogic.ashley.core.Entity;
 import com.jb.fe.components.ItemComponent;

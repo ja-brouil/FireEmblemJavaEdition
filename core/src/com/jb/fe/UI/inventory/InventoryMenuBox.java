@@ -83,7 +83,7 @@ public class InventoryMenuBox extends MenuBox{
 		uiComponent = new UIComponent();
 		inventoryBoxUpdate = new InventoryBoxUpdate(this, actionMenu, hand);
 		uiComponent.updateUI = inventoryBoxUpdate;
-		uiComponent.inputHandling = new InventoryInputHandle(hand);
+		uiComponent.inputHandling = new InventoryInputHandle(hand, uiComponent);
 		
 		boxEntity.add(itemStatsInfoImage);
 		boxEntity.add(itemStatsInfoPosition);

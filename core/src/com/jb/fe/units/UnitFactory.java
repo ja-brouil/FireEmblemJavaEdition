@@ -17,7 +17,6 @@ import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
 import com.jb.fe.components.IconComponent;
 import com.jb.fe.systems.graphics.ZOrder;
-import com.jb.fe.systems.items.ItemFactory;
 
 // Fix diamond of the box later
 public class UnitFactory {

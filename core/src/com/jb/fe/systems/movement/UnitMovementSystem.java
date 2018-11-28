@@ -151,7 +151,8 @@ public class UnitMovementSystem extends EntitySystem {
 						
 						// Resume UI
 						uiManager.setPauseStatus(false);
-						uiManager.startActionMenu(unit);
+						uiManager.startActionMenu();
+						UIManager.currentGameUnit = unit;
 						
 					} else {
 						Artifical_IntelligenceComponent artifical_IntelligenceComponent = aiComponentMapper.get(unit);

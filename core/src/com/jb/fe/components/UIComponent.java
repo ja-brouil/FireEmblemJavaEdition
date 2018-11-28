@@ -1,7 +1,6 @@
 package com.jb.fe.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.inputAndUI.UIManager;
 
@@ -13,9 +12,6 @@ public class UIComponent implements Component {
 	public InputHandling inputHandling;
 	
 	public UIManager uiManager;
-	
-	public Entity currentEntity;
-	
 	public SoundSystem soundSystem;
 	
 	public UIComponent(UIManager uiManager, SoundSystem soundSystem) {

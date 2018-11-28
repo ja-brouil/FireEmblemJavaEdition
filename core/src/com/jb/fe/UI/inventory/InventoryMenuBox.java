@@ -81,7 +81,7 @@ public class InventoryMenuBox extends MenuBox{
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 42, itemStatsInfoPosition.y + 14, "Uses 50", 0.2f, Align.left));
 		
 		uiComponent = new UIComponent();
-		inventoryBoxUpdate = new InventoryBoxUpdate(this, uiComponent, actionMenu, hand);
+		inventoryBoxUpdate = new InventoryBoxUpdate(this, actionMenu, hand);
 		uiComponent.updateUI = inventoryBoxUpdate;
 		uiComponent.inputHandling = new InventoryInputHandle(hand);
 		

@@ -7,7 +7,6 @@ import com.jb.fe.components.ItemComponent;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
-import com.jb.fe.components.UIComponent;
 import com.jb.fe.components.UIComponent.UpdateUI;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.systems.graphics.ZOrder;
@@ -18,7 +17,6 @@ public class InventoryBoxUpdate implements UpdateUI{
 	private InventoryMenuBox inventoryMenuBox;
 	private Entity hand;
 	private Entity actionMenu;
-	private UIComponent uiComponent;
 	
 	private ComponentMapper<InventoryComponent> iComponentMapper = ComponentMapper.getFor(InventoryComponent.class);
 	private ComponentMapper<NameComponent> nComponentMapper = ComponentMapper.getFor(NameComponent.class);
@@ -27,9 +25,8 @@ public class InventoryBoxUpdate implements UpdateUI{
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	private InventoryComponent inventoryComponent;
 	
-	public InventoryBoxUpdate(InventoryMenuBox inventoryMenuBox, UIComponent uiComponent, Entity actionMenu, Entity hand) {
+	public InventoryBoxUpdate(InventoryMenuBox inventoryMenuBox, Entity actionMenu, Entity hand) {
 		this.inventoryMenuBox = inventoryMenuBox;
-		this.uiComponent = uiComponent;
 		this.hand = hand;
 		this.actionMenu = actionMenu;
 	}

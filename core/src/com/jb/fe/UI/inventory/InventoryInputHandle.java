@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.jb.fe.components.InventoryComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.UIComponent.InputHandling;
+import com.jb.fe.systems.inputAndUI.UIManager;
 
 public class InventoryInputHandle implements InputHandling{
 	
@@ -14,18 +15,21 @@ public class InventoryInputHandle implements InputHandling{
 	private float currentDelay;
 	
 	private Entity hand;
-	private Entity unit;
+	public static int itemSelectionNumber;
 	
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<InventoryComponent> iComponentMapper = ComponentMapper.getFor(InventoryComponent.class);
 	
 	public InventoryInputHandle(Entity hand) {
 		this.hand = hand;
+		itemSelectionNumber = 0;
 	}
 
 	@Override
 	public void handleInput() {
 		currentDelay += Gdx.graphics.getDeltaTime();
+		System.out.println(iComponentMapper.get(UIManager.currentGameUnit).amountOfItemsCarried);
+		System.out.println(allowHandMovement());
 		if (currentDelay <= keyDelay) { return; }
 		
 		// Up
@@ -60,14 +64,12 @@ public class InventoryInputHandle implements InputHandling{
 	
 	private boolean allowHandMovement() {
 		// If there is only 1 item, no movement allowed
-		if (iComponentMapper.get(unit).amountOfItemsCarried >= 1) {
+		if (iComponentMapper.get(UIManager.currentGameUnit).amountOfItemsCarried <= 1) {
 			return false;
 		}
 		
+		
+		
 		return true;
-	}
-	
-	public void setUnit(Entity unit) {
-		this.unit = unit;
 	}
 }

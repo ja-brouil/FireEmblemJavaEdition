@@ -21,6 +21,9 @@ public class UIManager extends EntitySystem {
 	
 	private boolean pauseUI;
 	
+	// Game Unit that we are processing
+	public static Entity currentGameUnit;
+	
 	private ComponentMapper<UIComponent> uComponentMapper = ComponentMapper.getFor(UIComponent.class);
 	
 	public UIManager() {
@@ -46,10 +49,9 @@ public class UIManager extends EntitySystem {
 	}
 	
 	// Helpers functions to pass data
-	public void startActionMenu(Entity currentUnit) {
+	public void startActionMenu() {
 		actionMenu.getComponent(UIComponent.class).inputIsEnabled = true;
 		actionMenu.getComponent(UIComponent.class).updateIsEnabled = true;
-		actionMenu.getComponent(UIComponent.class).currentEntity = currentUnit;
 		setCurrentUI(actionMenu);
 	}
 	

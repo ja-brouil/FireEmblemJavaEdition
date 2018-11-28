@@ -17,6 +17,7 @@ import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.TextComponent;
 import com.jb.fe.components.UIComponent;
 import com.jb.fe.components.UIComponent.InputHandling;
+import com.jb.fe.systems.inputAndUI.UIManager;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 
 public class ActionMenuInput implements InputHandling {
@@ -111,7 +112,7 @@ public class ActionMenuInput implements InputHandling {
 		// B Button | send unit back | set mapcursor back
 		if (Gdx.input.isKeyPressed(Keys.X)) {
 			// Set Unit
-			entityToProcess = uiComponent.currentEntity;
+			entityToProcess = UIManager.currentGameUnit;
 			MovementStatsComponent movementStatsComponent = mComponentMapper.get(entityToProcess);
 			movementStatsComponent.currentCell = movementStatsComponent.previousCell;
 			movementStatsComponent.unit_State = Unit_State.CAN_DO_BOTH;

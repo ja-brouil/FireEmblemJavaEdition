@@ -15,6 +15,7 @@ import com.jb.fe.components.TextComponent;
 import com.jb.fe.components.UIComponent;
 import com.jb.fe.components.UIComponent.UpdateUI;
 import com.jb.fe.screens.FireEmblemGame;
+import com.jb.fe.systems.inputAndUI.UIManager;
 
 public class ActionMenuUpdate implements UpdateUI {
 	
@@ -46,7 +47,7 @@ public class ActionMenuUpdate implements UpdateUI {
 			sComponentMapper.get(hand).isEnabled = true;
 			// Set Position
 			PositionComponent actionMenuPositionComponent = pComponentMapper.get(actionMenu);
-			PositionComponent selectedUnit = pComponentMapper.get(uiComponent.currentEntity);
+			PositionComponent selectedUnit = pComponentMapper.get(UIManager.currentGameUnit);
 			PositionComponent handPosition = pComponentMapper.get(hand); 
 			handPosition.x = actionMenuPositionComponent.x - 5;
 			
@@ -101,7 +102,7 @@ public class ActionMenuUpdate implements UpdateUI {
 	
 	private void processAction() {
 		turnOff();
-		inventoryMenuBox.setUnit(uiComponent.currentEntity);
+		inventoryMenuBox.setUnit(UIManager.currentGameUnit);
 		uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));
 		uiComponent.uiManager.setCurrentUI(inventoryMenuBox.getBoxEntity());
 		uiComponent.uiManager.getCurrentUIComponent().getComponent(UIComponent.class).inputIsEnabled = true;
@@ -124,15 +125,15 @@ public class ActionMenuUpdate implements UpdateUI {
 	
 	// Helper DEBUG FUNCTION
 	private void turnOffMenu(Entity mapCursor) {
-		Entity entityToProcess = uiComponent.currentEntity;
-		entityToProcess.getComponent(MovementStatsComponent.class).unit_State = Unit_State.DONE;
+
+		UIManager.currentGameUnit.getComponent(MovementStatsComponent.class).unit_State = Unit_State.DONE;
 		
 		// Map Cursor
 		mapCursor.getComponent(MapCursorStateComponent.class).mapCursorState = MapCursorState.MOVEMENT_ONLY;
 		aComponentMapper.get(mapCursor).currentAnimation.isDrawing = true;
 		
 		// Finish animation
-		aComponentMapper.get(uiComponent.currentEntity).currentAnimation = aComponentMapper.get(uiComponent.currentEntity).allAnimationObjects.get("Idle");
+		aComponentMapper.get(UIManager.currentGameUnit).currentAnimation = aComponentMapper.get(UIManager.currentGameUnit).allAnimationObjects.get("Idle");
 		
 		// Play accept sound
 		uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));

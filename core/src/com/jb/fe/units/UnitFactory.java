@@ -82,6 +82,7 @@ public class UnitFactory {
 		
 		// Inventory
 		inventoryComponent.addItem(ItemFactory.createWeapon("Test Weapon 1"));
+		inventoryComponent.addItem(ItemFactory.createWeapon("Rapier"));
 		inventoryComponent.selectedItem = inventoryComponent.inventory[0];
 
 		// Add Components

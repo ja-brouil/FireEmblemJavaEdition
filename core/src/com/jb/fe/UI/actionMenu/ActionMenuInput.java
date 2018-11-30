@@ -21,7 +21,7 @@ import com.jb.fe.systems.inputAndUI.UIManager;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 
 public class ActionMenuInput implements InputHandling {
-
+	
 	// Timers
 	private float currentDelayTime;
 	private float delayTime;
@@ -82,7 +82,7 @@ public class ActionMenuInput implements InputHandling {
 				indexOption = 0;
 				currentOptionSelected = allOptions[indexOption];
 			} else {
-				uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Movement"));
+				UIComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Movement"));
 				indexOption--;
 				currentOptionSelected = allOptions[indexOption];
 			}
@@ -96,7 +96,7 @@ public class ActionMenuInput implements InputHandling {
 				indexOption = allOptions.length - 1;
 				currentOptionSelected = allOptions[indexOption];
 			} else {
-				uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Movement"));
+				UIComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Movement"));
 				indexOption++;
 				currentOptionSelected = allOptions[indexOption];
 			}
@@ -106,11 +106,12 @@ public class ActionMenuInput implements InputHandling {
 		if (Gdx.input.isKeyJustPressed(Keys.Z)) {
 			ActionMenuUpdate.action_Menu_State = Action_Menu_State.Process;
 			ActionMenuUpdate.curren_Action_Menu_Options = currentOptionSelected;
+			UIComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));
 			currentDelayTime = 0;
 		}
 		
 		// B Button | send unit back | set mapcursor back
-		if (Gdx.input.isKeyPressed(Keys.X)) {
+		if (Gdx.input.isKeyJustPressed(Keys.X)) {
 			// Set Unit
 			entityToProcess = UIManager.currentGameUnit;
 			MovementStatsComponent movementStatsComponent = mComponentMapper.get(entityToProcess);
@@ -129,7 +130,7 @@ public class ActionMenuInput implements InputHandling {
 			unitMapCellUpdater.updateCellInfo();
 			
 			// Play Back Sound
-			uiComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Back"));
+			UIComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Back"));
 			
 			// Stop Drawing
 			sComponentMapper.get(actionMenu).isEnabled = false;

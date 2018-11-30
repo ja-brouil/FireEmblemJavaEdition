@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.jb.fe.UI.soundTemp.UISounds;
 import com.jb.fe.components.InventoryComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.UIComponent;
@@ -17,15 +18,17 @@ public class InventoryInputHandle implements InputHandling{
 	
 	private Entity hand;
 	private UIComponent uiComponent;
+	private InventoryMenuBox inventoryMenuBox;
 	
 	public static int itemSelectionNumber;
 	
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<InventoryComponent> iComponentMapper = ComponentMapper.getFor(InventoryComponent.class);
 	
-	public InventoryInputHandle(Entity hand, UIComponent uiComponent) {
+	public InventoryInputHandle(Entity hand, UIComponent uiComponent, InventoryMenuBox inventoryMenuBox) {
 		this.hand = hand;
 		this.uiComponent = uiComponent;
+		this.inventoryMenuBox = inventoryMenuBox;
 		itemSelectionNumber = 0;
 	}
 
@@ -44,6 +47,7 @@ public class InventoryInputHandle implements InputHandling{
 				currentDelay = 0;
 				// Set new equip item
 				inventoryComponent.selectedItem = inventoryComponent.inventory[itemSelectionNumber];
+				UIComponent.soundSystem.playSound(UISounds.movement);
 			}
 		}
 		
@@ -54,6 +58,7 @@ public class InventoryInputHandle implements InputHandling{
 				pComponentMapper.get(hand).y -= 20;
 				currentDelay = 0;
 				inventoryComponent.selectedItem = inventoryComponent.inventory[itemSelectionNumber];
+				UIComponent.soundSystem.playSound(UISounds.movement);
 			}
 		}
 		
@@ -61,13 +66,19 @@ public class InventoryInputHandle implements InputHandling{
 		// A
 		if (Gdx.input.isKeyJustPressed(Keys.Z)) {
 			System.out.println("a");
+			UIComponent.soundSystem.playSound(UISounds.accept);
 			currentDelay = 0;
 		}
 		
 		// B
 		if (Gdx.input.isKeyJustPressed(Keys.X)) {
 			// Cancel and go back to the action menu
+			uiComponent.inputIsEnabled = false;
+			uiComponent.updateIsEnabled = false;
+			uiComponent.uiManager.startActionMenu();
+			inventoryMenuBox.turnOff();
 			
+			UIComponent.soundSystem.playSound(UISounds.back);
 			currentDelay = 0;
 		}
 	}

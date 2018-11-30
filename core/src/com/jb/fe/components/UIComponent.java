@@ -12,10 +12,16 @@ public class UIComponent implements Component {
 	public InputHandling inputHandling;
 	
 	public UIManager uiManager;
-	public SoundSystem soundSystem;
+	public static SoundSystem soundSystem;
 	
 	public UIComponent(UIManager uiManager, SoundSystem soundSystem) {
-		this.soundSystem = soundSystem;
+		UIComponent.soundSystem = soundSystem;
+		this.uiManager = uiManager;
+		updateIsEnabled = true;
+		inputIsEnabled = true;
+	}
+	
+	public UIComponent(UIManager uiManager) {
 		this.uiManager = uiManager;
 		updateIsEnabled = true;
 		inputIsEnabled = true;

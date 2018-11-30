@@ -13,6 +13,7 @@ import com.jb.fe.components.UIComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.graphics.ZOrder;
+import com.jb.fe.systems.inputAndUI.UIManager;
 
 public class InventoryMenuBox extends MenuBox{
 
@@ -32,7 +33,7 @@ public class InventoryMenuBox extends MenuBox{
 	private ZOrderComponent zOrderComponentStats;
 	private TextComponent itemStatsTextComponent;
 	
-	public InventoryMenuBox(AssetManager assetManager, Engine engine, Entity hand, Entity actionMenu) {
+	public InventoryMenuBox(AssetManager assetManager, Engine engine, Entity hand, Entity actionMenu, UIManager uiManager) {
 		super(assetManager, engine);
 		
 		// Inventory Info
@@ -48,6 +49,7 @@ public class InventoryMenuBox extends MenuBox{
 		
 		itemBoxTextComponent = new TextComponent();
 		itemBoxTextComponent.isDrawing = false;
+		
 		// Both of these are placeholders
 		itemBoxTextComponent.textArray.addLast(new TextObject(itemInvPositionComponent.x + 30, itemInvPositionComponent.y + 23, "Iron Sword", 0.2f, Align.left));
 		itemBoxTextComponent.textArray.addLast(new TextObject(itemInvPositionComponent.x + 30, itemInvPositionComponent.y + 38, "Rapier", 0.2f, Align.left));
@@ -73,17 +75,18 @@ public class InventoryMenuBox extends MenuBox{
 		zOrderComponentStats = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
 		itemStatsTextComponent = new TextComponent();
 		itemStatsTextComponent.isDrawing = false;
-		// Placeholder testx
+		
+		// Placeholder test
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 33, itemStatsInfoPosition.y + 48, "Affin", 0.2f, Align.center));
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 8, itemStatsInfoPosition.y + 34, "Atk 10", 0.2f, Align.left));
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 8, itemStatsInfoPosition.y + 14, "Hit 100", 0.2f, Align.left));
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 42, itemStatsInfoPosition.y + 34, "Crit 5", 0.2f, Align.left));
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 42, itemStatsInfoPosition.y + 14, "Uses 50", 0.2f, Align.left));
 		
-		uiComponent = new UIComponent();
-		inventoryBoxUpdate = new InventoryBoxUpdate(this, actionMenu, hand);
+		uiComponent = new UIComponent(uiManager);
+		inventoryBoxUpdate = new InventoryBoxUpdate(this, hand);
 		uiComponent.updateUI = inventoryBoxUpdate;
-		uiComponent.inputHandling = new InventoryInputHandle(hand, uiComponent);
+		uiComponent.inputHandling = new InventoryInputHandle(hand, uiComponent, this);
 		
 		boxEntity.add(itemStatsInfoImage);
 		boxEntity.add(itemStatsInfoPosition);

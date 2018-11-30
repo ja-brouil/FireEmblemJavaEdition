@@ -172,7 +172,7 @@ public class UIFactory {
 	}
 	
 	public void createInventoryMenu(Engine engine) {
-		inventoryMenuBox = new InventoryMenuBox(assetManager, engine, hand, actionMenu);
+		inventoryMenuBox = new InventoryMenuBox(assetManager, engine, hand, actionMenu, uiManager);
 		engine.addEntity(inventoryMenuBox.getBoxEntity());
 	}
 }

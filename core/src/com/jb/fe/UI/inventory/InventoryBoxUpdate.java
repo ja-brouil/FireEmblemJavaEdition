@@ -16,7 +16,6 @@ public class InventoryBoxUpdate implements UpdateUI{
 	// UI Entites needed
 	private InventoryMenuBox inventoryMenuBox;
 	private Entity hand;
-	private Entity actionMenu;
 	
 	private ComponentMapper<InventoryComponent> iComponentMapper = ComponentMapper.getFor(InventoryComponent.class);
 	private ComponentMapper<NameComponent> nComponentMapper = ComponentMapper.getFor(NameComponent.class);
@@ -25,10 +24,9 @@ public class InventoryBoxUpdate implements UpdateUI{
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	private InventoryComponent inventoryComponent;
 	
-	public InventoryBoxUpdate(InventoryMenuBox inventoryMenuBox, Entity actionMenu, Entity hand) {
+	public InventoryBoxUpdate(InventoryMenuBox inventoryMenuBox, Entity hand) {
 		this.inventoryMenuBox = inventoryMenuBox;
 		this.hand = hand;
-		this.actionMenu = actionMenu;
 	}
 
 	@Override
@@ -62,6 +60,7 @@ public class InventoryBoxUpdate implements UpdateUI{
 		hand.getComponent(ZOrderComponent.class).zOrder = ZOrder.UI_MIDDLE_LAYER;
 		pComponentMapper.get(hand).x = pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x - 5;
 		pComponentMapper.get(hand).y = inventoryMenuBox.getItemBoxTextComponent().textArray.get(0).y - 10;
+		InventoryInputHandle.itemSelectionNumber = 0;
 	}
 	
 	public void setTextInfo() {

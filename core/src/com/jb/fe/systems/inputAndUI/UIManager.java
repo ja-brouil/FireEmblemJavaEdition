@@ -54,6 +54,7 @@ public class UIManager extends EntitySystem {
 		actionMenu.getComponent(UIComponent.class).updateIsEnabled = true;
 		setCurrentUI(actionMenu);
 	}
+
 	
 	public void startSystem() {
 		currentUI = mapcursor;

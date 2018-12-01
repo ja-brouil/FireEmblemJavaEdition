@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
 import com.jb.fe.components.InventoryComponent;
@@ -28,7 +29,7 @@ public class UnitDamageSelectionInput implements InputHandling {
 	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
 
 	private Array<Entity> allEnemiesThatCanBeAttacked;
-	private int unitAt = 0;
+	private static int unitAt = 0;
 
 	public UnitDamageSelectionInput() {
 		allEnemiesThatCanBeAttacked = new Array<>();
@@ -44,12 +45,14 @@ public class UnitDamageSelectionInput implements InputHandling {
 
 		// Cycle through all the Enemies
 		if (Gdx.input.isKeyPressed(Keys.UP)) {
-			
+			unitAt--;
+			cycleInt();
 			currentDelay = 0;
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-
+			unitAt++;
+			
 			currentDelay = 0;
 		}
 
@@ -92,6 +95,12 @@ public class UnitDamageSelectionInput implements InputHandling {
 	}
 	
 	private void cycleInt() {
-		if ()
+		if (unitAt < 0) {
+			unitAt = allEnemiesThatCanBeAttacked.size - 1;
+		}
+		
+		if (unitAt > allEnemiesThatCanBeAttacked.size - 1) {
+			unitAt = 0;
+		}
 	}
 }

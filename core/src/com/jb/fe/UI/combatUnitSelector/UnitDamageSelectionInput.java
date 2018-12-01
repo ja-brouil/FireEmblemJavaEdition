@@ -4,34 +4,31 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Queue;
-import com.jb.fe.components.InventoryComponent;
 import com.jb.fe.components.ItemComponent;
 import com.jb.fe.components.MovementStatsComponent;
-import com.jb.fe.components.NameComponent;
-import com.jb.fe.components.UnitStatsComponent;
+import com.jb.fe.components.PositionComponent;
+import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.UIComponent.InputHandling;
 import com.jb.fe.map.MapCell;
-import com.jb.fe.systems.inputAndUI.UIManager;
 
 public class UnitDamageSelectionInput implements InputHandling {
 
+	private Entity mapCursor;
+	
 	private float inputDelay = 0.08f;
 	private float currentDelay;
 
-	private ComponentMapper<InventoryComponent> iComponentMapper = ComponentMapper.getFor(InventoryComponent.class);
-	private ComponentMapper<NameComponent> nComponentMapper = ComponentMapper.getFor(NameComponent.class);
 	private ComponentMapper<ItemComponent> itemComponentMapper = ComponentMapper.getFor(ItemComponent.class);
 	private ComponentMapper<MovementStatsComponent> mComponentMapper = ComponentMapper
 			.getFor(MovementStatsComponent.class);
-	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
+	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
+	private ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
 
 	private Array<Entity> allEnemiesThatCanBeAttacked;
 	private static int unitAt = 0;
 
-	public UnitDamageSelectionInput() {
+	public UnitDamageSelectionInput(Entity mapCursor) {
 		allEnemiesThatCanBeAttacked = new Array<>();
 	}
 
@@ -47,12 +44,13 @@ public class UnitDamageSelectionInput implements InputHandling {
 		if (Gdx.input.isKeyPressed(Keys.UP)) {
 			unitAt--;
 			cycleInt();
+			setCursorPosition();
 			currentDelay = 0;
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
 			unitAt++;
-			
+			setCursorPosition();
 			currentDelay = 0;
 		}
 
@@ -102,5 +100,20 @@ public class UnitDamageSelectionInput implements InputHandling {
 		if (unitAt > allEnemiesThatCanBeAttacked.size - 1) {
 			unitAt = 0;
 		}
+	}
+	
+	private void setCursorPosition() {
+		// Move Cursor to unit in the list
+		pComponentMapper.get(mapCursor).x = pComponentMapper.get(allEnemiesThatCanBeAttacked.get(unitAt)).x;
+		pComponentMapper.get(mapCursor).y = pComponentMapper.get(allEnemiesThatCanBeAttacked.get(unitAt)).y;
+	}
+	
+	public void turnOn() {
+		// Turn on static map cursor
+		
+	}
+	
+	public void turnOfF() {
+		
 	}
 }

@@ -8,4 +8,5 @@ public class UISounds {
 	public static SoundObject movement;
 	public static SoundObject back;
 	public static SoundObject accept;
+	public static SoundObject invalid;
 }

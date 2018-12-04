@@ -12,19 +12,22 @@ import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.systems.graphics.ZOrder;
 import com.jb.fe.systems.inputAndUI.UIManager;
 
-public class UnitDamageSelectorFactor {
+public class UnitDamageSelectorFactory {
 	
 	public static Entity createUnitDamagePreviewEntity(AssetManager assetManager, UIManager uiManager, Entity mapCursor, InventoryMenuBox inventoryMenuBox) {
 		Entity damagePreviewMenuBox = new Entity();
 		
 		// Graphics
 		StaticImageComponent staticImageComponent = new StaticImageComponent(assetManager, "UI/damageBox/damageBox.png");
-		staticImageComponent.isEnabled = true;
+		staticImageComponent.isEnabled = false;
+		staticImageComponent.width = 70;
+		staticImageComponent.height = 100;
 		PositionComponent positionComponent = new PositionComponent();
 		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
 		
 		// Text Component
 		TextComponent textComponent = new TextComponent();
+		textComponent.isDrawing = true;
 		textComponent.textArray.addFirst(new TextObject(0, 0, "Attacking Unit Name"));
 		textComponent.textArray.addFirst(new TextObject(0, 0, "Def HP"));
 		textComponent.textArray.addFirst(new TextObject(0, 0, "Atk HP"));
@@ -40,6 +43,7 @@ public class UnitDamageSelectorFactor {
 		// UI Component
 		UIComponent uiComponent = new UIComponent(uiManager);
 		uiComponent.inputHandling = new UnitDamageSelectionInput(mapCursor, damagePreviewMenuBox, inventoryMenuBox);
+		uiComponent.updateUI = new UnitDamagePreviewUpdate();
 		
 		// Add everything
 		damagePreviewMenuBox.add(staticImageComponent);

@@ -1,5 +1,6 @@
 package com.jb.fe.UI.inventory;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
@@ -19,6 +20,7 @@ public class InventoryMenuBox extends MenuBox{
 
 	public UIComponent uiComponent;
 	public InventoryBoxUpdate inventoryBoxUpdate;
+	public InventoryInputHandle inventoryInputHandle;
 	
 	// Item Box Info
 	private Entity itemInvInfoBox;
@@ -33,8 +35,13 @@ public class InventoryMenuBox extends MenuBox{
 	private ZOrderComponent zOrderComponentStats;
 	private TextComponent itemStatsTextComponent;
 	
+	// Hand
+	private Entity hand;
+	private ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
+	
 	public InventoryMenuBox(AssetManager assetManager, Engine engine, Entity hand, Entity actionMenu, Entity unitDamageSelectionPreview, UIManager uiManager) {
 		super(assetManager, engine);
+		this.hand = hand;
 		
 		// Inventory Info
 		itemInvInfoBox = new Entity();
@@ -86,7 +93,8 @@ public class InventoryMenuBox extends MenuBox{
 		uiComponent = new UIComponent(uiManager);
 		inventoryBoxUpdate = new InventoryBoxUpdate(this, hand);
 		uiComponent.updateUI = inventoryBoxUpdate;
-		uiComponent.inputHandling = new InventoryInputHandle(hand, uiComponent, this, unitDamageSelectionPreview);
+		inventoryInputHandle = new InventoryInputHandle(hand, uiComponent, this, null);
+		uiComponent.inputHandling = inventoryInputHandle;
 		
 		boxEntity.add(itemStatsInfoImage);
 		boxEntity.add(itemStatsInfoPosition);
@@ -119,6 +127,10 @@ public class InventoryMenuBox extends MenuBox{
 		inventoryBoxUpdate.setUnit(unit);
 	}
 	
+	public void setUnitDamageSelection(Entity unitDamageSelection) {
+		inventoryInputHandle.unitDamagePreview = unitDamageSelection;
+	}
+	
 	@Override
 	public void turnOff() {
 		itemInventoryBoxImage.isEnabled = false;
@@ -126,6 +138,11 @@ public class InventoryMenuBox extends MenuBox{
 		
 		itemStatsInfoImage.isEnabled = false;
 		itemStatsTextComponent.isDrawing = false;
+		
+		uiComponent.inputIsEnabled = false;
+		uiComponent.updateIsEnabled = false;
+		
+		sComponentMapper.get(hand).isEnabled = false;
 	}
 	
 	public void turnOn() {
@@ -134,5 +151,10 @@ public class InventoryMenuBox extends MenuBox{
 		
 		itemStatsInfoImage.isEnabled = true;
 		itemStatsTextComponent.isDrawing = true;
+		
+		uiComponent.inputIsEnabled = true;
+		uiComponent.updateIsEnabled = true;
+		
+		sComponentMapper.get(hand).isEnabled = true;
 	}
 }

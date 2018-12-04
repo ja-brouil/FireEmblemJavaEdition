@@ -17,7 +17,7 @@ public class InventoryInputHandle implements InputHandling{
 	private float currentDelay;
 	
 	private Entity hand;
-	private Entity unitDamagePreview;
+	public Entity unitDamagePreview;
 	private UIComponent uiComponent;
 	private InventoryMenuBox inventoryMenuBox;
 	
@@ -68,7 +68,11 @@ public class InventoryInputHandle implements InputHandling{
 		// A
 		if (Gdx.input.isKeyJustPressed(Keys.Z)) {
 			UIComponent.soundSystem.playSound(UISounds.accept);
+			unitDamagePreview.getComponent(UIComponent.class).inputHandling.turnOn();
 			uiComponent.uiManager.setCurrentUI(unitDamagePreview);
+			uiComponent.inputIsEnabled = false;
+			uiComponent.updateIsEnabled = false;
+			inventoryMenuBox.turnOff();
 			currentDelay = 0;
 		}
 		
@@ -79,7 +83,6 @@ public class InventoryInputHandle implements InputHandling{
 			uiComponent.updateIsEnabled = false;
 			uiComponent.uiManager.startActionMenu();
 			inventoryMenuBox.turnOff();
-			
 			UIComponent.soundSystem.playSound(UISounds.back);
 			currentDelay = 0;
 		}
@@ -103,4 +106,6 @@ public class InventoryInputHandle implements InputHandling{
 		
 		return true;
 	}
+	
+	public void turnOn() {}
 }

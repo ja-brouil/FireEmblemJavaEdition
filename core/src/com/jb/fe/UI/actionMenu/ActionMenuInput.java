@@ -149,4 +149,6 @@ public class ActionMenuInput implements InputHandling {
 	public void setUnitUpdateSystem(UnitMapCellUpdater unitMapCellUpdater) {
 		this.unitMapCellUpdater = unitMapCellUpdater;
 	}
+	
+	public void turnOn() {}
 }

@@ -176,4 +176,6 @@ public class MapCursorInputHandling implements InputHandling{
 			
 		}
 	}
+	
+	public void turnOn() {};
 }

@@ -7,10 +7,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.jb.fe.UI.Text.TextObject;
 import com.jb.fe.UI.actionMenu.ActionMenuInput;
 import com.jb.fe.UI.actionMenu.ActionMenuUpdate;
-import com.jb.fe.UI.combatUnitSelector.UnitDamageSelectorFactor;
+import com.jb.fe.UI.combatUnitSelector.UnitDamageSelectorFactory;
 import com.jb.fe.UI.inventory.InventoryMenuBox;
 import com.jb.fe.UI.mapcursor.MapCursorInfoUpdate;
 import com.jb.fe.UI.mapcursor.MapCursorInputHandling;
+import com.jb.fe.UI.soundTemp.UISounds;
 import com.jb.fe.audio.SoundObject;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.AnimationObject;
@@ -91,6 +92,7 @@ public class UIFactory {
 		soundComponent.allSoundObjects.put("Movement", new SoundObject("sound/cursorMovement.wav", assetManager));
 		soundComponent.allSoundObjects.put("Invalid", new SoundObject("sound/Not Allowed.mp3", assetManager));
 		soundComponent.allSoundObjects.put("Select Unit", new SoundObject("sound/selectUnit.wav", assetManager));
+		UISounds.invalid = soundComponent.allSoundObjects.get("Invalid");
 		
 		UIComponent uiComponent = new UIComponent(uiManager, soundSystem);
 		MapCursorInfoUpdate mapCursorInfoUpdate = new MapCursorInfoUpdate();
@@ -177,12 +179,12 @@ public class UIFactory {
 	}
 	
 	public void createInventoryMenu() {
-		inventoryMenuBox = new InventoryMenuBox(assetManager, engine, hand, actionMenu, createDamagePreviewBox(), uiManager);
-		engine.addEntity(inventoryMenuBox.getBoxEntity());
+		inventoryMenuBox = new InventoryMenuBox(assetManager, engine, hand, actionMenu, null, uiManager);
+		inventoryMenuBox.inventoryInputHandle.unitDamagePreview = createDamagePreviewBox();
 	}
 	
 	public Entity createDamagePreviewBox() {
-		Entity unitDamagePreview = UnitDamageSelectorFactor.createUnitDamagePreviewEntity(assetManager, uiManager, mapCursor, inventoryMenuBox);
+		Entity unitDamagePreview = UnitDamageSelectorFactory.createUnitDamagePreviewEntity(assetManager, uiManager, mapCursor, inventoryMenuBox);
 		engine.addEntity(unitDamagePreview);
 		return unitDamagePreview;
 	}

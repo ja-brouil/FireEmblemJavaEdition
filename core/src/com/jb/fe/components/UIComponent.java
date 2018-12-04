@@ -38,5 +38,6 @@ public class UIComponent implements Component {
 	
 	public interface InputHandling{
 		public void handleInput();
+		public void turnOn();
 	}
 }

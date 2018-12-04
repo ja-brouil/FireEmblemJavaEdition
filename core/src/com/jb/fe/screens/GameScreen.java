@@ -72,11 +72,11 @@ public class GameScreen extends ScreenAdapter{
 		currentLevel.startLevel();
 		
 		// User Interface
-		UIFactory = new UIFactory(assetManager, soundSystem, gameCamera, uiManager);
-		UIFactory.createHand(engine);
-		Entity mapCursor = UIFactory.createMapCursor(currentLevel, engine);
-		UIFactory.createInventoryMenu(engine);
-		Entity actionMenu = UIFactory.createActionMenu(unitMovementSystem, unitMapCellUpdater, engine);
+		UIFactory = new UIFactory(assetManager, soundSystem, gameCamera, uiManager, engine);
+		UIFactory.createHand();
+		Entity mapCursor = UIFactory.createMapCursor(currentLevel);
+		UIFactory.createInventoryMenu();
+		Entity actionMenu = UIFactory.createActionMenu(unitMovementSystem, unitMapCellUpdater);
 		
 		uiManager.startSystem();
 		engine.addEntity(mapCursor);

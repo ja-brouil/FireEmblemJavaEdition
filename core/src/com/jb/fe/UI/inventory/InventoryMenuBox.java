@@ -33,7 +33,7 @@ public class InventoryMenuBox extends MenuBox{
 	private ZOrderComponent zOrderComponentStats;
 	private TextComponent itemStatsTextComponent;
 	
-	public InventoryMenuBox(AssetManager assetManager, Engine engine, Entity hand, Entity actionMenu, UIManager uiManager) {
+	public InventoryMenuBox(AssetManager assetManager, Engine engine, Entity hand, Entity actionMenu, Entity unitDamageSelectionPreview, UIManager uiManager) {
 		super(assetManager, engine);
 		
 		// Inventory Info
@@ -86,7 +86,7 @@ public class InventoryMenuBox extends MenuBox{
 		uiComponent = new UIComponent(uiManager);
 		inventoryBoxUpdate = new InventoryBoxUpdate(this, hand);
 		uiComponent.updateUI = inventoryBoxUpdate;
-		uiComponent.inputHandling = new InventoryInputHandle(hand, uiComponent, this);
+		uiComponent.inputHandling = new InventoryInputHandle(hand, uiComponent, this, unitDamageSelectionPreview);
 		
 		boxEntity.add(itemStatsInfoImage);
 		boxEntity.add(itemStatsInfoPosition);

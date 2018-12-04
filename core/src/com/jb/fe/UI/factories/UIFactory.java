@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.jb.fe.UI.Text.TextObject;
 import com.jb.fe.UI.actionMenu.ActionMenuInput;
 import com.jb.fe.UI.actionMenu.ActionMenuUpdate;
+import com.jb.fe.UI.combatUnitSelector.UnitDamageSelectorFactor;
 import com.jb.fe.UI.inventory.InventoryMenuBox;
 import com.jb.fe.UI.mapcursor.MapCursorInfoUpdate;
 import com.jb.fe.UI.mapcursor.MapCursorInputHandling;
@@ -47,20 +48,24 @@ public class UIFactory {
 	// UI Manager
 	private UIManager uiManager;
 	
+	// Engine
+	private Engine engine;
+	
 	// UI Entities
 	private Entity mapCursor;
 	private Entity hand;
 	private Entity actionMenu;
 	private InventoryMenuBox inventoryMenuBox;
 	
-	public UIFactory(AssetManager assetManager, SoundSystem soundSystem, OrthographicCamera camera, UIManager uiManager) {
+	public UIFactory(AssetManager assetManager, SoundSystem soundSystem, OrthographicCamera camera, UIManager uiManager, Engine engine) {
 		this.assetManager = assetManager;
 		this.soundSystem = soundSystem;
 		this.camera = camera;
 		this.uiManager = uiManager;
+		this.engine = engine;
 	}
 	
-	public Entity createMapCursor(Level level, Engine engine) {
+	public Entity createMapCursor(Level level) {
 		Entity mapCursor = new Entity();
 		
 		// Components
@@ -112,7 +117,7 @@ public class UIFactory {
 		return mapCursor;
 	}
 	
-	public Entity createActionMenu(UnitMovementSystem unitMovementSystem, UnitMapCellUpdater unitMapCellUpdater, Engine engine) {
+	public Entity createActionMenu(UnitMovementSystem unitMovementSystem, UnitMapCellUpdater unitMapCellUpdater) {
 		Entity actionMenu = new Entity();
 		
 		// Components
@@ -153,7 +158,7 @@ public class UIFactory {
 		return actionMenu;
 	}
 	
-	public void createHand(Engine engine) {
+	public void createHand() {
 		Entity hand = new Entity();
 		// Components
 		StaticImageComponent staticImageComponent = new StaticImageComponent(assetManager, "UI/Cursor/hand.png");
@@ -171,8 +176,14 @@ public class UIFactory {
 		engine.addEntity(hand);
 	}
 	
-	public void createInventoryMenu(Engine engine) {
-		inventoryMenuBox = new InventoryMenuBox(assetManager, engine, hand, actionMenu, uiManager);
+	public void createInventoryMenu() {
+		inventoryMenuBox = new InventoryMenuBox(assetManager, engine, hand, actionMenu, createDamagePreviewBox(), uiManager);
 		engine.addEntity(inventoryMenuBox.getBoxEntity());
+	}
+	
+	public Entity createDamagePreviewBox() {
+		Entity unitDamagePreview = UnitDamageSelectorFactor.createUnitDamagePreviewEntity(assetManager, uiManager, mapCursor, inventoryMenuBox);
+		engine.addEntity(unitDamagePreview);
+		return unitDamagePreview;
 	}
 }

@@ -17,6 +17,7 @@ public class InventoryInputHandle implements InputHandling{
 	private float currentDelay;
 	
 	private Entity hand;
+	private Entity unitDamagePreview;
 	private UIComponent uiComponent;
 	private InventoryMenuBox inventoryMenuBox;
 	
@@ -25,7 +26,8 @@ public class InventoryInputHandle implements InputHandling{
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<InventoryComponent> iComponentMapper = ComponentMapper.getFor(InventoryComponent.class);
 	
-	public InventoryInputHandle(Entity hand, UIComponent uiComponent, InventoryMenuBox inventoryMenuBox) {
+	public InventoryInputHandle(Entity hand, UIComponent uiComponent, InventoryMenuBox inventoryMenuBox, Entity unitDamagePreview) {
+		this.unitDamagePreview = unitDamagePreview;
 		this.hand = hand;
 		this.uiComponent = uiComponent;
 		this.inventoryMenuBox = inventoryMenuBox;
@@ -34,9 +36,9 @@ public class InventoryInputHandle implements InputHandling{
 
 	@Override
 	public void handleInput() {
+		
 		currentDelay += Gdx.graphics.getDeltaTime();
 		if (currentDelay <= keyDelay) { return; }
-		
 		InventoryComponent inventoryComponent = iComponentMapper.get(UIManager.currentGameUnit);
 		
 		// Up
@@ -65,8 +67,8 @@ public class InventoryInputHandle implements InputHandling{
 		
 		// A
 		if (Gdx.input.isKeyJustPressed(Keys.Z)) {
-			System.out.println("a");
 			UIComponent.soundSystem.playSound(UISounds.accept);
+			uiComponent.uiManager.setCurrentUI(unitDamagePreview);
 			currentDelay = 0;
 		}
 		

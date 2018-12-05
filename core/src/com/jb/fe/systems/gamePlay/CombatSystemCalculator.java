@@ -132,15 +132,24 @@ public class CombatSystemCalculator {
 		// Critical Hits always hit
 		if (calculateCritChance()) {
 			criticalHitDamageIncrease = 3;
-			return (attackDamage * criticalHitDamageIncrease) - defenceReduction;
+			int finalDamageAmount = (attackDamage * criticalHitDamageIncrease) - defenceReduction;
+			if (finalDamageAmount < 0) {
+				return 0;
+			}
+			return finalDamageAmount;
 		}
 		
-		// If Miss return -10000
+		// If Miss return -10000 | For now it's 0 but later change this so that it has a No Damage animation instead of miss
 		if (!calculateHitChance()) {
-			return -10000;
+			return 0;
 		}
 		
-		return attackDamage - defenceReduction;
+		int finalDamageAmount = attackDamage - defenceReduction;
+		if (finalDamageAmount < 0) {
+			return 0;
+		}
+		
+		return finalDamageAmount;
 	}
 	
 	// Utility functions

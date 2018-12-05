@@ -11,13 +11,16 @@ import com.jb.fe.UI.soundTemp.UISounds;
 import com.jb.fe.components.InventoryComponent;
 import com.jb.fe.components.ItemComponent;
 import com.jb.fe.components.MovementStatsComponent;
+import com.jb.fe.components.MovementStatsComponent.Unit_State;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.TextComponent;
 import com.jb.fe.components.UIComponent;
+import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.components.UIComponent.InputHandling;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.screens.FireEmblemGame;
+import com.jb.fe.systems.gamePlay.CombatSystemCalculator;
 import com.jb.fe.systems.inputAndUI.UIManager;
 
 public class UnitDamageSelectionInput implements InputHandling {
@@ -33,6 +36,7 @@ public class UnitDamageSelectionInput implements InputHandling {
 	private ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
 	private ComponentMapper<TextComponent> tComponentMapper = ComponentMapper.getFor(TextComponent.class);
 	private ComponentMapper<UIComponent> uiComponentMapper = ComponentMapper.getFor(UIComponent.class);
+	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
 
 	private Array<Entity> allEnemiesThatCanBeAttacked;
 	private Array<MapCell> redCellArray;
@@ -89,6 +93,22 @@ public class UnitDamageSelectionInput implements InputHandling {
 					unitDamagePreviewUpdate.unitDamagePreviewState = UnitDamagePreviewState.READY_FOR_COMBAT;
 				} else {
 					// Proceed to combat -> reset everything
+					unitDamagePreviewUpdate.unitDamagePreviewState = UnitDamagePreviewState.SELECTING_UNIT;
+					
+					// Combat animations/Whatever cool shit you want to use here. For now, just boring old numbers changing | Turn this into a system
+					// later so that we can take units out when they are "dead" or if Eirika dies it should be game over.
+					uComponentMapper.get(UIManager.currentGameUnit).health -= CombatSystemCalculator.DefendingDamage;
+					uComponentMapper.get(allEnemiesThatCanBeAttacked.get(unitAt)).health -= CombatSystemCalculator.AttackingDamage;
+					
+					// Get out of Combat preview
+					turnOff();
+					disableDamagePreview();
+					
+					// Unit is done
+					UIManager.currentGameUnit.getComponent(MovementStatsComponent.class).unit_State = Unit_State.DONE;
+					
+					// Set Cursor back to control
+					uiComponentMapper.get(damagePreviewBoxEntity).uiManager.startMapCursor();
 				}
 			}
 		}
@@ -97,9 +117,9 @@ public class UnitDamageSelectionInput implements InputHandling {
 		if (Gdx.input.isKeyJustPressed(Keys.X)) {
 			turnOff();
 			disableDamagePreview();
+			setToPreviousMenu();
 			UIComponent.soundSystem.playSound(UISounds.back);
 		}
-
 	}
 
 	// Get all Enemies that can be attacked with the current weapon that is equipped
@@ -188,7 +208,11 @@ public class UnitDamageSelectionInput implements InputHandling {
 		// Turn off static map cursor
 		sComponentMapper.get(mapCursor).isEnabled = false;
 		
-		// Set Previous menu
+		// Turn this off
+		disableDamagePreview();
+	}
+	
+	private void setToPreviousMenu() {
 		uiComponentMapper.get(damagePreviewBoxEntity).uiManager.setCurrentUI(inventoryMenuBox.getBoxEntity());
 		inventoryMenuBox.turnOn();
 	}

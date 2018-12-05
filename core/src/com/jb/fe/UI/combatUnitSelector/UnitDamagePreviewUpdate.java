@@ -91,6 +91,9 @@ public class UnitDamagePreviewUpdate implements UpdateUI {
 		textComponent.textArray.get(10).x = 70 - 40 + xOffset;
 		textComponent.textArray.get(10).y = 134;
 		
+		// Attacking unit damage
+		CombatSystemCalculator.AttackingDamage = combatSystemCalculator.calculateDamage();
+		
 		// Defending Numbers
 		// Swap Units
 		Entity swapEntity = combatSystemCalculator.getDefendingUnit();
@@ -115,6 +118,9 @@ public class UnitDamagePreviewUpdate implements UpdateUI {
 		textComponent.textArray.get(9).text = Integer.toString(combatSystemCalculator.getAttackingUnitStats().health);
 		textComponent.textArray.get(9).x = xOffset + 8;
 		textComponent.textArray.get(9).y = 120;
+		
+		// Defending unit damage
+		CombatSystemCalculator.DefendingDamage = combatSystemCalculator.calculateDamage();
 	}
 	
 	public static enum UnitDamagePreviewState {

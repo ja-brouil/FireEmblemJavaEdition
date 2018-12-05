@@ -3,7 +3,10 @@ package com.jb.fe.systems.inputAndUI;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.jb.fe.components.AnimationComponent;
+import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.UIComponent;
+import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 
 /**
@@ -62,6 +65,11 @@ public class UIManager extends EntitySystem {
 	
 	public void setMapCursor(Entity mapCursor) {
 		this.mapcursor = mapCursor;
+	}
+	
+	public void startMapCursor() {
+		mapcursor.getComponent(MapCursorStateComponent.class).mapCursorState = MapCursorState.MOVEMENT_ONLY;
+		mapcursor.getComponent(AnimationComponent.class).currentAnimation.isDrawing = true;
 	}
 	
 	public void setActionMenu(Entity actionMenu) {

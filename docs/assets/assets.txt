@@ -55,6 +55,8 @@ d:UI/Cursor:0:application/unknown
 i:UI/Cursor/cursor.png:71612:image/png
 i:UI/Cursor/hand.png:15618:image/png
 i:UI/Cursor/staticCursor.png:17999:image/png
+d:UI/damageBox:0:application/unknown
+i:UI/damageBox/damageBox.png:76390:image/png
 d:UI/Dialogue:0:application/unknown
 i:UI/Dialogue/arrowDialogue.png:17931:image/png
 i:UI/Dialogue/dialogueBox.png:51648:image/png
@@ -66,6 +68,8 @@ i:UI/font/main font.png:20826:image/png
 b:UI/font/Main Font.ttf:7136040:application/unknown
 t:UI/font/outline.fnt:16698:application/unknown
 i:UI/font/outline.png:26515:image/png
+d:UI/itemBox:0:application/unknown
+i:UI/itemBox/itemBox.png:262212:image/png
 d:UI/selected:0:application/unknown
 i:UI/selected/bluedarkSelect.png:15464:image/png
 i:UI/selected/blueSelec.png:16024:image/png

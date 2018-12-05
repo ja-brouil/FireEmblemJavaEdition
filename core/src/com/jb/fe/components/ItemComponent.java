@@ -28,7 +28,7 @@ public class ItemComponent implements Component{
 	// Iron Sword default
 	public ItemComponent() {
 		uses = 45 + MathUtils.random(-10, 10);
-		might = 5 + MathUtils.random(-3, 3);
+		might = 5 + MathUtils.random(0, 3);
 		hit = 90 + MathUtils.random(0, 10);
 		crit = 0 + MathUtils.random(0, 10);
 		maxRange = 1;

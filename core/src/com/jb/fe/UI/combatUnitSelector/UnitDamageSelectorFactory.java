@@ -27,18 +27,18 @@ public class UnitDamageSelectorFactory {
 		
 		// Text Component
 		TextComponent textComponent = new TextComponent();
-		textComponent.isDrawing = true;
-		textComponent.textArray.addFirst(new TextObject(0, 0, "Attacking Unit Name"));
-		textComponent.textArray.addFirst(new TextObject(0, 0, "Def HP"));
-		textComponent.textArray.addFirst(new TextObject(0, 0, "Atk HP"));
-		textComponent.textArray.addFirst(new TextObject(0, 0, "Def Might"));
-		textComponent.textArray.addFirst(new TextObject(0, 0, "Atk Might"));
-		textComponent.textArray.addFirst(new TextObject(0, 0, "Def Hit"));
-		textComponent.textArray.addFirst(new TextObject(0, 0, "Atk Hit"));
-		textComponent.textArray.addFirst(new TextObject(0, 0, "Def Crit"));
-		textComponent.textArray.addFirst(new TextObject(0, 0, "Atk Crit"));
-		textComponent.textArray.addFirst(new TextObject(0, 0, "Defending Unit Name"));
-		textComponent.textArray.addFirst(new TextObject(0, 0, "Defending Unit Item Equipped"));
+		textComponent.isDrawing = false;
+		textComponent.textArray.addFirst(new TextObject(50, 50, "Attacking Unit Name", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 40, "Def HP", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 30, "Atk HP", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 35, "Def Might", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 25, "Atk Might", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 20, "Def Hit", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 15, "Atk Hit", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 10, "Def Crit", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 0, "Atk Crit", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 0, "Defending Unit Name", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 0, "Defending Unit Item Equipped", 0.20f));
 		
 		// UI Component
 		UIComponent uiComponent = new UIComponent(uiManager);

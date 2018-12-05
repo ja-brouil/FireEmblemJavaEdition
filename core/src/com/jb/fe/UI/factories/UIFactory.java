@@ -76,7 +76,7 @@ public class UIFactory {
 		animationComponent.currentAnimation.width = FireEmblemGame.WIDTH / 15;
 		animationComponent.currentAnimation.height = FireEmblemGame.HEIGHT / 10;
 		
-		PositionComponent positionComponent = new PositionComponent(16,16);
+		PositionComponent positionComponent = new PositionComponent(160,32);
 		
 		MapCursorStateComponent mapCursorStateComponent = new MapCursorStateComponent();
 		mapCursorStateComponent.mapCursorState = MapCursorState.DISABLED;
@@ -92,6 +92,9 @@ public class UIFactory {
 		soundComponent.allSoundObjects.put("Movement", new SoundObject("sound/cursorMovement.wav", assetManager));
 		soundComponent.allSoundObjects.put("Invalid", new SoundObject("sound/Not Allowed.mp3", assetManager));
 		soundComponent.allSoundObjects.put("Select Unit", new SoundObject("sound/selectUnit.wav", assetManager));
+		UISounds.accept = soundComponent.allSoundObjects.get("Accept");
+		UISounds.back = soundComponent.allSoundObjects.get("Back");
+		UISounds.movement = soundComponent.allSoundObjects.get("Movement");
 		UISounds.invalid = soundComponent.allSoundObjects.get("Invalid");
 		
 		UIComponent uiComponent = new UIComponent(uiManager, soundSystem);

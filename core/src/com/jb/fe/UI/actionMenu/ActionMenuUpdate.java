@@ -3,7 +3,6 @@ package com.jb.fe.UI.actionMenu;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.jb.fe.UI.inventory.InventoryMenuBox;
-import com.jb.fe.UI.soundTemp.UISounds;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
@@ -40,11 +39,6 @@ public class ActionMenuUpdate implements UpdateUI {
 		this.hand = hand;
 		this.mapCursor = mapCursor;
 		this.inventoryMenuBox = inventoryMenuBox;
-		
-		// Start Sounds | Debug for now
-		UISounds.accept = mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept");
-		UISounds.back = mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Back");
-		UISounds.movement = mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Movement");
 	};
 	
 	@Override
@@ -111,9 +105,8 @@ public class ActionMenuUpdate implements UpdateUI {
 		turnOff();
 		inventoryMenuBox.setUnit(UIManager.currentGameUnit);
 		UIComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));
+		inventoryMenuBox.turnOn();
 		uiComponent.uiManager.setCurrentUI(inventoryMenuBox.getBoxEntity());
-		uiComponent.uiManager.getCurrentUIComponent().getComponent(UIComponent.class).inputIsEnabled = true;
-		uiComponent.uiManager.getCurrentUIComponent().getComponent(UIComponent.class).updateIsEnabled = true;
 	}
 	
 	private void processTrade(Entity mapCursor) {

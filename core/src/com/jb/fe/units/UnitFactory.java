@@ -41,7 +41,6 @@ public class UnitFactory {
 		
 		//  Unit stats
 		unitStatsComponent.setEirika();
-		unitStatsComponent.health = 6;
 		
 		// Movement Sound
 		soundComponent.allSoundObjects.put("Movement", new SoundObject("sound/unitMovement/Light Foot Steps 1.wav", assetManager));
@@ -80,7 +79,7 @@ public class UnitFactory {
 		movementStatsComponent.movementSteps = 5;
 		
 		// Inventory
-		inventoryComponent.addItem(ItemFactory.createWeapon("Test Weapon 1"));
+		inventoryComponent.addItem(ItemFactory.createWeapon("Iron Sword"));
 		inventoryComponent.addItem(ItemFactory.createWeapon("Rapier"));
 		inventoryComponent.selectedItem = inventoryComponent.inventory[0];
 

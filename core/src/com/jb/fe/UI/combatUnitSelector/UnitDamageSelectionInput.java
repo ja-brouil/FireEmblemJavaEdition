@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.utils.Array;
+import com.jb.fe.UI.combatUnitSelector.UnitDamagePreviewUpdate.UnitDamagePreviewState;
 import com.jb.fe.UI.inventory.InventoryMenuBox;
 import com.jb.fe.UI.soundTemp.UISounds;
 import com.jb.fe.components.InventoryComponent;
@@ -24,6 +25,7 @@ public class UnitDamageSelectionInput implements InputHandling {
 	private Entity mapCursor;
 	private Entity damagePreviewBoxEntity;
 	private InventoryMenuBox inventoryMenuBox;
+	private UnitDamagePreviewUpdate unitDamagePreviewUpdate;
 
 	private ComponentMapper<MovementStatsComponent> mComponentMapper = ComponentMapper
 			.getFor(MovementStatsComponent.class);
@@ -40,27 +42,30 @@ public class UnitDamageSelectionInput implements InputHandling {
 		this.mapCursor = mapCursor;
 		this.damagePreviewBoxEntity = damagePreviewBoxEntity;
 		this.inventoryMenuBox = inventoryMenuBox;
+		this.unitDamagePreviewUpdate = new UnitDamagePreviewUpdate();
 		allEnemiesThatCanBeAttacked = new Array<>();
 		redCellArray = new Array<MapCell>();
 	}
 
 	@Override
 	public void handleInput() {
-
+		
 		// Cycle through all the Enemies
-		if (Gdx.input.isKeyJustPressed(Keys.UP) && allEnemiesThatCanBeAttacked.size > 0) {
+		if ((Gdx.input.isKeyJustPressed(Keys.UP) || Gdx.input.isKeyJustPressed(Keys.LEFT)) && allEnemiesThatCanBeAttacked.size > 0) {
 			unitAt--;
 			cycleInt();
 			setCursorPosition();
+			setDefendingEnemy();
 			if (allEnemiesThatCanBeAttacked.size != 1) {
 				UIComponent.soundSystem.playSound(UISounds.movement);
 			}
 		}
 
-		if (Gdx.input.isKeyJustPressed(Keys.DOWN) && allEnemiesThatCanBeAttacked.size > 0) {
+		if ((Gdx.input.isKeyJustPressed(Keys.DOWN) || Gdx.input.isKeyJustPressed(Keys.RIGHT)) && allEnemiesThatCanBeAttacked.size > 0) {
 			unitAt++;
 			cycleInt();
 			setCursorPosition();
+			setDefendingEnemy();
 			if (allEnemiesThatCanBeAttacked.size != 1) {
 				UIComponent.soundSystem.playSound(UISounds.movement);
 			}
@@ -71,11 +76,20 @@ public class UnitDamageSelectionInput implements InputHandling {
 			if (allEnemiesThatCanBeAttacked.size <= 0) {
 				UIComponent.soundSystem.playSound(UISounds.invalid);
 			} else {
-				// Do the combat stuff here
-				UIComponent.soundSystem.playSound(UISounds.accept);
-				sComponentMapper.get(mapCursor).isEnabled = false;
-				sComponentMapper.get(damagePreviewBoxEntity).isEnabled = true;
-				setLocationOfDamageBox(pComponentMapper.get(damagePreviewBoxEntity));
+				// Select Unit
+				if (unitDamagePreviewUpdate.unitDamagePreviewState.equals(UnitDamagePreviewState.SELECTING_UNIT)) {
+					// Sound and UI
+					UIComponent.soundSystem.playSound(UISounds.accept);
+					sComponentMapper.get(mapCursor).isEnabled = false;
+					sComponentMapper.get(damagePreviewBoxEntity).isEnabled = true;
+					setLocationOfDamageBox(pComponentMapper.get(damagePreviewBoxEntity));
+					
+					// Combat Preview Numbers
+					unitDamagePreviewUpdate.calculateDamage(UIManager.currentGameUnit, allEnemiesThatCanBeAttacked.get(unitAt));
+					unitDamagePreviewUpdate.unitDamagePreviewState = UnitDamagePreviewState.READY_FOR_COMBAT;
+				} else {
+					// Proceed to combat -> reset everything
+				}
 			}
 		}
 
@@ -128,6 +142,11 @@ public class UnitDamageSelectionInput implements InputHandling {
 		pComponentMapper.get(mapCursor).y = pComponentMapper.get(allEnemiesThatCanBeAttacked.get(unitAt)).y;
 	}
 	
+	private void setDefendingEnemy() {
+		unitDamagePreviewUpdate.getCombatSystemCalculator().setUnits(UIManager.currentGameUnit, allEnemiesThatCanBeAttacked.get(unitAt));
+		setLocationOfDamageBox(pComponentMapper.get(damagePreviewBoxEntity));
+	}
+	
 	public void turnOn() {
 		// Reset Stats
 		allEnemiesThatCanBeAttacked.clear();
@@ -138,6 +157,7 @@ public class UnitDamageSelectionInput implements InputHandling {
 		calculateEnemies(UIManager.currentGameUnit, UIManager.currentGameUnit.getComponent(InventoryComponent.class).selectedItem.getComponent(ItemComponent.class).maxRange);
 		if (allEnemiesThatCanBeAttacked.size > 0) {
 			sComponentMapper.get(mapCursor).isEnabled = true;
+			setDefendingEnemy();
 			setCursorPosition();
 			enableDamagePreview();
 		}
@@ -155,7 +175,6 @@ public class UnitDamageSelectionInput implements InputHandling {
 		
 		// Damage box preview enable
 		sComponentMapper.get(damagePreviewBoxEntity).isEnabled = true;
-		setLocationOfDamageBox(pComponentMapper.get(damagePreviewBoxEntity));
 		
 		// Enable Text
 		tComponentMapper.get(damagePreviewBoxEntity).isDrawing = true;
@@ -187,9 +206,11 @@ public class UnitDamageSelectionInput implements InputHandling {
 		if (pComponentMapper.get(UIManager.currentGameUnit).x <= FireEmblemGame.WIDTH / 2) {
 			positionComponent.x = FireEmblemGame.WIDTH - (sComponentMapper.get(damagePreviewBoxEntity).width + 10);
 			positionComponent.y = 40;
+			unitDamagePreviewUpdate.setStatisticsText(tComponentMapper.get(damagePreviewBoxEntity), true);
 		} else {
 			positionComponent.x = 10;
 			positionComponent.y = 40;
+			unitDamagePreviewUpdate.setStatisticsText(tComponentMapper.get(damagePreviewBoxEntity), false);
 		}
 	}
 }

@@ -2,22 +2,19 @@ package com.jb.fe.systems.gamePlay;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.jb.fe.components.InventoryComponent;
 import com.jb.fe.components.ItemComponent;
+import com.jb.fe.components.ItemComponent.ItemType;
 import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.UnitStatsComponent;
-import com.jb.fe.components.ItemComponent.ItemType;
-import com.jb.fe.systems.SystemPriorityDictionnary;
 
 /**
  * Calculate various battle stats
  * Modify these later to accomodate for support bonuses
  * @author james
- *
  */
-public class CombatSystem extends EntitySystem{
+public class CombatSystemCalculator {
 	
 	private Entity attackingUnit;
 	private Entity defendingUnit;
@@ -27,6 +24,7 @@ public class CombatSystem extends EntitySystem{
 	private ComponentMapper<ItemComponent> iComponentMapper = ComponentMapper.getFor(ItemComponent.class);
 	private ComponentMapper<MovementStatsComponent> mComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	private UnitStatsComponent attackingUnitStats;
+
 	private UnitStatsComponent defendingUnitStats;
 	private InventoryComponent attackingInventory;
 	private InventoryComponent defendingInventory;
@@ -34,17 +32,20 @@ public class CombatSystem extends EntitySystem{
 	private ItemComponent attackingItem;
 	private ItemComponent defendingItem;
 	
-	public CombatSystem() {
-		priority = SystemPriorityDictionnary.CombatPhase;
-		setProcessing(false);
-	}
+	// These are set during the Unit Damage Preview Update Component
+	public static int AttackingDamage = 0;
+	public static int DefendingDamage = 0;
+	
+	public CombatSystemCalculator() {}
 	
 	// Calculations
 	// Double Attack
 	public boolean hasDoubleAttack(int attackSpeed) {
 		if (attackSpeed - defendingUnitStats.speed >= 4) {
+			System.out.println("HAS DOUBLE ATTACK");
 			return true;
 		}
+		System.out.println("NO DOUBLE ATTACK");
 		return false;
 	}
 	
@@ -64,6 +65,16 @@ public class CombatSystem extends EntitySystem{
 		return MathUtils.random(100) >= totalAccuracy;
 	}
 	
+	public int calculateHitChanceNumber() {
+		int accuracy = attackingItem.hit + (attackingUnitStats.skill * 2) + (attackingUnitStats.luck / 2) + 5 + (getWeaponBonus() * 15);
+		int enemyAvoidance = (getAttackSpeed(defendingInventory, defendingUnitStats) + defendingUnitStats.luck + 5 + (int) defendingMovementStat.currentCell.avoidanceBonus);
+		int totalAccuracy = accuracy - enemyAvoidance;
+		if (totalAccuracy < 0) {
+			totalAccuracy = 0;
+		}
+		return totalAccuracy;
+	}
+	
 	public boolean calculateCritChance() {
 		int criticalRate = attackingItem.crit + (attackingUnitStats.skill / 2) + attackingUnitStats.bonusCrit;
 		int battleCriticalRate = criticalRate - defendingUnitStats.luck;
@@ -76,6 +87,15 @@ public class CombatSystem extends EntitySystem{
 		}
 		
 		return MathUtils.random(100) >= battleCriticalRate;
+	}
+	
+	public int calculateCritChanceNumber() {
+		int criticalRate = attackingItem.crit + (attackingUnitStats.skill / 2) + attackingUnitStats.bonusCrit;
+		int battleCriticalRate = criticalRate - defendingUnitStats.luck;
+		if (battleCriticalRate < 0) {
+			battleCriticalRate = 0;
+		}
+		return battleCriticalRate;
 	}
 	
 	public int getAttackSpeed(InventoryComponent inventoryComponent, UnitStatsComponent unitStatsComponent) {
@@ -124,7 +144,7 @@ public class CombatSystem extends EntitySystem{
 	}
 	
 	// Utility functions
-	public void getComponents() {
+	private void getComponents() {
 		attackingUnitStats = uComponentMapper.get(attackingUnit);
 		defendingUnitStats = uComponentMapper.get(defendingUnit);
 		attackingInventory = invComponentMapper.get(attackingUnit);
@@ -146,6 +166,13 @@ public class CombatSystem extends EntitySystem{
 		this.defendingMovementStat = null;
 	}
 	
+	public void setUnits(Entity attackingUnit, Entity defendingUnit) {
+		clearEntities();
+		this.attackingUnit = attackingUnit;
+		this.defendingUnit = defendingUnit;
+		getComponents();
+	}
+	
 	public int getWeaponBonus() {
 		if (attackingItem.weaponClass.strongAgainst.equals(defendingItem.weaponClass.itemClass)) {
 			return 1;
@@ -156,5 +183,37 @@ public class CombatSystem extends EntitySystem{
 		}
 		
 		return 0;
+	}
+	
+	public Entity getAttackingUnit() {
+		return attackingUnit;
+	}
+	
+	public Entity getDefendingUnit() {
+		return defendingUnit;
+	}
+
+	public UnitStatsComponent getAttackingUnitStats() {
+		return attackingUnitStats;
+	}
+
+	public InventoryComponent getAttackingInventory() {
+		return attackingInventory;
+	}
+
+	public InventoryComponent getDefendingInventory() {
+		return defendingInventory;
+	}
+
+	public MovementStatsComponent getDefendingMovementStat() {
+		return defendingMovementStat;
+	}
+
+	public ItemComponent getAttackingItem() {
+		return attackingItem;
+	}
+
+	public ItemComponent getDefendingItem() {
+		return defendingItem;
 	}
 }

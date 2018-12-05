@@ -101,6 +101,7 @@ public class InventoryMenuBox extends MenuBox{
 		boxEntity.add(zOrderComponentStats);
 		boxEntity.add(itemStatsTextComponent);
 		boxEntity.add(uiComponent);
+		engine.addEntity(boxEntity);
 	}
 
 	public TextComponent getItemBoxTextComponent() {

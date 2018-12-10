@@ -10,6 +10,7 @@ public class InventoryComponent implements Component{
 	
 	// Selected item
 	public Entity selectedItem;
+	public int selectedItemIndex = 0;
 	
 	// Counts
 	public final int MAX_INVENTORY_SIZE = 6;
@@ -27,5 +28,15 @@ public class InventoryComponent implements Component{
 	public void removeItem(int index) {
 		inventory[index] = null;
 		amountOfItemsCarried--;
+		moveAllItemsDown();
+	}
+	
+	private void moveAllItemsDown() {
+		for (int i = 0; i < MAX_INVENTORY_SIZE; i++) {
+			if (inventory[i] == null && i + 1 < MAX_INVENTORY_SIZE) {
+				inventory[i] = inventory[i + 1];
+				inventory[i + 1] = null;
+			}
+		}
 	}
 }

@@ -21,8 +21,6 @@ public class InventoryInputHandle implements InputHandling{
 	private UIComponent uiComponent;
 	private InventoryMenuBox inventoryMenuBox;
 	
-	public static int itemSelectionNumber;
-	
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<InventoryComponent> iComponentMapper = ComponentMapper.getFor(InventoryComponent.class);
 	
@@ -31,7 +29,6 @@ public class InventoryInputHandle implements InputHandling{
 		this.hand = hand;
 		this.uiComponent = uiComponent;
 		this.inventoryMenuBox = inventoryMenuBox;
-		itemSelectionNumber = 0;
 	}
 
 	@Override
@@ -40,26 +37,27 @@ public class InventoryInputHandle implements InputHandling{
 		currentDelay += Gdx.graphics.getDeltaTime();
 		if (currentDelay <= keyDelay) { return; }
 		InventoryComponent inventoryComponent = iComponentMapper.get(UIManager.currentGameUnit);
+		inventoryComponent.selectedItem = inventoryComponent.inventory[inventoryComponent.selectedItemIndex];
 		
 		// Up
 		if (Gdx.input.isKeyPressed(Keys.UP)) {
-			itemSelectionNumber--;
+			inventoryComponent.selectedItemIndex--;
 			if (allowHandMovement()) {
 				pComponentMapper.get(hand).y += 20;
 				currentDelay = 0;
 				// Set new equip item
-				inventoryComponent.selectedItem = inventoryComponent.inventory[itemSelectionNumber];
+				inventoryComponent.selectedItem = inventoryComponent.inventory[inventoryComponent.selectedItemIndex];
 				UIComponent.soundSystem.playSound(UISounds.movement);
 			}
 		}
 		
 		// Down
 		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-			itemSelectionNumber++;
+			inventoryComponent.selectedItemIndex++;
 			if (allowHandMovement()) {
 				pComponentMapper.get(hand).y -= 20;
 				currentDelay = 0;
-				inventoryComponent.selectedItem = inventoryComponent.inventory[itemSelectionNumber];
+				inventoryComponent.selectedItem = inventoryComponent.inventory[inventoryComponent.selectedItemIndex];
 				UIComponent.soundSystem.playSound(UISounds.movement);
 			}
 		}
@@ -90,17 +88,28 @@ public class InventoryInputHandle implements InputHandling{
 	
 	private boolean allowHandMovement() {
 		// If there is only 1 item, no movement allowed
+		InventoryComponent inventoryComponent = iComponentMapper.get(UIManager.currentGameUnit);
 		if (iComponentMapper.get(UIManager.currentGameUnit).amountOfItemsCarried <= 1) {
+			
+			if (inventoryComponent.selectedItemIndex < 0) {
+				inventoryComponent.selectedItemIndex = 0;
+				return false;
+			}
+			
+			if (inventoryComponent.selectedItemIndex >= iComponentMapper.get(UIManager.currentGameUnit).amountOfItemsCarried) {
+				inventoryComponent.selectedItemIndex--;
+				return false;
+			}
 			return false;
 		}
 		
-		if (itemSelectionNumber < 0) {
-			itemSelectionNumber = 0;
+		if (inventoryComponent.selectedItemIndex < 0) {
+			inventoryComponent.selectedItemIndex = 0;
 			return false;
 		}
 		
-		if (itemSelectionNumber >= iComponentMapper.get(UIManager.currentGameUnit).amountOfItemsCarried) {
-			itemSelectionNumber--;
+		if (inventoryComponent.selectedItemIndex >= iComponentMapper.get(UIManager.currentGameUnit).amountOfItemsCarried) {
+			inventoryComponent.selectedItemIndex--;
 			return false;
 		}
 		

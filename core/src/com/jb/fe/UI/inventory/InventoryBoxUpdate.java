@@ -10,6 +10,7 @@ import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.UIComponent.UpdateUI;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.systems.graphics.ZOrder;
+import com.jb.fe.systems.inputAndUI.UIManager;
 
 public class InventoryBoxUpdate implements UpdateUI{
 	
@@ -60,7 +61,7 @@ public class InventoryBoxUpdate implements UpdateUI{
 		hand.getComponent(ZOrderComponent.class).zOrder = ZOrder.UI_MIDDLE_LAYER;
 		pComponentMapper.get(hand).x = pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x - 5;
 		pComponentMapper.get(hand).y = inventoryMenuBox.getItemBoxTextComponent().textArray.get(0).y - 10;
-		InventoryInputHandle.itemSelectionNumber = 0;
+		iComponentMapper.get(UIManager.currentGameUnit).selectedItemIndex = 0;
 	}
 	
 	public void setTextInfo() {

@@ -13,11 +13,9 @@ public class UnitDamagePreviewUpdate implements UpdateUI {
 
 	private ComponentMapper<NameComponent> nComponentMapper = ComponentMapper.getFor(NameComponent.class);
 	private CombatSystemCalculator combatSystemCalculator;
-	public UnitDamagePreviewState unitDamagePreviewState;
 	
 	public UnitDamagePreviewUpdate() {
 		combatSystemCalculator = new CombatSystemCalculator();
-		this.unitDamagePreviewState = UnitDamagePreviewState.SELECTING_UNIT;
 	}
 	
 	@Override
@@ -25,7 +23,6 @@ public class UnitDamagePreviewUpdate implements UpdateUI {
 	
 	public void calculateDamage(Entity attackingUnit, Entity defendingUnit) {
 		combatSystemCalculator.setUnits(attackingUnit, defendingUnit);
-		System.out.println(combatSystemCalculator.calculateDamage()); //DEBUG FOR NOW
 	}
 	
 	/* Order of the Array
@@ -77,7 +74,7 @@ public class UnitDamagePreviewUpdate implements UpdateUI {
 		textComponent.textArray.get(4).y = 94;
 		
 		// Atk Might
-		textComponent.textArray.get(6).text = Integer.toString(combatSystemCalculator.getAttackingItem().might);
+		textComponent.textArray.get(6).text = Integer.toString(combatSystemCalculator.calculateDamagePreview());
 		textComponent.textArray.get(6).x = 70 - 19 + xOffset;
 		textComponent.textArray.get(6).y = 107;
 		
@@ -110,7 +107,7 @@ public class UnitDamagePreviewUpdate implements UpdateUI {
 		textComponent.textArray.get(5).y = 94;
 		
 		// Def Might
-		textComponent.textArray.get(7).text = Integer.toString(combatSystemCalculator.getAttackingItem().might);
+		textComponent.textArray.get(7).text = Integer.toString(combatSystemCalculator.calculateDamagePreview());
 		textComponent.textArray.get(7).x = xOffset + 8;
 		textComponent.textArray.get(7).y = 107;
 		
@@ -122,11 +119,7 @@ public class UnitDamagePreviewUpdate implements UpdateUI {
 		// Defending unit damage
 		CombatSystemCalculator.DefendingDamage = combatSystemCalculator.calculateDamage();
 	}
-	
-	public static enum UnitDamagePreviewState {
-		SELECTING_UNIT, READY_FOR_COMBAT;
-	}
-	
+
 	public CombatSystemCalculator getCombatSystemCalculator() {
 		return combatSystemCalculator;
 	}

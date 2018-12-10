@@ -7,7 +7,7 @@ import com.jb.fe.components.WeaponClass.WeaponType;
 public class ItemComponent implements Component{
 	
 	public WeaponClass weaponClass;
-	public boolean isUsable; // Can be used by current class
+	public boolean isUsable; 	// Can be used by current class
 	
 	public int uses; 				// durability
 	public int might;				// effectiveness | damage
@@ -23,11 +23,11 @@ public class ItemComponent implements Component{
 	
 	public Effect specialEffect; // Anything special add a function here
 	
-	public boolean isBroken; // For pooling purposes
+	public boolean isBroken; 	// For pooling purposes
 	
 	// Iron Sword default
 	public ItemComponent() {
-		uses = 45 + MathUtils.random(-10, 10);
+		uses =  1; // 45 + MathUtils.random(-10, 10);
 		might = 5 + MathUtils.random(0, 3);
 		hit = 90 + MathUtils.random(0, 10);
 		crit = 0 + MathUtils.random(0, 10);

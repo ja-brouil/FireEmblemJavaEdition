@@ -10,6 +10,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.jb.fe.Utilities.JsonHandler;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.graphics.RenderSystem;
@@ -24,7 +25,7 @@ public class FireEmblemGame extends Game {
 	// Size
 	public static final int WIDTH = 240;
 	public static final int HEIGHT = 160;
-	public static final int CONSTANT = 5;
+	public static final int CONSTANT = 1;
 	public static final String TITLE = "Fire Emblem";
 
 	// Graphics
@@ -85,6 +86,9 @@ public class FireEmblemGame extends Game {
 		allGameScreens.put("GameOverScreen", new GameOverScreen());
 		allGameScreens.put("PauseScreen", new PauseScreen());
 		this.setScreen(allGameScreens.get("GameScreen"));
+		
+		// JSON TEST
+		JsonHandler.parseJSON("items/ItemList.json");
 	}
 	
 	@Override

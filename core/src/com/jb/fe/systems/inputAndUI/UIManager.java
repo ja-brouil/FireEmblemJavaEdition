@@ -68,6 +68,7 @@ public class UIManager extends EntitySystem {
 	}
 	
 	public void startMapCursor() {
+		currentUI = mapcursor;
 		mapcursor.getComponent(MapCursorStateComponent.class).mapCursorState = MapCursorState.MOVEMENT_ONLY;
 		mapcursor.getComponent(AnimationComponent.class).currentAnimation.isDrawing = true;
 	}

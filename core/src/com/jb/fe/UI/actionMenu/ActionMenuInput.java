@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.jb.fe.UI.actionMenu.ActionMenuUpdate.Action_Menu_Options;
 import com.jb.fe.UI.actionMenu.ActionMenuUpdate.Action_Menu_State;
 import com.jb.fe.components.AnimationComponent;
+import com.jb.fe.components.InventoryComponent;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.MovementStatsComponent;
@@ -38,7 +39,7 @@ public class ActionMenuInput implements InputHandling {
 	// Option
 	private Action_Menu_Options currentOptionSelected;
 	private Action_Menu_Options[] allOptions;
-	private int indexOption;
+	public static int indexOption;
 	
 	// Component Mappers
 	private ComponentMapper<MovementStatsComponent> mComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
@@ -68,11 +69,12 @@ public class ActionMenuInput implements InputHandling {
 	
 	@Override
 	public void handleInput() {
-		//sComponentMapper.get(hand).isEnabled = true;
 		currentDelayTime += Gdx.graphics.getDeltaTime();
 		if (currentDelayTime < delayTime) {
 			return;
 		}
+		
+		currentOptionSelected = allOptions[indexOption];
 		
 		// Up
 		if (Gdx.input.isKeyPressed(Keys.UP)) {
@@ -106,7 +108,9 @@ public class ActionMenuInput implements InputHandling {
 		if (Gdx.input.isKeyJustPressed(Keys.Z)) {
 			ActionMenuUpdate.action_Menu_State = Action_Menu_State.Process;
 			ActionMenuUpdate.curren_Action_Menu_Options = currentOptionSelected;
-			UIComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));
+			if (UIManager.currentGameUnit.getComponent(InventoryComponent.class).amountOfItemsCarried != 0) {
+				UIComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));
+			}
 			currentDelayTime = 0;
 		}
 		

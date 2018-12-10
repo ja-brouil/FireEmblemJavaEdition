@@ -62,7 +62,7 @@ public class CombatSystemCalculator {
 			return false;
 		}
 		
-		return MathUtils.random(100) >= totalAccuracy;
+		return MathUtils.random(100) <= totalAccuracy;
 	}
 	
 	public int calculateHitChanceNumber() {
@@ -86,7 +86,7 @@ public class CombatSystemCalculator {
 			return false;
 		}
 		
-		return MathUtils.random(100) >= battleCriticalRate;
+		return MathUtils.random(100) <= battleCriticalRate;
 	}
 	
 	public int calculateCritChanceNumber() {
@@ -131,6 +131,7 @@ public class CombatSystemCalculator {
 		
 		// Critical Hits always hit
 		if (calculateCritChance()) {
+			System.out.println("CRITICAL HIT OCCURED");
 			criticalHitDamageIncrease = 3;
 			int finalDamageAmount = (attackDamage * criticalHitDamageIncrease) - defenceReduction;
 			if (finalDamageAmount < 0) {
@@ -141,8 +142,36 @@ public class CombatSystemCalculator {
 		
 		// If Miss return -10000 | For now it's 0 but later change this so that it has a No Damage animation instead of miss
 		if (!calculateHitChance()) {
+			System.out.println("IT MISSED");
+			return -10000;
+		}
+		
+		int finalDamageAmount = attackDamage - defenceReduction;
+		if (finalDamageAmount < 0) {
+			System.out.println("NO DAMAGE");
 			return 0;
 		}
+		
+		return finalDamageAmount;
+	}
+	
+	// Use this method for the damage preview
+	public int calculateDamagePreview() {
+		int effectiveBonus = 1; 				// change this later. Example: Bow vs flying = 3
+		
+		// Damage
+		int baseAttack = 0;
+		int baseDefence = 0;
+		if (attackingItem.itemType.equals(ItemType.PHYSICAL)) {
+			baseAttack = attackingUnitStats.str;
+			baseDefence = defendingUnitStats.def;
+		} else if (attackingItem.itemType.equals(ItemType.MAGIC)) {
+			baseAttack = attackingUnitStats.magic;
+			baseDefence = defendingUnitStats.res;
+		}
+		
+		int attackDamage = baseAttack + ((attackingItem.might + getWeaponBonus()) * effectiveBonus);
+		int defenceReduction = baseDefence + (int) defendingMovementStat.currentCell.defenceBonus; 
 		
 		int finalDamageAmount = attackDamage - defenceReduction;
 		if (finalDamageAmount < 0) {

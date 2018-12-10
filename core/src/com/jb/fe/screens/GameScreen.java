@@ -16,6 +16,7 @@ import com.jb.fe.map.MapRenderSystem;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.gamePlay.AISystem;
+import com.jb.fe.systems.gamePlay.CombatSystem;
 import com.jb.fe.systems.gamePlay.TurnManager;
 import com.jb.fe.systems.inputAndUI.InfoBoxUpdate;
 import com.jb.fe.systems.inputAndUI.UIManager;
@@ -42,6 +43,7 @@ public class GameScreen extends ScreenAdapter{
 	private AISystem aiSystem;
 	private UIManager uiManager;
 	private InfoBoxUpdate infoBoxUpdate;
+	private CombatSystem combatSystem;
 	
 	public GameScreen(MusicSystem musicSystem, SoundSystem soundSystem, Engine engine, AssetManager assetManager, SpriteBatch spriteBatch, OrthographicCamera gameCamera) {
 		this.engine = engine;
@@ -55,6 +57,7 @@ public class GameScreen extends ScreenAdapter{
 		aiSystem = new AISystem();
 		uiManager = new UIManager();
 		infoBoxUpdate = new InfoBoxUpdate();
+		combatSystem = new CombatSystem();
 		
 		// Add Systems to the Engine
 		engine.addSystem(mapRenderSystem);
@@ -66,6 +69,7 @@ public class GameScreen extends ScreenAdapter{
 		engine.addSystem(aiSystem);
 		engine.addSystem(uiManager);
 		engine.addSystem(infoBoxUpdate);
+		engine.addSystem(combatSystem);
 	
 		// Start First Level
 		currentLevel = new Level("levels/level1/level1.tmx", assetManager, engine);

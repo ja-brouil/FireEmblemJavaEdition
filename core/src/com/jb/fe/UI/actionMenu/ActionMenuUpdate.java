@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.jb.fe.UI.inventory.InventoryMenuBox;
 import com.jb.fe.components.AnimationComponent;
+import com.jb.fe.components.InventoryComponent;
 import com.jb.fe.components.MapCursorStateComponent;
 import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.MovementStatsComponent;
@@ -91,40 +92,46 @@ public class ActionMenuUpdate implements UpdateUI {
 	
 	public void doAction(Action_Menu_Options action_Menu_Options, Entity mapCursor) {
 		if (action_Menu_Options.equals(Action_Menu_Options.Action)) {
-			processAction();
+			processAction(action_Menu_Options);
 		} else if (action_Menu_Options.equals(Action_Menu_Options.Items)) {
-			processItems(mapCursor);
+			processItems(mapCursor, action_Menu_Options);
 		} else if (action_Menu_Options.equals(Action_Menu_Options.Trade)) {
-			processTrade(mapCursor);
+			processTrade(mapCursor, action_Menu_Options);
 		} else if (action_Menu_Options.equals(Action_Menu_Options.Wait)) {
-			processWait(mapCursor);
+			processWait(mapCursor, action_Menu_Options);
 		}
 	}
 	
-	private void processAction() {
-		turnOff();
-		inventoryMenuBox.setUnit(UIManager.currentGameUnit);
-		UIComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));
-		inventoryMenuBox.turnOn();
-		uiComponent.uiManager.setCurrentUI(inventoryMenuBox.getBoxEntity());
+	private void processAction(Action_Menu_Options action_Menu_Options) {
+		// If we have no items, don't do anything
+		if (UIManager.currentGameUnit.getComponent(InventoryComponent.class).amountOfItemsCarried <= 0) {
+			action_Menu_State = Action_Menu_State.Idle;
+			UIComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Invalid"));
+		} else {
+			turnOff();
+			inventoryMenuBox.setUnit(UIManager.currentGameUnit);
+			UIComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Accept"));
+			inventoryMenuBox.turnOn();
+			uiComponent.uiManager.setCurrentUI(inventoryMenuBox.getBoxEntity());
+		}
 	}
 	
-	private void processTrade(Entity mapCursor) {
+	private void processTrade(Entity mapCursor, Action_Menu_Options action_Menu_Options) {
 		System.out.println("TRADE SELECTED");
-		turnOffMenu(mapCursor);
+		turnOffMenu(mapCursor, action_Menu_Options);
 	}
 	
-	private void processItems(Entity mapCursor) {
+	private void processItems(Entity mapCursor, Action_Menu_Options action_Menu_Options) {
 		System.out.println("ITEMS SELECTED");
-		turnOffMenu(mapCursor);
+		turnOffMenu(mapCursor, action_Menu_Options);
 	}
 	
-	private void processWait(Entity mapCursor) {
-		turnOffMenu(mapCursor);
+	private void processWait(Entity mapCursor, Action_Menu_Options action_Menu_Options) {
+		turnOffMenu(mapCursor, action_Menu_Options);
 	}
 	
 	// Helper DEBUG FUNCTION
-	private void turnOffMenu(Entity mapCursor) {
+	private void turnOffMenu(Entity mapCursor, Action_Menu_Options action_Menu_Options) {
 
 		UIManager.currentGameUnit.getComponent(MovementStatsComponent.class).unit_State = Unit_State.DONE;
 		
@@ -141,6 +148,10 @@ public class ActionMenuUpdate implements UpdateUI {
 		turnOff();
 		uiComponent.uiManager.setCurrentUI(mapCursor);
 		action_Menu_State = Action_Menu_State.Idle;
+		
+		// Reset Hand and selection
+		pComponentMapper.get(hand).y = 121;
+		ActionMenuInput.indexOption = 0;
 	}
 	
 	public void turnOff() {

@@ -9,7 +9,7 @@ public class DesktopLauncher {
 	// Dimensions
 	public static final int WIDTH = 240;
 	public static final int HEIGHT = 160;
-	public static final int CONSTANT = 5;
+	public static final int CONSTANT = 2;
 	public static final String TITLE = "Fire Emblem Java Edition";
 	
 	public static void main (String[] args) {

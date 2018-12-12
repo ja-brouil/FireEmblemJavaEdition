@@ -10,7 +10,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.jb.fe.Utilities.JsonHandler;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.graphics.RenderSystem;
@@ -86,9 +85,6 @@ public class FireEmblemGame extends Game {
 		allGameScreens.put("GameOverScreen", new GameOverScreen());
 		allGameScreens.put("PauseScreen", new PauseScreen());
 		this.setScreen(allGameScreens.get("GameScreen"));
-		
-		// JSON TEST
-		JsonHandler.parseJSON("items/ItemList.json");
 	}
 	
 	@Override

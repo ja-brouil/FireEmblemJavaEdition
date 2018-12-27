@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.utils.Array;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.UnitStatsComponent;
@@ -32,11 +33,16 @@ public class Level {
 
 	// Victory/Defeat condition
 	public VictoryCondition victoryCondition;
+	
+	// Enenies
+	public Array<Entity> allEnemies;
 
 	public Level(String mapFileLocation, AssetManager assetManager, Engine engine) {
 		this.engine = engine;
 		this.assetManager = assetManager;
 		this.mapFileLocation = mapFileLocation;
+		
+		allEnemies = new Array<Entity>();
 	}
 	
 	public void startLevel() {

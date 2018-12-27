@@ -7,10 +7,6 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
-import com.jb.fe.components.Artifical_IntelligenceComponent;
-import com.jb.fe.components.NameComponent;
-import com.jb.fe.components.UnitStatsComponent;
-import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.units.UnitFactory;
 
@@ -58,12 +54,14 @@ public class Level {
 		engine.addEntity(UnitFactory.createCavalierUnit(assetManager, "Seth", "units/cavalier/cavalierAlly copy.png", 2 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, true, engine));
 		
 		// Enemy
+		/*
 		engine.addEntity(UnitFactory.createCavalierUnit(assetManager,"Evil Seth", "units/cavalier/cavalierAllyRed.png", 11 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false, engine));
 		Entity aggresiveAI = UnitFactory.createCavalierUnit(assetManager, "Evil Seth", "units/cavalier/cavalierAllyRed.png", 5 * MapCell.CELL_SIZE, 9 * MapCell.CELL_SIZE, false, engine);
 		aggresiveAI.getComponent(Artifical_IntelligenceComponent.class).ai_Type = AI_TYPE.AGGRESSIVE;
 		aggresiveAI.getComponent(UnitStatsComponent.class).setKnight();
 		aggresiveAI.getComponent(NameComponent.class).name = "Test";
 		engine.addEntity(aggresiveAI);
+		*/
 		
 		
 		// Set Map Bounderies

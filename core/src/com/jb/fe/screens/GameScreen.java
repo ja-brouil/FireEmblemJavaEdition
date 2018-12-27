@@ -12,6 +12,7 @@ import com.jb.fe.UI.infoBoxes.UnitInfoBox;
 import com.jb.fe.UI.infoBoxes.VictoryInfoBox;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCellInfoSystem;
+import com.jb.fe.map.MapEntityLoading;
 import com.jb.fe.map.MapRenderSystem;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
@@ -34,9 +35,12 @@ public class GameScreen extends ScreenAdapter{
 	// User Interface
 	private UIFactory UIFactory;
 	
-	// Systems Required
+	// Map Loading
 	private MapRenderSystem mapRenderSystem;
 	private MapCellInfoSystem mapCellInfoSystem;
+	private MapEntityLoading mapEntityLoading;
+	
+	// Systems Required
 	private UnitMapCellUpdater unitMapCellUpdater;
 	private UnitMovementSystem unitMovementSystem;
 	private TurnManager turnManagerSystem;
@@ -51,6 +55,7 @@ public class GameScreen extends ScreenAdapter{
 		// Start Systems
 		mapRenderSystem = new MapRenderSystem(gameCamera, spriteBatch);
 		mapCellInfoSystem = new MapCellInfoSystem(assetManager, engine);
+		mapEntityLoading = new MapEntityLoading(engine, assetManager);
 		unitMapCellUpdater = new UnitMapCellUpdater();
 		unitMovementSystem = new UnitMovementSystem();
 		turnManagerSystem = new TurnManager();
@@ -115,6 +120,7 @@ public class GameScreen extends ScreenAdapter{
 	public void setNewMap(Level level, Entity mapCursor) {
 		mapRenderSystem.setCurrentLevel(level);
 		mapCellInfoSystem.processTiles(level);
+		mapEntityLoading.loadMap(level);
 		unitMapCellUpdater.startSystem(level);
 		unitMovementSystem.startSystem(uiManager);
 		turnManagerSystem.startSystem(level.assetManager, uiManager);

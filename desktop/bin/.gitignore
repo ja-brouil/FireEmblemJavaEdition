@@ -1,3 +1,9 @@
-/com/
-/units/
+/UI/
+/items/
 /levels/
+/music/
+/shaders/
+/sound/
+/titleScreen/
+/transition/
+/units/

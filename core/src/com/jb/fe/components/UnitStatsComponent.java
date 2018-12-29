@@ -72,6 +72,23 @@ public class UnitStatsComponent implements Component{
 		// TO DO
 	}
 	
+	// Bandit
+	public void setBandit() {
+		health = 21;
+		maxHealth = 21;
+		str = 5;
+		skill = 3;
+		speed = 4;
+		magic = 1;
+		luck = 0;
+		def = 2;
+		res = 0;
+		consti = 9;
+		bonusCrit = 0;
+		bonusDodge = 0;
+		bonusHit = 0;
+	}
+	
 	public static enum ClassList {
 		LORD,
 		CAVALIER,

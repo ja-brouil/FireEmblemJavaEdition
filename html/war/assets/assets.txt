@@ -2,11 +2,12 @@ d:assets:0:application/unknown
 b:.DS_Store:6148:application/unknown
 d:items:0:application/unknown
 i:items/Game Boy Advance - Fire Emblem The Blazing Blade - Item Icons.png:14883:image/png
+t:items/ItemList.json:997:application/unknown
 d:levels:0:application/unknown
 d:levels/level1:0:application/unknown
 b:levels/level1/Impassable.tx:205:application/unknown
 i:levels/level1/level1.png:130356:image/png
-b:levels/level1/level1.tmx:24299:application/unknown
+b:levels/level1/level1.tmx:24932:application/unknown
 b:levels/level1/level1tileset:196:application/unknown
 d:levels/level2:0:application/unknown
 i:levels/level2/level2.png:101820:image/png
@@ -63,6 +64,7 @@ i:UI/Dialogue/dialogueBox.png:51648:image/png
 d:UI/endturnbox:0:application/unknown
 i:UI/endturnbox/endturnbox.png:47595:image/png
 d:UI/font:0:application/unknown
+b:UI/font/.DS_Store:6148:application/unknown
 t:UI/font/main font.fnt:16700:application/unknown
 i:UI/font/main font.png:20826:image/png
 b:UI/font/Main Font.ttf:7136040:application/unknown

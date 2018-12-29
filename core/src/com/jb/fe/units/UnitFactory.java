@@ -181,4 +181,88 @@ public class UnitFactory {
 
 		return cavalierUnit;
 	}
+	
+	public static Entity createBandit(AssetManager assetManager, String name, String animationFileLocation, float x, float y, boolean isAlly, Engine engine) {
+		Entity bandit = new Entity();
+		
+		// Components
+		NameComponent nameComponent = new NameComponent(name);
+		PositionComponent positionComponent = new PositionComponent(x, y);
+		AnimationComponent animationComponent = new AnimationComponent();
+		MovementStatsComponent movementStatsComponent = new MovementStatsComponent();
+		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.MIDDLE_LAYER);
+		SoundComponent soundComponent = new SoundComponent();
+		InventoryComponent inventoryComponent = new InventoryComponent();
+		IconComponent iconComponent = new IconComponent();
+		
+		// Icon
+		Entity icon = IconFactory.createUnitIcon(assetManager, "units/enemyPortrait/normalSoldierPortrait.png", engine);
+		iconComponent.iconEntity = icon;
+		
+		// Unit Stats
+		unitStatsComponent.setBandit();
+		
+		// Movement Sound
+		soundComponent.allSoundObjects.put("Movement", new SoundObject("sound/unitMovement/Light Foot Steps 1.wav", assetManager));
+		soundComponent.allSoundObjects.get("Movement").delayTimer = 0.24f;
+		
+		// Graphics
+		animationComponent.allAnimationObjects.put("Hovering", new AnimationObject(assetManager, animationFileLocation,
+				32, 32, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 0, 4));
+		animationComponent.allAnimationObjects.put("Left", new AnimationObject(assetManager, animationFileLocation, 32,
+				32, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 1, 4));
+		animationComponent.allAnimationObjects.put("Right", new AnimationObject(assetManager, animationFileLocation, 32,
+				32, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 1, 4));
+		animationComponent.allAnimationObjects.get("Right").flipTexture(true, false);
+		animationComponent.allAnimationObjects.put("Up", new AnimationObject(assetManager, animationFileLocation, 32,
+				32, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 4, 4));
+		animationComponent.allAnimationObjects.put("Down", new AnimationObject(assetManager, animationFileLocation, 32,
+				32, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 3, 4));
+		animationComponent.allAnimationObjects.put("Idle", new AnimationObject(assetManager, animationFileLocation, 32,
+				32, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 2, 4));
+		animationComponent.allAnimationObjects.put("Selected", new AnimationObject(assetManager, animationFileLocation,
+				32, 32, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 3, 4));
+		
+		// Animation Offsets
+		animationComponent.allAnimationObjects.get("Left").Xoffset = 0;
+		animationComponent.allAnimationObjects.get("Right").Xoffset = 0;
+		animationComponent.allAnimationObjects.get("Up").Xoffset = 0;
+		animationComponent.allAnimationObjects.get("Down").Xoffset = 0;
+		animationComponent.allAnimationObjects.get("Hovering").Xoffset = 0;
+		animationComponent.allAnimationObjects.get("Idle").Xoffset = 0;
+		animationComponent.allAnimationObjects.get("Selected").Xoffset = 0;
+
+		// Set Default Animation
+		animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Idle");
+		
+		// Unit Stats
+		movementStatsComponent.movementSteps = 7;
+		movementStatsComponent.isAlly = isAlly;
+		
+		// Add AI component if not ally
+		if (!isAlly) {
+			Artifical_IntelligenceComponent aiComponent = new Artifical_IntelligenceComponent();
+			nameComponent.name = "Red Empire";
+			aiComponent.ai_Type = AI_TYPE.PASSIVE;
+			bandit.add(aiComponent);
+		}
+		
+		// Inventory Component
+		inventoryComponent.addItem(ItemFactory.createWeapon("Iron Sword"));
+		inventoryComponent.selectedItem = inventoryComponent.inventory[0];
+		
+		// Add Components
+		bandit.add(unitStatsComponent);
+		bandit.add(movementStatsComponent);
+		bandit.add(animationComponent);
+		bandit.add(positionComponent);
+		bandit.add(nameComponent);
+		bandit.add(zOrderComponent);
+		bandit.add(soundComponent);
+		bandit.add(inventoryComponent);
+		bandit.add(iconComponent);
+		
+		return bandit;
+	}
 }

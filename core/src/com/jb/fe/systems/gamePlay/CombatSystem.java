@@ -3,9 +3,12 @@ package com.jb.fe.systems.gamePlay;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.utils.Array;
 import com.jb.fe.components.InventoryComponent;
 import com.jb.fe.components.ItemComponent;
+import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.UnitStatsComponent;
+import com.jb.fe.level.Level;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 
 public class CombatSystem extends EntitySystem{
@@ -14,9 +17,12 @@ public class CombatSystem extends EntitySystem{
 	public static Entity defendingUnit;
 	public static boolean isProcessing;
 	
+	private Level level;
+	
 	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
 	private ComponentMapper<ItemComponent> iComponentMapper = ComponentMapper.getFor(ItemComponent.class);
 	private ComponentMapper<InventoryComponent> invComponentMapper = ComponentMapper.getFor(InventoryComponent.class);
+	private ComponentMapper<MovementStatsComponent> mComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	
 	public CombatSystem() {
 		priority = SystemPriorityDictionnary.CombatPhase;
@@ -47,6 +53,15 @@ public class CombatSystem extends EntitySystem{
 		if (defendingUnitStats.health <= 0 ) {
 			defendingUnitStats.health = 0;
 			getEngine().removeEntity(defendingUnit);
+			
+			// Remove unit from Level array
+			if (mComponentMapper.get(defendingUnit).isAlly) {
+				removeUnitFromLevelArray(level.allAllies, defendingUnit);
+			} else {
+				System.out.println(level);
+				removeUnitFromLevelArray(level.allEnemies, defendingUnit);
+			}
+			
 			isProcessing = false;
 			return;
 		}	
@@ -70,9 +85,25 @@ public class CombatSystem extends EntitySystem{
 		if (attackingUnitStats.health <= 0) {
 			attackingUnitStats.health = 0;
 			getEngine().removeEntity(attackingUnit);
+			
+			// Remove unit from Level array
+			if (mComponentMapper.get(attackingUnit).isAlly) {
+				removeUnitFromLevelArray(level.allAllies, attackingUnit);
+			} else {
+				removeUnitFromLevelArray(level.allEnemies, attackingUnit);
+			}
 		}
 		
 		// Turn off system
 		isProcessing = false;
+	}
+	
+	private void removeUnitFromLevelArray(Array<Entity> levelArray, Entity unitToRemove) {
+		levelArray.removeValue(unitToRemove, true);
+	}
+	
+	// Load Level
+	public void loadLevel(Level level) {
+		this.level = level;
 	}
 }

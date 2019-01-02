@@ -3,6 +3,7 @@ package com.jb.fe.units;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.maps.MapProperties;
 import com.jb.fe.audio.SoundObject;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.AnimationObject;
@@ -182,8 +183,16 @@ public class UnitFactory {
 		return cavalierUnit;
 	}
 	
-	public static Entity createBandit(AssetManager assetManager, String name, String animationFileLocation, float x, float y, boolean isAlly, Engine engine) {
+	public static Entity createBandit(AssetManager assetManager, String animationFileLocation, Engine engine, MapProperties unitStats) {
 		Entity bandit = new Entity();
+		
+		// Properties from tiled
+		String name = unitStats.get("Name", String.class);
+		float x = unitStats.get("x", Float.class);
+		float y = unitStats.get("y", Float.class);
+		boolean isAlly = unitStats.get("isAlly", Boolean.class);
+		boolean isAggresive = unitStats.get("aiType", Boolean.class);
+		
 		
 		// Components
 		NameComponent nameComponent = new NameComponent(name);
@@ -225,26 +234,29 @@ public class UnitFactory {
 				32, 32, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 3, 4));
 		
 		// Animation Offsets
-		animationComponent.allAnimationObjects.get("Left").Xoffset = 0;
-		animationComponent.allAnimationObjects.get("Right").Xoffset = 0;
-		animationComponent.allAnimationObjects.get("Up").Xoffset = 0;
-		animationComponent.allAnimationObjects.get("Down").Xoffset = 0;
-		animationComponent.allAnimationObjects.get("Hovering").Xoffset = 0;
-		animationComponent.allAnimationObjects.get("Idle").Xoffset = 0;
-		animationComponent.allAnimationObjects.get("Selected").Xoffset = 0;
+		animationComponent.allAnimationObjects.get("Left").Xoffset = -8;
+		animationComponent.allAnimationObjects.get("Right").Xoffset = -8;
+		animationComponent.allAnimationObjects.get("Up").Xoffset = -8;
+		animationComponent.allAnimationObjects.get("Down").Xoffset = -8;
+		animationComponent.allAnimationObjects.get("Hovering").Xoffset = -8;
+		animationComponent.allAnimationObjects.get("Idle").Xoffset = -8;
+		animationComponent.allAnimationObjects.get("Selected").Xoffset = -8;
 
 		// Set Default Animation
 		animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Idle");
 		
 		// Unit Stats
-		movementStatsComponent.movementSteps = 7;
+		movementStatsComponent.movementSteps = 3;
 		movementStatsComponent.isAlly = isAlly;
 		
 		// Add AI component if not ally
 		if (!isAlly) {
 			Artifical_IntelligenceComponent aiComponent = new Artifical_IntelligenceComponent();
-			nameComponent.name = "Red Empire";
-			aiComponent.ai_Type = AI_TYPE.PASSIVE;
+			if (isAggresive) {
+				aiComponent.ai_Type = AI_TYPE.AGGRESSIVE;
+			} else {
+				aiComponent.ai_Type = AI_TYPE.PASSIVE;
+			}
 			bandit.add(aiComponent);
 		}
 		

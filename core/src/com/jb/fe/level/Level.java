@@ -32,13 +32,17 @@ public class Level {
 	
 	// Enenies
 	public Array<Entity> allEnemies;
+	
+	// Allies
+	public Array<Entity> allAllies;
 
 	public Level(String mapFileLocation, AssetManager assetManager, Engine engine) {
 		this.engine = engine;
 		this.assetManager = assetManager;
 		this.mapFileLocation = mapFileLocation;
 		
-		allEnemies = new Array<Entity>();
+		allEnemies = new Array<>();
+		allAllies = new Array<>();
 	}
 	
 	public void startLevel() {
@@ -49,20 +53,10 @@ public class Level {
 		levelMap = assetManager.get(mapFileLocation, TiledMap.class);
 		
 		// Allies
-		engine.addEntity(UnitFactory.createEirika(assetManager, "Eirika", "units/eirika/eirika copy.png", 160,
-				48, true, engine));
-		engine.addEntity(UnitFactory.createCavalierUnit(assetManager, "Seth", "units/cavalier/cavalierAlly copy.png", 2 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, true, engine));
-		
-		// Enemy
-		/*
-		engine.addEntity(UnitFactory.createCavalierUnit(assetManager,"Evil Seth", "units/cavalier/cavalierAllyRed.png", 11 * MapCell.CELL_SIZE, 3 * MapCell.CELL_SIZE, false, engine));
-		Entity aggresiveAI = UnitFactory.createCavalierUnit(assetManager, "Evil Seth", "units/cavalier/cavalierAllyRed.png", 5 * MapCell.CELL_SIZE, 9 * MapCell.CELL_SIZE, false, engine);
-		aggresiveAI.getComponent(Artifical_IntelligenceComponent.class).ai_Type = AI_TYPE.AGGRESSIVE;
-		aggresiveAI.getComponent(UnitStatsComponent.class).setKnight();
-		aggresiveAI.getComponent(NameComponent.class).name = "Test";
-		engine.addEntity(aggresiveAI);
-		*/
-		
+		Entity eirika = UnitFactory.createEirika(assetManager, "Eirika", "units/eirika/eirika copy.png", 100,
+				60, true, engine);
+		engine.addEntity(eirika);
+		allAllies.add(eirika);
 		
 		// Set Map Bounderies
 		setMapBounderies();

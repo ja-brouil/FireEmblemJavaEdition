@@ -126,5 +126,6 @@ public class GameScreen extends ScreenAdapter{
 		turnManagerSystem.startSystem(level.assetManager, uiManager);
 		unitMapCellUpdater.updateCellInfo();
 		infoBoxUpdate.setMapCursor(mapCursor);
+		combatSystem.loadLevel(currentLevel);
 	}
 }

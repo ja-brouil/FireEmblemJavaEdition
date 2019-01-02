@@ -68,7 +68,7 @@ public class MapCursorInputHandling implements InputHandling{
 			}
 			System.out.println("------------------------------------");
 		}
-		
+
 		// Movement only
 		if (mapCursorStateComponent.mapCursorState.equals(MapCursorStateComponent.MapCursorState.MOVEMENT_ONLY)) {
 

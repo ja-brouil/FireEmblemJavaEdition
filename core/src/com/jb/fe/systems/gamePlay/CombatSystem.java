@@ -58,7 +58,6 @@ public class CombatSystem extends EntitySystem{
 			if (mComponentMapper.get(defendingUnit).isAlly) {
 				removeUnitFromLevelArray(level.allAllies, defendingUnit);
 			} else {
-				System.out.println(level);
 				removeUnitFromLevelArray(level.allEnemies, defendingUnit);
 			}
 			

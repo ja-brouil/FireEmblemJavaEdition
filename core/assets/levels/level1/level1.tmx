@@ -817,7 +817,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Enemies" visible="0">
+ <objectgroup name="Enemies">
   <object id="507" template="../../units/TiledTemplates/BasicUnit.tx" x="32" y="32">
    <properties>
     <property name="BonusCrit" type="int" value="0"/>
@@ -907,7 +907,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Allies">
+ <objectgroup name="Allies" visible="0">
   <object id="490" x="224" y="112" width="16" height="16">
    <properties>
     <property name="Class" value="Lord"/>

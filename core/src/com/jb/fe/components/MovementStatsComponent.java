@@ -49,6 +49,21 @@ public class MovementStatsComponent implements Component {
 		unit_State = Unit_State.CAN_DO_BOTH;
 	}
 	
+	public MovementStatsComponent(int movementSteps, boolean isAlly) {
+		// Movement Defaults
+		allPossibleMoves = new HashSet<>();
+		allOutsideAttackMoves = new Array<>();
+		pathfindingQueue = new Queue<MapCell>();
+		this.movementSteps = movementSteps;
+		this.isAlly = isAlly;
+		currentCell = null;
+		isMoving = false;
+		animationMovementSpeed = 8f;
+		
+		// Unit State
+		unit_State = Unit_State.CAN_DO_BOTH;
+	}
+	
 	public static enum Unit_State {
 		CAN_DO_ACTION,
 		CAN_ONLY_MOVE,

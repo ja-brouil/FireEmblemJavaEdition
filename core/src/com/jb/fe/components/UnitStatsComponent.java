@@ -1,6 +1,7 @@
 package com.jb.fe.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.maps.MapProperties;
 
 public class UnitStatsComponent implements Component{
 
@@ -32,6 +33,22 @@ public class UnitStatsComponent implements Component{
 	
 	public UnitStatsComponent() {}
 	
+	public UnitStatsComponent(MapProperties unitProperties) {
+		health = unitProperties.get("Health", Integer.class);
+		maxHealth = unitProperties.get("MaxHealth", Integer.class);
+		str = unitProperties.get("Str", Integer.class);
+		skill = unitProperties.get("Skill", Integer.class);
+		speed = unitProperties.get("Speed", Integer.class);
+		magic = unitProperties.get("Magic", Integer.class);
+		luck = unitProperties.get("Luck", Integer.class);;
+		def = unitProperties.get("Defense", Integer.class);;
+		res = unitProperties.get("Res", Integer.class);;
+		consti = unitProperties.get("Consti", Integer.class);
+		bonusCrit = unitProperties.get("BonusCrit", Integer.class);
+		bonusDodge = unitProperties.get("BonusDodge", Integer.class);
+		bonusHit = unitProperties.get("BonusHit", Integer.class);
+	}
+	
 	// Stat templates
 	// Eirika
 	public void setEirika() {
@@ -48,45 +65,6 @@ public class UnitStatsComponent implements Component{
 		bonusCrit = 5;
 		bonusDodge = 5;
 		bonusHit = 5;
-	}
-	
-	// Cavalier
-	public void setCavalier() {
-		health = 20;
-		maxHealth = 20;
-		str = 7;
-		skill = 5;
-		speed = 7;
-		magic = 2;
-		luck = 2;
-		def = 6;
-		res = 1;
-		consti = 9;
-		bonusCrit = 0;
-		bonusDodge = 0;
-		bonusHit = 0;
-	}
-	
-	// Knight
-	public void setKnight() {
-		// TO DO
-	}
-	
-	// Bandit
-	public void setBandit() {
-		health = 21;
-		maxHealth = 21;
-		str = 5;
-		skill = 3;
-		speed = 4;
-		magic = 1;
-		luck = 0;
-		def = 2;
-		res = 0;
-		consti = 9;
-		bonusCrit = 0;
-		bonusDodge = 0;
-		bonusHit = 0;
 	}
 	
 	public static enum ClassList {

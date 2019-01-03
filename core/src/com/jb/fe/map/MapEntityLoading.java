@@ -50,7 +50,6 @@ public class MapEntityLoading {
 		// Check if ally exists
 		allyMapObjectLayer.forEach((allyObject) -> {
 			MapProperties allyObjectProp = allyObject.getProperties();
-			
 			String nameObject = allyObjectProp.get("Name", String.class);
 			for (int i = 0; i < currentLevel.allAllies.size; i++) {
 				String nameInArray = nComponentMapper.get(currentLevel.allAllies.get(i)).name;
@@ -60,7 +59,7 @@ public class MapEntityLoading {
 					positionComponent.x = allyObjectProp.get("x", Float.class);
 					positionComponent.y = allyObjectProp.get("y", Float.class);
 				} else {
-					// Create Entity based on the stats // Only Cavalier
+					// Create Entity based on the stats
 					Entity ally = createUnit(allyObjectProp);
 					engine.addEntity(ally);
 					currentLevel.allAllies.add(ally);
@@ -77,8 +76,7 @@ public class MapEntityLoading {
 			unit = UnitFactory.createBandit(assetManager, 
 					"units/bandit/banditRed.png", engine, unitProp);
 		} else if (unitClass.equals("Paladin")) {
-			unit = UnitFactory.createCavalierUnit(assetManager, unitProp.get("Name", String.class), "units/cavalier/cavalierAlly copy.png", 
-					unitProp.get("x", Float.class),unitProp.get("y", Float.class), true, engine);
+			unit = UnitFactory.createCavalierUnit(assetManager, "units/cavalier/cavalierAlly copy.png", engine, unitProp);
 		}
 		return unit;
 	}

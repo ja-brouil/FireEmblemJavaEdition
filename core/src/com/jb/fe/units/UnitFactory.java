@@ -8,15 +8,15 @@ import com.jb.fe.audio.SoundObject;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.AnimationObject;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
+import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
+import com.jb.fe.components.IconComponent;
 import com.jb.fe.components.InventoryComponent;
+import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.UnitStatsComponent;
-import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.ZOrderComponent;
-import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
-import com.jb.fe.components.IconComponent;
 import com.jb.fe.systems.graphics.ZOrder;
 
 // Fix diamond of the box later
@@ -98,26 +98,31 @@ public class UnitFactory {
 		return Eirika;
 	}
 
-	public static Entity createCavalierUnit(AssetManager assetManager, String name, String animationFileLocation, float x, float y, boolean isAlly, Engine engine) {
+	public static Entity createCavalierUnit(AssetManager assetManager, String animationFileLocation, Engine engine, MapProperties unitStats) {
 		Entity cavalierUnit = new Entity();
-
+		
+		// Stats
+		String name = unitStats.get("Name", String.class);
+		float x = unitStats.get("x", Float.class);
+		float y = unitStats.get("y", Float.class);
+		int move = unitStats.get("Move", Integer.class);
+		boolean isAlly = unitStats.get("isAlly", Boolean.class);
+		
 		// Components
 		NameComponent nameComponent = new NameComponent(name);
 		PositionComponent positionComponent = new PositionComponent(x, y);
 		AnimationComponent animationComponent = new AnimationComponent();
-		MovementStatsComponent movementStatsComponent = new MovementStatsComponent();
-		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
+		MovementStatsComponent movementStatsComponent = new MovementStatsComponent(move, isAlly);
+		UnitStatsComponent unitStatsComponent = new UnitStatsComponent(unitStats);
 		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.MIDDLE_LAYER);
 		SoundComponent soundComponent = new SoundComponent();
 		InventoryComponent inventoryComponent = new InventoryComponent();
 		IconComponent iconComponent = new IconComponent();
 		
-		// Icon
+		// Icon | Default Icon for now
 		Entity icon = IconFactory.createUnitIcon(assetManager, "units/cavalier/sethPortrait.png", engine);
 		iconComponent.iconEntity = icon;
 		
-		// Unit stats
-		unitStatsComponent.setCavalier();
 		
 		// Sound
 		soundComponent.allSoundObjects.put("Movement", new SoundObject("sound/unitMovement/Horse Steps.wav", assetManager));
@@ -153,15 +158,15 @@ public class UnitFactory {
 		animationComponent.allAnimationObjects.get("Idle").Xoffset = -3;
 		animationComponent.allAnimationObjects.get("Selected").Xoffset = -12;
 		
-		// Unit Stats
-		movementStatsComponent.movementSteps = 7;
-		movementStatsComponent.isAlly = isAlly;
-		
 		// Add AI component if not ally
 		if (!isAlly) {
 			Artifical_IntelligenceComponent aiComponent = new Artifical_IntelligenceComponent();
-			nameComponent.name = "Red Empire";
-			aiComponent.ai_Type = AI_TYPE.PASSIVE;
+			boolean isAggresive = unitStats.get("aiType", Boolean.class);
+			if (isAggresive) {
+				aiComponent.ai_Type = AI_TYPE.AGGRESSIVE;
+			} else {
+				aiComponent.ai_Type = AI_TYPE.PASSIVE;
+			}
 			cavalierUnit.add(aiComponent);
 		}
 		
@@ -191,7 +196,6 @@ public class UnitFactory {
 		float x = unitStats.get("x", Float.class);
 		float y = unitStats.get("y", Float.class);
 		boolean isAlly = unitStats.get("isAlly", Boolean.class);
-		boolean isAggresive = unitStats.get("aiType", Boolean.class);
 		
 		
 		// Components
@@ -199,7 +203,7 @@ public class UnitFactory {
 		PositionComponent positionComponent = new PositionComponent(x, y);
 		AnimationComponent animationComponent = new AnimationComponent();
 		MovementStatsComponent movementStatsComponent = new MovementStatsComponent();
-		UnitStatsComponent unitStatsComponent = new UnitStatsComponent();
+		UnitStatsComponent unitStatsComponent = new UnitStatsComponent(unitStats);
 		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.MIDDLE_LAYER);
 		SoundComponent soundComponent = new SoundComponent();
 		InventoryComponent inventoryComponent = new InventoryComponent();
@@ -209,8 +213,6 @@ public class UnitFactory {
 		Entity icon = IconFactory.createUnitIcon(assetManager, "units/enemyPortrait/normalSoldierPortrait.png", engine);
 		iconComponent.iconEntity = icon;
 		
-		// Unit Stats
-		unitStatsComponent.setBandit();
 		
 		// Movement Sound
 		soundComponent.allSoundObjects.put("Movement", new SoundObject("sound/unitMovement/Light Foot Steps 1.wav", assetManager));
@@ -252,6 +254,7 @@ public class UnitFactory {
 		// Add AI component if not ally
 		if (!isAlly) {
 			Artifical_IntelligenceComponent aiComponent = new Artifical_IntelligenceComponent();
+			boolean isAggresive = unitStats.get("aiType", Boolean.class);
 			if (isAggresive) {
 				aiComponent.ai_Type = AI_TYPE.AGGRESSIVE;
 			} else {

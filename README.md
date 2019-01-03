@@ -90,6 +90,8 @@ Each Menu State will have two major components -> <br>
         - Arrow keys: Moves the cursor around the map.
         - A button: On an **EMPTY TILE** will open the end turn menu.
         - A button: On an occupied tile that is an **ALLY** will open the movement selection screen.
+        - A button: On an occupied tile that is a **NEUTRAL** or **ENEMY** it will show the movement possible that this unit can take.
+        - Any button: While **NEUTRAL** or **ENEMY** is selected -> reset mapcursor selection and remove possible paths.
     - Update Function
         - Everytime the cursor moves, check if there is an ally unit on it. If there is update the unit info window.
         - Everytime the cursor moves, get the tile info and set it to the tile info.

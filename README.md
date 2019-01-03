@@ -84,7 +84,7 @@ Each Menu State will have two major components -> <br>
 - A wrapper that contains the UI
 - An update function that contains the logic of the UI state
 - A handler function that contains the keystroke/mouse events of the UI state
-<br>
+
 1. Game starts in **MapCursor State**.
     - Input Handler
         - Arrow keys: Moves the cursor around the map.

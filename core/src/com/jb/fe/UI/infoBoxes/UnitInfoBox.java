@@ -8,18 +8,18 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Align;
 import com.jb.fe.UI.MenuBox;
 import com.jb.fe.UI.Text.TextObject;
+import com.jb.fe.UI.mapcursor.MapCursor;
+import com.jb.fe.UI.mapcursor.MapCursor.MAP_CURSOR_QUADRANT;
 import com.jb.fe.components.IconComponent;
-import com.jb.fe.components.MapCursorStateComponent.MAP_CURSOR_QUADRANT;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.TextComponent;
-import com.jb.fe.components.UIComponent;
 import com.jb.fe.components.UnitStatsComponent;
-import com.jb.fe.components.UIComponent.UpdateUI;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.graphics.ZOrder;
+import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
 
 public class UnitInfoBox extends MenuBox {
 
@@ -35,8 +35,6 @@ public class UnitInfoBox extends MenuBox {
 	
 	private StaticImageComponent backgroundStaticImageComponent;
 	private ZOrderComponent backgroundZorder;
-	private UIComponent uiComponent;
-	private UnitInfoBoxUpdate unitInfoBoxUpdate;
 	
 	private TextComponent textComponent;
 	private Color tealColor;
@@ -50,7 +48,7 @@ public class UnitInfoBox extends MenuBox {
 	private float emptyHPBarX, emptyHPBarY, fullHPBarX, fullHPBarY, hpX, hpY, nameX, nameY, portraitX, portraitY;
 	private PositionComponent lastPortrait;
 	
-	public UnitInfoBox(Entity mapCursor, AssetManager assetManager, Engine engine) {
+	public UnitInfoBox(MapCursor mapCursor, AssetManager assetManager, Engine engine) {
 		super(mapCursor, assetManager, engine);
 		// Initial last
 		lastPortrait = new PositionComponent();
@@ -79,11 +77,6 @@ public class UnitInfoBox extends MenuBox {
 		backgroundStaticImageComponent.height = 40;
 		backgroundZorder = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
 		
-		uiComponent = new UIComponent();
-		uiComponent.updateIsEnabled = true;
-		unitInfoBoxUpdate = new UnitInfoBoxUpdate();
-		uiComponent.updateUI = unitInfoBoxUpdate;
-		
 		textComponent = new TextComponent();
 		textComponent.isDrawing = true;
 		textComponent.textArray.addFirst(new TextObject(0, 0, "name", 0.19f, Align.center));
@@ -95,7 +88,6 @@ public class UnitInfoBox extends MenuBox {
 		boxEntity.add(positionComponent);
 		boxEntity.add(backgroundStaticImageComponent);
 		boxEntity.add(backgroundZorder);
-		boxEntity.add(uiComponent);
 		engine.addEntity(boxEntity);
 		
 		// Empty Bar
@@ -133,85 +125,83 @@ public class UnitInfoBox extends MenuBox {
 	
 	@Override
 	public void turnOff() {
-		unitInfoBoxUpdate.noDrawingPosition();
+		noDrawingPosition();
 	}
 	
-	private class UnitInfoBoxUpdate implements UpdateUI {
-		@Override
-		public void updateUI(float delta) {
-			// Do not draw anything if map cursor has no units
-			if (mComponentMapper.get(mapCursor).unitSelected == null) {
-				noDrawingPosition();
-				return;
-			}
-			
-			// Set Last portrait
-			lastPortrait = pComponentMapper.get(mComponentMapper.get(mapCursor).unitSelected.getComponent(IconComponent.class).iconEntity);
+	@Override
+	public void update(MapCursor mapCursor) {
+		// Do not draw anything if map cursor has no units
+		if (UserInterfaceManager.unitSelected == null) {
+			noDrawingPosition();
+			return;
+		}
+		
+		// Set Last portrait
+		lastPortrait = pComponentMapper.get(UserInterfaceManager.unitSelected.getComponent(IconComponent.class).iconEntity);
 
-			// Set Position
-			if (mComponentMapper.get(mapCursor).mapCursorQuandrant.equals(MAP_CURSOR_QUADRANT.TOP_LEFT)) {
-				sPosition = SCREEN_POSITION.BOTTOM_LEFT;
-				positionComponent.x = 4;
-				positionComponent.y = 4;
-			} else if (mComponentMapper.get(mapCursor).mapCursorQuandrant.equals(MAP_CURSOR_QUADRANT.TOP_RIGHT)) {
-				sPosition = SCREEN_POSITION.TOP_LEFT;
-				positionComponent.x = 3;
-				positionComponent.y = FireEmblemGame.HEIGHT - 40;
-			} else if (mComponentMapper.get(mapCursor).mapCursorQuandrant.equals(MAP_CURSOR_QUADRANT.BOTTOM_LEFT)) {
-				sPosition = SCREEN_POSITION.TOP_LEFT;
-				positionComponent.x = 3;
-				positionComponent.y = FireEmblemGame.HEIGHT - 40;
-			} else if (mComponentMapper.get(mapCursor).mapCursorQuandrant.equals(MAP_CURSOR_QUADRANT.BOTTOM_RIGHT)) {
-				sPosition = SCREEN_POSITION.TOP_LEFT;
-				positionComponent.x = 3;
-				positionComponent.y = FireEmblemGame.HEIGHT - 40;
-			}
-			
-			// Set HP Bar Positions
-			emptyHPPositionComponent.x = positionComponent.x + emptyHPBarX;
-			emptyHPPositionComponent.y = positionComponent.y + emptyHPBarY;
-			healthyPositionComponent.x = positionComponent.x + fullHPBarX;
-			healthyPositionComponent.y = positionComponent.y + fullHPBarY;
-			
-			// Set Width of full HP Bar
-			healthyStaticImage.width = calculateRemainingHPWidth(mComponentMapper.get(mapCursor).unitSelected);
-			
-			// Get Portrait of the unit to draw
-			PositionComponent unitPositionComponent = pComponentMapper.get(mComponentMapper.get(mapCursor).unitSelected.getComponent(IconComponent.class).iconEntity);
-			unitPositionComponent.x = positionComponent.x + portraitX;
-			unitPositionComponent.y = positionComponent.y + portraitY;
-			
-			// Set Strings for Text
-			textComponent.textArray.get(0).text = nComponentMapper.get(mComponentMapper.get(mapCursor).unitSelected).name; 
-			textComponent.textArray.get(0).x = positionComponent.x + nameX;
-			textComponent.textArray.get(0).y = positionComponent.y + nameY;
-			
-			textComponent.textArray.get(1).text = calculateHP(mComponentMapper.get(mapCursor).unitSelected);
-			textComponent.textArray.get(1).x = positionComponent.x + hpX;
-			textComponent.textArray.get(1).y = positionComponent.y + hpY;
+		// Set Position
+		if (mapCursor.getMapCursorQuandrant().equals(MAP_CURSOR_QUADRANT.TOP_LEFT)) {
+			sPosition = SCREEN_POSITION.BOTTOM_LEFT;
+			positionComponent.x = 4;
+			positionComponent.y = 4;
+		} else if (mapCursor.getMapCursorQuandrant().equals(MAP_CURSOR_QUADRANT.TOP_RIGHT)) {
+			sPosition = SCREEN_POSITION.TOP_LEFT;
+			positionComponent.x = 3;
+			positionComponent.y = FireEmblemGame.HEIGHT - 40;
+		} else if (mapCursor.getMapCursorQuandrant().equals(MAP_CURSOR_QUADRANT.BOTTOM_LEFT)) {
+			sPosition = SCREEN_POSITION.TOP_LEFT;
+			positionComponent.x = 3;
+			positionComponent.y = FireEmblemGame.HEIGHT - 40;
+		} else if (mapCursor.getMapCursorQuandrant().equals(MAP_CURSOR_QUADRANT.BOTTOM_RIGHT)) {
+			sPosition = SCREEN_POSITION.TOP_LEFT;
+			positionComponent.x = 3;
+			positionComponent.y = FireEmblemGame.HEIGHT - 40;
 		}
 		
-		private void noDrawingPosition() {
-			positionComponent.x = -500;
-			positionComponent.y = -500;
-			lastPortrait.x = positionComponent.x;
-			lastPortrait.y = positionComponent.y;
-			emptyHPPositionComponent.x = positionComponent.x + emptyHPBarX;
-			emptyHPPositionComponent.y = positionComponent.y + emptyHPBarY;
-			healthyPositionComponent.x = positionComponent.x + fullHPBarX;
-			healthyPositionComponent.y = positionComponent.y + fullHPBarY;
-			textComponent.textArray.get(0).x = positionComponent.x + nameX;
-			textComponent.textArray.get(0).y = positionComponent.y + nameY;
-			textComponent.textArray.get(1).x = positionComponent.x + hpX;
-			textComponent.textArray.get(1).y = positionComponent.y + hpY;
-		}
+		// Set HP Bar Positions
+		emptyHPPositionComponent.x = positionComponent.x + emptyHPBarX;
+		emptyHPPositionComponent.y = positionComponent.y + emptyHPBarY;
+		healthyPositionComponent.x = positionComponent.x + fullHPBarX;
+		healthyPositionComponent.y = positionComponent.y + fullHPBarY;
 		
-		private String calculateHP(Entity unit) {			
-			return "HP: " + uComponentMapper.get(unit).health + " / "  + uComponentMapper.get(unit).maxHealth;
-		}
+		// Set Width of full HP Bar
+		healthyStaticImage.width = calculateRemainingHPWidth(UserInterfaceManager.unitSelected);
 		
-		private float calculateRemainingHPWidth(Entity unit) {
-			return ((float) uComponentMapper.get(unit).health / (float) uComponentMapper.get(unit).maxHealth) * 40f;
-		}
+		// Get Portrait of the unit to draw
+		PositionComponent unitPositionComponent = pComponentMapper.get(UserInterfaceManager.unitSelected.getComponent(IconComponent.class).iconEntity);
+		unitPositionComponent.x = positionComponent.x + portraitX;
+		unitPositionComponent.y = positionComponent.y + portraitY;
+		
+		// Set Strings for Text
+		textComponent.textArray.get(0).text = nComponentMapper.get(UserInterfaceManager.unitSelected).name; 
+		textComponent.textArray.get(0).x = positionComponent.x + nameX;
+		textComponent.textArray.get(0).y = positionComponent.y + nameY;
+		
+		textComponent.textArray.get(1).text = calculateHP(UserInterfaceManager.unitSelected);
+		textComponent.textArray.get(1).x = positionComponent.x + hpX;
+		textComponent.textArray.get(1).y = positionComponent.y + hpY;
+	}
+	
+	private void noDrawingPosition() {
+		positionComponent.x = -500;
+		positionComponent.y = -500;
+		lastPortrait.x = positionComponent.x;
+		lastPortrait.y = positionComponent.y;
+		emptyHPPositionComponent.x = positionComponent.x + emptyHPBarX;
+		emptyHPPositionComponent.y = positionComponent.y + emptyHPBarY;
+		healthyPositionComponent.x = positionComponent.x + fullHPBarX;
+		healthyPositionComponent.y = positionComponent.y + fullHPBarY;
+		textComponent.textArray.get(0).x = positionComponent.x + nameX;
+		textComponent.textArray.get(0).y = positionComponent.y + nameY;
+		textComponent.textArray.get(1).x = positionComponent.x + hpX;
+		textComponent.textArray.get(1).y = positionComponent.y + hpY;
+	}
+	
+	private String calculateHP(Entity unit) {			
+		return "HP: " + uComponentMapper.get(unit).health + " / "  + uComponentMapper.get(unit).maxHealth;
+	}
+	
+	private float calculateRemainingHPWidth(Entity unit) {
+		return ((float) uComponentMapper.get(unit).health / (float) uComponentMapper.get(unit).maxHealth) * 40f;
 	}
 }

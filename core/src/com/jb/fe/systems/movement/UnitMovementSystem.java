@@ -1,5 +1,7 @@
 package com.jb.fe.systems.movement;
 
+import javax.swing.UIManager;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -18,7 +20,6 @@ import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.audio.SoundSystem;
-import com.jb.fe.systems.inputAndUI.UIManager;
 
 /**
  * Controls the unit movements
@@ -30,9 +31,6 @@ public class UnitMovementSystem extends EntitySystem {
 
 	// All Entities
 	private ImmutableArray<Entity> allMovableEntities;
-	
-	// Ui Manager
-	private UIManager uiManager;
 
 	// Mappers
 	private ComponentMapper<AnimationComponent> aComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
@@ -82,8 +80,8 @@ public class UnitMovementSystem extends EntitySystem {
 			MovementStatsComponent unitStatsComponent = sComponentMapper.get(unit);
 			
 			if (unitStatsComponent.isMoving) {
-				// Pause UI
-				uiManager.setPauseStatus(true);
+				
+				// Pause UI HERE
 				
 				// Destination Cell and Starting Cell
 				MapCell startingCell = unitStatsComponent.currentCell;
@@ -149,17 +147,15 @@ public class UnitMovementSystem extends EntitySystem {
 						// Set Unit to Done status -> This needs to be changed to check later if you did an action first.
 						unitStatsComponent.unit_State = Unit_State.CAN_DO_ACTION;
 						
-						// Resume UI
-						uiManager.setPauseStatus(false);
-						uiManager.startActionMenu();
-						UIManager.currentGameUnit = unit;
+						// Resume UI Here
 						
 					} else {
 						Artifical_IntelligenceComponent artifical_IntelligenceComponent = aiComponentMapper.get(unit);
 						artifical_IntelligenceComponent.isProcessing = false;
 					
 						aComponentMapper.get(unit).currentAnimation = aComponentMapper.get(unit).allAnimationObjects.get("Idle");
-						uiManager.setPauseStatus(false);
+						
+						// PAUSE UI HERE
 					}
 					
 					// Turn off Map Cells
@@ -179,8 +175,7 @@ public class UnitMovementSystem extends EntitySystem {
 		}
 	}
 
-	public void startSystem(UIManager uiManager) {
-		this.uiManager = uiManager;
+	public void startSystem() {
 		unitMapCellUpdater = getEngine().getSystem(UnitMapCellUpdater.class);
 		soundSystem = getEngine().getSystem(SoundSystem.class);
 	}

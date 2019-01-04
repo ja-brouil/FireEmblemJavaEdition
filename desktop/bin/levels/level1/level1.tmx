@@ -818,7 +818,7 @@
   </object>
  </objectgroup>
  <objectgroup name="Enemies">
-  <object id="507" template="../../units/TiledTemplates/BasicUnit.tx" x="32" y="32">
+  <object id="507" x="32" y="32" width="16" height="16">
    <properties>
     <property name="BonusCrit" type="int" value="0"/>
     <property name="BonusDodge" type="int" value="0"/>

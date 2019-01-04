@@ -12,15 +12,12 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
-import com.jb.fe.components.MapCursorStateComponent;
-import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.MovementStatsComponent;
-import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.components.MovementStatsComponent.Unit_State;
+import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
-import com.jb.fe.systems.inputAndUI.UIManager;
 
 /*
  * Controls experience and status of the units when they have moved and stuff.
@@ -44,8 +41,6 @@ public class TurnManager extends EntitySystem {
 	// Transition
 	private EndTurnTransition endTurnTransition;
 	
-	// UI Elements -> Will need a manager for this later
-	private UIManager uiManager;
 	
 	// Audio
 	private MusicSystem musicSystem;
@@ -54,7 +49,6 @@ public class TurnManager extends EntitySystem {
 	// Component Mapper
 	private ComponentMapper<MovementStatsComponent> uComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	private ComponentMapper<Artifical_IntelligenceComponent> aiComponentMapper = ComponentMapper.getFor(Artifical_IntelligenceComponent.class);
-	private ComponentMapper<MapCursorStateComponent> cursorStateComponentMapper = ComponentMapper.getFor(MapCursorStateComponent.class);
 	private ComponentMapper<AnimationComponent> aComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
 	private ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
 
@@ -105,10 +99,10 @@ public class TurnManager extends EntitySystem {
 			}
 			
 			// All Units are done, move to the AI turn
-			cursorStateComponentMapper.get(uiManager.getMapCursor()).mapCursorState = MapCursorState.DISABLED;
+			// SET UI MAP CURSOR HERE
 			turn_Status = Turn_Status.TRANSITION_INTO_ENEMY;
-			aComponentMapper.get(uiManager.getMapCursor()).currentAnimation.isDrawing = false;
-			sComponentMapper.get(uiManager.getMapCursor()).isEnabled = false;
+			//aComponentMapper.get(uiManager.getMapCursor()).currentAnimation.isDrawing = false;
+			//sComponentMapper.get(uiManager.getMapCursor()).isEnabled = false;
 			
 			// Get all enemies
 			sortEnemyUnits();
@@ -125,8 +119,10 @@ public class TurnManager extends EntitySystem {
 			// Are we empty? Yes -> done, go to player phase | No, keep going
 			if (enemyUnits.size == 0 && unitBeingProcessed == null) {
 				turn_Status = Turn_Status.TRANSITION_INTO_ALLY;
-				aComponentMapper.get(uiManager.getMapCursor()).currentAnimation.isDrawing = true;
-				sComponentMapper.get(uiManager.getMapCursor()).isEnabled = true;
+				
+				// SET MAPCURSOR ANIMATION STATE HERE
+				//aComponentMapper.get(uiManager.getMapCursor()).currentAnimation.isDrawing = true;
+				//sComponentMapper.get(uiManager.getMapCursor()).isEnabled = true;
 				musicSystem.stopCurrentSong();
 				return;
 			}
@@ -172,13 +168,9 @@ public class TurnManager extends EntitySystem {
 		this.turn_Status = turn_Status;
 	}
 	
-	public MapCursorStateComponent getMapCursorStateComponent() {
-		return cursorStateComponentMapper.get(uiManager.getMapCursor());
-	}
 	
-	public void startSystem(AssetManager assetManager, UIManager uiManager) {
+	public void startSystem(AssetManager assetManager) {
 		aiSystem = getEngine().getSystem(AISystem.class);
-		this.uiManager = uiManager;
 		musicSystem = getEngine().getSystem(MusicSystem.class);
 		soundSystem = getEngine().getSystem(SoundSystem.class);
 		endTurnTransition = new EndTurnTransition(assetManager, getEngine(), soundSystem, musicSystem, this);

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.jb.fe.UI.UserInterfaceState;
+import com.jb.fe.systems.SystemPriorityDictionnary;
 
 public class UserInterfaceManager extends EntitySystem {
 	
@@ -12,24 +13,32 @@ public class UserInterfaceManager extends EntitySystem {
 	public static Entity unitSelected;
 	
 	public HashMap<String, UserInterfaceState> allUserInterfaceStates;
-	
-	public UserInterfaceState previousState;
 	public UserInterfaceState currentState;
-	public UserInterfaceState nextState;
 	
 	// User Interface Menu
 	public UserInterfaceManager() {
 		allUserInterfaceStates = new HashMap<>();
+		priority = SystemPriorityDictionnary.HandleInputAndUI;	
 	}
 	
 	@Override
 	public void update(float delta) {
+		currentState.handleInput(delta);
 		currentState.update(delta);
 	}
 	
-	public void setStates(UserInterfaceState previousState, UserInterfaceState currentState, UserInterfaceState nextState) {
-		this.previousState = previousState;
+	/**
+	 * Use this to change states
+	 * @param previousState
+	 * @param currentState
+	 */
+	public void setStates(UserInterfaceState previousState, UserInterfaceState currentState) {
 		this.currentState = currentState;
-		this.nextState = nextState;
+		previousState.resetState();
+		currentState.startState();
+	}
+	
+	public void startSystem() {
+		currentState = allUserInterfaceStates.get("MapCursor");
 	}
 }

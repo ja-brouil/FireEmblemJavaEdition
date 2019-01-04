@@ -2,9 +2,11 @@ package com.jb.fe.UI.soundTemp;
 
 import com.jb.fe.audio.SoundObject;
 
-// Remove this later when UI is finished
+/**
+ * References to the UI Sounds
+ * @author james
+ */
 public class UISounds {
-
 	public static SoundObject movement;
 	public static SoundObject back;
 	public static SoundObject accept;

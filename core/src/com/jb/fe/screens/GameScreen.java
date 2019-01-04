@@ -1,15 +1,15 @@
 package com.jb.fe.screens;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.jb.fe.UI.factories.UIFactory;
 import com.jb.fe.UI.infoBoxes.TerrainInfoBox;
 import com.jb.fe.UI.infoBoxes.UnitInfoBox;
 import com.jb.fe.UI.infoBoxes.VictoryInfoBox;
+import com.jb.fe.UI.mapcursor.MapCursor;
+import com.jb.fe.UI.mapcursor.MovementSelection;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCellInfoSystem;
 import com.jb.fe.map.MapEntityLoading;
@@ -20,20 +20,20 @@ import com.jb.fe.systems.gamePlay.AISystem;
 import com.jb.fe.systems.gamePlay.CombatSystem;
 import com.jb.fe.systems.gamePlay.TurnManager;
 import com.jb.fe.systems.inputAndUI.InfoBoxUpdate;
-import com.jb.fe.systems.inputAndUI.UIManager;
+import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
+import com.jb.fe.systems.movement.MovementUtilityCalculator;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 import com.jb.fe.systems.movement.UnitMovementSystem;
 
 public class GameScreen extends ScreenAdapter{
-	
-	// Engine
+
 	private Engine engine;
+	private AssetManager assetManager;
+	private OrthographicCamera gameCamera;
+	private SoundSystem soundSystem;
 	
 	// Level
 	private Level currentLevel;
-	
-	// User Interface
-	private UIFactory UIFactory;
 	
 	// Map Loading
 	private MapRenderSystem mapRenderSystem;
@@ -45,12 +45,16 @@ public class GameScreen extends ScreenAdapter{
 	private UnitMovementSystem unitMovementSystem;
 	private TurnManager turnManagerSystem;
 	private AISystem aiSystem;
-	private UIManager uiManager;
 	private InfoBoxUpdate infoBoxUpdate;
+	private UserInterfaceManager userInterfaceManager;
 	private CombatSystem combatSystem;
+	private MovementUtilityCalculator movementUtilityCalculator;
 	
 	public GameScreen(MusicSystem musicSystem, SoundSystem soundSystem, Engine engine, AssetManager assetManager, SpriteBatch spriteBatch, OrthographicCamera gameCamera) {
 		this.engine = engine;
+		this.soundSystem = soundSystem;
+		this.assetManager = assetManager;
+		this.gameCamera = gameCamera;
 		
 		// Start Systems
 		mapRenderSystem = new MapRenderSystem(gameCamera, spriteBatch);
@@ -60,8 +64,8 @@ public class GameScreen extends ScreenAdapter{
 		unitMovementSystem = new UnitMovementSystem();
 		turnManagerSystem = new TurnManager();
 		aiSystem = new AISystem();
-		uiManager = new UIManager();
 		infoBoxUpdate = new InfoBoxUpdate();
+		userInterfaceManager = new UserInterfaceManager();
 		combatSystem = new CombatSystem();
 		
 		// Add Systems to the Engine
@@ -72,32 +76,12 @@ public class GameScreen extends ScreenAdapter{
 		engine.addSystem(musicSystem);
 		engine.addSystem(turnManagerSystem);
 		engine.addSystem(aiSystem);
-		engine.addSystem(uiManager);
-		engine.addSystem(infoBoxUpdate);
+		engine.addSystem(userInterfaceManager);
 		engine.addSystem(combatSystem);
 	
 		// Start First Level
 		currentLevel = new Level("levels/level1/level1.tmx", assetManager, engine);
 		currentLevel.startLevel();
-		
-		// User Interface
-		UIFactory = new UIFactory(assetManager, soundSystem, gameCamera, uiManager, engine);
-		UIFactory.createHand();
-		Entity mapCursor = UIFactory.createMapCursor(currentLevel);
-		UIFactory.createInventoryMenu();
-		Entity actionMenu = UIFactory.createActionMenu(unitMovementSystem, unitMapCellUpdater);
-		
-		uiManager.startSystem();
-		engine.addEntity(mapCursor);
-		engine.addEntity(actionMenu);
-		
-		// Info Boxes
-		TerrainInfoBox terrainInfoBox = new TerrainInfoBox(mapCursor, assetManager, engine);
-		VictoryInfoBox victoryInfoBox = new VictoryInfoBox(mapCursor, assetManager, engine, currentLevel);
-		UnitInfoBox unitInfoBox = new UnitInfoBox(mapCursor, assetManager, engine);
-		infoBoxUpdate.getAllBattleFieldMenuBoxes().add(unitInfoBox);
-		infoBoxUpdate.getAllBattleFieldMenuBoxes().add(terrainInfoBox);
-		infoBoxUpdate.getAllBattleFieldMenuBoxes().add(victoryInfoBox);
 		
 		// Set Audio
 		musicSystem.addNewSong("Ally Battle Theme", "music/FE Level1 HD Good.mp3", assetManager);
@@ -105,7 +89,7 @@ public class GameScreen extends ScreenAdapter{
 		musicSystem.addNewSong("Enemy Phase", "music/enemy theme.mp3", assetManager);
 		
 		// Set Level
-		setNewMap(currentLevel, mapCursor);
+		setNewMap(currentLevel);
 	}
 	
 	@Override
@@ -117,15 +101,38 @@ public class GameScreen extends ScreenAdapter{
 	 * Change to the next level
 	 * @param level
 	 */
-	public void setNewMap(Level level, Entity mapCursor) {
+	public void setNewMap(Level level) {
 		mapRenderSystem.setCurrentLevel(level);
 		mapCellInfoSystem.processTiles(level);
 		mapEntityLoading.loadMap(level);
 		unitMapCellUpdater.startSystem(level);
-		unitMovementSystem.startSystem(uiManager);
-		turnManagerSystem.startSystem(level.assetManager, uiManager);
+		unitMovementSystem.startSystem();
+		turnManagerSystem.startSystem(level.assetManager);
 		unitMapCellUpdater.updateCellInfo();
-		infoBoxUpdate.setMapCursor(mapCursor);
 		combatSystem.loadLevel(currentLevel);
+		movementUtilityCalculator = new MovementUtilityCalculator(level, unitMapCellUpdater);
+		aiSystem.setMovementCalculator(movementUtilityCalculator);
+		
+		createUserInterface();
+	}
+	
+	private void createUserInterface() {
+		// User Interface Creation
+		MapCursor mapCursor = new MapCursor(assetManager, currentLevel, gameCamera, engine, soundSystem, userInterfaceManager, infoBoxUpdate);
+		MovementSelection movementSelection = new MovementSelection(assetManager, soundSystem, userInterfaceManager, mapCursor.getMapCursorEntity(), currentLevel, unitMapCellUpdater, movementUtilityCalculator);
+		
+		// Add everything
+		userInterfaceManager.allUserInterfaceStates.put("MapCursor", mapCursor);
+		userInterfaceManager.allUserInterfaceStates.put("MovementSelection", movementSelection);
+		
+		// Info Boxes
+		TerrainInfoBox terrainInfoBox = new TerrainInfoBox(mapCursor, assetManager, engine);
+		VictoryInfoBox victoryInfoBox = new VictoryInfoBox(mapCursor, assetManager, engine, currentLevel);
+		UnitInfoBox unitInfoBox = new UnitInfoBox(mapCursor, assetManager, engine);
+		infoBoxUpdate.getAllBattleFieldMenuBoxes().add(unitInfoBox);
+		infoBoxUpdate.getAllBattleFieldMenuBoxes().add(terrainInfoBox);
+		infoBoxUpdate.getAllBattleFieldMenuBoxes().add(victoryInfoBox);
+		
+		userInterfaceManager.startSystem();
 	}
 }

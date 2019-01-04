@@ -76,4 +76,21 @@ public class UnitStatsComponent implements Component{
 		THIEF,
 		ARCHER
 	}
+	
+	@Override
+	public String toString() {
+		return "Current Health: " + health +
+				"\nMax Health: " + maxHealth
+				+ "\nStr: " + str +
+				"\nSkill: " + skill+
+				"\nSpeed: " + speed+
+				"\nMagic: " + magic+
+				"\nLuck: " + luck +
+				"\nDef: " + def +
+				"\nRes: " + res +
+				"\nConsti: " + consti +
+				"\nBonus Crit: " + bonusCrit +
+				"\nBonus Dodge: " + bonusDodge +
+				"\nBonus Hit: " + bonusHit;
+	}
 }

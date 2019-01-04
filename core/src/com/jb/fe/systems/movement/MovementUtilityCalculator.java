@@ -237,6 +237,16 @@ public class MovementUtilityCalculator {
 		
 		return allMapCellsStatic[x][y];
 	}
+	
+	public static MapCell getMapCellStatic(int x, int y) {
+		return allMapCellsStatic[x][y];
+	}
+	
+	public static MapCell getMapCellStatic(PositionComponent positionComponent) {
+		int x = (int) positionComponent.x / MapCell.CELL_SIZE;
+		int y = (int) positionComponent.y / MapCell.CELL_SIZE;
+		return allMapCellsStatic[x][y];
+	}
 
 	// Enable Squares
 	public void enableSquares() {

@@ -8,7 +8,6 @@ import com.jb.fe.UI.factories.TurnChangeTransitionFactory;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.StaticImageComponent;
-import com.jb.fe.components.MapCursorStateComponent.MapCursorState;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
@@ -100,7 +99,7 @@ public class EndTurnTransition {
 					turnManager.setTurnStatus(Turn_Status.PLAYER_TURN);
 					musicSystem.setCurrentSong("Ally Battle Theme SD", true);
 					musicSystem.playCurrentSong();
-					turnManager.getMapCursorStateComponent().mapCursorState = MapCursorState.MOVEMENT_ONLY;
+					// Renable UI here
 				} else {
 					turnManager.setTurnStatus(Turn_Status.ENEMY_TURN);
 					musicSystem.setCurrentSong("Enemy Phase", true);

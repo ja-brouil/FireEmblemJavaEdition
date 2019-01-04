@@ -10,14 +10,13 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
-import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.MovementStatsComponent.Unit_State;
-import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
 
 /*
  * Controls experience and status of the units when they have moved and stuff.
@@ -40,7 +39,7 @@ public class TurnManager extends EntitySystem {
 	
 	// Transition
 	private EndTurnTransition endTurnTransition;
-	
+	private UserInterfaceManager userInterfaceManager;
 	
 	// Audio
 	private MusicSystem musicSystem;
@@ -49,8 +48,6 @@ public class TurnManager extends EntitySystem {
 	// Component Mapper
 	private ComponentMapper<MovementStatsComponent> uComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	private ComponentMapper<Artifical_IntelligenceComponent> aiComponentMapper = ComponentMapper.getFor(Artifical_IntelligenceComponent.class);
-	private ComponentMapper<AnimationComponent> aComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
-	private ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
 
 	public TurnManager() {
 		priority = SystemPriorityDictionnary.TurnManager;
@@ -99,10 +96,8 @@ public class TurnManager extends EntitySystem {
 			}
 			
 			// All Units are done, move to the AI turn
-			// SET UI MAP CURSOR HERE
+			// UI for AI here, move the cursor and camera to where the AI is thinking of moving next
 			turn_Status = Turn_Status.TRANSITION_INTO_ENEMY;
-			//aComponentMapper.get(uiManager.getMapCursor()).currentAnimation.isDrawing = false;
-			//sComponentMapper.get(uiManager.getMapCursor()).isEnabled = false;
 			
 			// Get all enemies
 			sortEnemyUnits();
@@ -114,15 +109,15 @@ public class TurnManager extends EntitySystem {
 			
 			// Stop Music
 			musicSystem.stopCurrentSong();
+			
 		} else if (turn_Status.equals(Turn_Status.ENEMY_TURN)){
 			// Enemy Phase
 			// Are we empty? Yes -> done, go to player phase | No, keep going
 			if (enemyUnits.size == 0 && unitBeingProcessed == null) {
 				turn_Status = Turn_Status.TRANSITION_INTO_ALLY;
 				
-				// SET MAPCURSOR ANIMATION STATE HERE
-				//aComponentMapper.get(uiManager.getMapCursor()).currentAnimation.isDrawing = true;
-				//sComponentMapper.get(uiManager.getMapCursor()).isEnabled = true;
+				// Set AI
+				userInterfaceManager.pauseUI();
 				musicSystem.stopCurrentSong();
 				return;
 			}
@@ -174,5 +169,11 @@ public class TurnManager extends EntitySystem {
 		musicSystem = getEngine().getSystem(MusicSystem.class);
 		soundSystem = getEngine().getSystem(SoundSystem.class);
 		endTurnTransition = new EndTurnTransition(assetManager, getEngine(), soundSystem, musicSystem, this);
+		userInterfaceManager = getEngine().getSystem(UserInterfaceManager.class);
+		endTurnTransition.setUserInterfaceManager(userInterfaceManager);
+	}
+	
+	public UserInterfaceManager getUserInterfaceManager() {
+		return userInterfaceManager;
 	}
 }

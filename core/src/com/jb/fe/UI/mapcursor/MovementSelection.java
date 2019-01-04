@@ -16,6 +16,7 @@ import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
 import com.jb.fe.systems.movement.MovementUtilityCalculator;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
+import com.jb.fe.systems.movement.UnitMovementSystem;
 
 public class MovementSelection extends UserInterfaceState{
 
@@ -84,6 +85,10 @@ public class MovementSelection extends UserInterfaceState{
 			movementStatsComponent.isMoving = true;
 			movementStatsComponent.previousCell = movementStatsComponent.currentCell;
 			movementUtilityCalculator.createPathFindingQueue(cursorMapCell, UserInterfaceManager.unitSelected);
+			
+			// Start movement
+			UnitMovementSystem.setEntity(UserInterfaceManager.unitSelected);
+			userInterfaceManager.pauseUI();
 			
 			// Accept Sound
 			soundSystem.playSound(UISounds.accept);

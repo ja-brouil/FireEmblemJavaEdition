@@ -41,4 +41,18 @@ public class UserInterfaceManager extends EntitySystem {
 	public void startSystem() {
 		currentState = allUserInterfaceStates.get("MapCursor");
 	}
+	
+	/**
+	 * Pauses or resumes the UI
+	 */
+	public void pauseUI() {
+		if (checkProcessing()) {
+			setProcessing(false);
+			currentState.resetState();
+		} else {
+			setProcessing(true);
+			currentState.startState();
+		}
+		
+	}
 }

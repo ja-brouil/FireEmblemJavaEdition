@@ -12,6 +12,7 @@ import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.gamePlay.TurnManager.Turn_Status;
+import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
 
 public class EndTurnTransition {
 
@@ -26,6 +27,7 @@ public class EndTurnTransition {
 
 	// Turn Manager
 	private TurnManager turnManager;
+	private UserInterfaceManager userInterfaceManager;
 
 	// Mappers
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
@@ -42,6 +44,7 @@ public class EndTurnTransition {
 		this.musicSystem = musicSystem;
 		this.turnManager = turnManager;
 		this.soundSystem = soundSystem;
+		
 		// Create transition entities
 		TurnChangeTransitionFactory turnChangeTransitionFactory = new TurnChangeTransitionFactory(assetManager);
 		enemyEndTurn = turnChangeTransitionFactory.createTurnPhase("transition/enemy phase.png");
@@ -99,7 +102,6 @@ public class EndTurnTransition {
 					turnManager.setTurnStatus(Turn_Status.PLAYER_TURN);
 					musicSystem.setCurrentSong("Ally Battle Theme SD", true);
 					musicSystem.playCurrentSong();
-					// Renable UI here
 				} else {
 					turnManager.setTurnStatus(Turn_Status.ENEMY_TURN);
 					musicSystem.setCurrentSong("Enemy Phase", true);
@@ -115,5 +117,9 @@ public class EndTurnTransition {
 		if (!soundAlreadyPlayed) {
 			soundSystem.playSound(soundComponentMapper.get(transitionGraphic).allSoundObjects.get("Transition"));
 		}
+	}
+	
+	public void setUserInterfaceManager(UserInterfaceManager userInterfaceManager) {
+		this.userInterfaceManager = userInterfaceManager;
 	}
 }

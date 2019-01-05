@@ -3,6 +3,8 @@ package com.jb.fe.UI;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.gdx.assets.AssetManager;
 import com.jb.fe.components.AnimationComponent;
+import com.jb.fe.components.InventoryComponent;
+import com.jb.fe.components.ItemComponent;
 import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
@@ -26,6 +28,8 @@ public abstract class UserInterfaceState {
 	protected ComponentMapper<NameComponent> nComponentMapper = ComponentMapper.getFor(NameComponent.class);
 	protected ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
 	protected ComponentMapper<TextComponent> tComponentMapper = ComponentMapper.getFor(TextComponent.class);
+	protected ComponentMapper<InventoryComponent> iComponentMapper = ComponentMapper.getFor(InventoryComponent.class);
+	protected ComponentMapper<ItemComponent> itemComponentMapper = ComponentMapper.getFor(ItemComponent.class);
 	
 	public UserInterfaceState(AssetManager assetManager, SoundSystem soundSystem, UserInterfaceManager userInterfaceManager) {
 		this.assetManager = assetManager;
@@ -58,5 +62,5 @@ public abstract class UserInterfaceState {
 	 * Called every frame. Use only if needed to run logic every frame
 	 * @param delta
 	 */
-	public abstract void update(float delta);
+	public void update(float delta) {};
 }

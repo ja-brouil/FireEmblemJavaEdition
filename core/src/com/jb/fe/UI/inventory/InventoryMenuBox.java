@@ -1,24 +1,21 @@
 package com.jb.fe.UI.inventory;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.Align;
 import com.jb.fe.UI.MenuBox;
 import com.jb.fe.UI.Text.TextObject;
+import com.jb.fe.UI.mapcursor.MapCursor;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.TextComponent;
-import com.jb.fe.components.UIComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.graphics.ZOrder;
-import com.jb.fe.systems.inputAndUI.UIManager;
 
-public class InventoryMenuBox extends MenuBox{
+public class InventoryMenuBox extends MenuBox {
 
-	public UIComponent uiComponent;
 	public InventoryBoxUpdate inventoryBoxUpdate;
 	public InventoryInputHandle inventoryInputHandle;
 	
@@ -35,13 +32,8 @@ public class InventoryMenuBox extends MenuBox{
 	private ZOrderComponent zOrderComponentStats;
 	private TextComponent itemStatsTextComponent;
 	
-	// Hand
-	private Entity hand;
-	private ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
-	
-	public InventoryMenuBox(AssetManager assetManager, Engine engine, Entity hand, Entity actionMenu, Entity unitDamageSelectionPreview, UIManager uiManager) {
+	public InventoryMenuBox(AssetManager assetManager, Engine engine) {
 		super(assetManager, engine);
-		this.hand = hand;
 		
 		// Inventory Info
 		itemInvInfoBox = new Entity();
@@ -90,34 +82,11 @@ public class InventoryMenuBox extends MenuBox{
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 42, itemStatsInfoPosition.y + 34, "Crit 5", 0.2f, Align.left));
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 42, itemStatsInfoPosition.y + 14, "Uses 50", 0.2f, Align.left));
 		
-		uiComponent = new UIComponent(uiManager);
-		inventoryBoxUpdate = new InventoryBoxUpdate(this, hand);
-		uiComponent.updateUI = inventoryBoxUpdate;
-		inventoryInputHandle = new InventoryInputHandle(hand, uiComponent, this, null);
-		uiComponent.inputHandling = inventoryInputHandle;
-		
 		boxEntity.add(itemStatsInfoImage);
 		boxEntity.add(itemStatsInfoPosition);
 		boxEntity.add(zOrderComponentStats);
 		boxEntity.add(itemStatsTextComponent);
-		boxEntity.add(uiComponent);
 		engine.addEntity(boxEntity);
-	}
-
-	public TextComponent getItemBoxTextComponent() {
-		return itemBoxTextComponent;
-	}
-	
-	public TextComponent getItemStatsTextComponent() {
-		return itemStatsTextComponent;
-	}
-	
-	public StaticImageComponent getStaticImageComponent() {
-		return itemInventoryBoxImage;
-	}
-	
-	public PositionComponent getPositionComponentItemBox() {
-		return itemInvPositionComponent;
 	}
 	
 	public Entity getItemInvBoxEntity() {
@@ -139,11 +108,6 @@ public class InventoryMenuBox extends MenuBox{
 		
 		itemStatsInfoImage.isEnabled = false;
 		itemStatsTextComponent.isDrawing = false;
-		
-		uiComponent.inputIsEnabled = false;
-		uiComponent.updateIsEnabled = false;
-		
-		sComponentMapper.get(hand).isEnabled = false;
 	}
 	
 	public void turnOn() {
@@ -153,9 +117,8 @@ public class InventoryMenuBox extends MenuBox{
 		itemStatsInfoImage.isEnabled = true;
 		itemStatsTextComponent.isDrawing = true;
 		
-		uiComponent.inputIsEnabled = true;
-		uiComponent.updateIsEnabled = true;
-		
-		sComponentMapper.get(hand).isEnabled = true;
 	}
+
+	@Override
+	public void update(MapCursor mapCursor) {}
 }

@@ -51,6 +51,7 @@ public class MapCursor extends UserInterfaceState {
 
 	@Override
 	public void startState() {
+		UserInterfaceManager.unitSelected = null;
 		mapCursorChecks();
 		infoBoxUpdate.update(this);
 		infoBoxUpdate.turnOnBoxes();
@@ -79,7 +80,6 @@ public class MapCursor extends UserInterfaceState {
 		soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Select Unit"));
 		currentDelay = 0;
 		userInterfaceManager.setStates(userInterfaceManager.allUserInterfaceStates.get("MapCursor"), userInterfaceManager.allUserInterfaceStates.get("MovementSelection"));
-		
 	}
 
 	@Override
@@ -146,9 +146,6 @@ public class MapCursor extends UserInterfaceState {
 		}
 	}
 
-	@Override
-	public void update(float delta) {}
-
 	public MAP_CURSOR_QUADRANT getMapCursorQuandrant() {
 		return mapCursorQuandrant;
 	}
@@ -211,6 +208,8 @@ public class MapCursor extends UserInterfaceState {
 	
 	private void checkUnit() {
 		// Reset Animations
+		animationComponentMapper.get(mapCursor).currentAnimation.isDrawing = true;
+		staticImageComponentMapper.get(mapCursor).isEnabled = false;
 		for (Entity allyUnit : level.allAllies) {
 			AnimationComponent animationComponent = animationComponentMapper.get(allyUnit);
 			animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Idle");
@@ -220,12 +219,11 @@ public class MapCursor extends UserInterfaceState {
 		PositionComponent positionComponent = pComponentMapper.get(mapCursor);
 		currentMapCell = level.allLevelMapCells[(int) positionComponent.x / MapCell.CELL_SIZE][(int) positionComponent.y / MapCell.CELL_SIZE];
 		if (currentMapCell.isOccupied) {
-			if (mStatComponentMapper.get(currentMapCell.occupyingUnit).isAlly) {
+			if (mStatComponentMapper.get(currentMapCell.occupyingUnit).isAlly && mStatComponentMapper.get(currentMapCell.occupyingUnit).unit_State != Unit_State.DONE) {
 				animationComponentMapper.get(currentMapCell.occupyingUnit).currentAnimation = animationComponentMapper.get(currentMapCell.occupyingUnit).allAnimationObjects.get("Hovering");
 				animationComponentMapper.get(mapCursor).currentAnimation.isDrawing = false;
 				staticImageComponentMapper.get(mapCursor).isEnabled = true;
 			}
-		
 			UserInterfaceManager.unitSelected = currentMapCell.occupyingUnit;
 		} else {
 			animationComponentMapper.get(mapCursor).currentAnimation.isDrawing = true;

@@ -1,10 +1,10 @@
 package com.jb.fe.UI.factories;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.jb.fe.UI.Text.TextObject;
-import com.jb.fe.UI.combatUnitSelector.UnitDamageSelectorFactory;
 import com.jb.fe.UI.inventory.InventoryMenuBox;
 import com.jb.fe.UI.soundTemp.UISounds;
 import com.jb.fe.audio.SoundObject;
@@ -120,12 +120,13 @@ public class UIFactory {
 		return hand;
 	}
 	
-	/*
-	public void createInventoryMenu() {
-		inventoryMenuBox = new InventoryMenuBox(assetManager, engine, hand, actionMenu, null, uiManager);
-		inventoryMenuBox.inventoryInputHandle.unitDamagePreview = createDamagePreviewBox();
+	
+	public static InventoryMenuBox createInventoryMenu(AssetManager assetManager, Engine engine) {
+		InventoryMenuBox inventoryMenuBox = new InventoryMenuBox(assetManager, engine);
+		return inventoryMenuBox;
 	}
 	
+	/*
 	public Entity createDamagePreviewBox() {
 		Entity unitDamagePreview = UnitDamageSelectorFactory.createUnitDamagePreviewEntity(assetManager, uiManager, mapCursor, inventoryMenuBox);
 		engine.addEntity(unitDamagePreview);

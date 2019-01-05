@@ -107,15 +107,13 @@ public class EndTurnTransition {
 					turnManager.setTurnStatus(Turn_Status.PLAYER_TURN);
 					musicSystem.setCurrentSong("Ally Battle Theme SD", true);
 					musicSystem.playCurrentSong();
+					userInterfaceManager.setStates(userInterfaceManager.allUserInterfaceStates.get("MapCursor"), userInterfaceManager.allUserInterfaceStates.get("MapCursor"));
+					userInterfaceManager.pauseUI();
 				} else {
 					turnManager.setTurnStatus(Turn_Status.ENEMY_TURN);
 					musicSystem.setCurrentSong("Enemy Phase", true);
 					musicSystem.playCurrentSong();
 				}
-				
-				// Turn On UI
-				userInterfaceManager.pauseUI();
-				
 			}
 		}
 

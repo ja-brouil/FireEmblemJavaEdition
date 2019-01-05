@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
+import com.jb.fe.UI.mapcursor.MapCursor;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.MovementStatsComponent;
@@ -126,9 +127,6 @@ public class UnitMovementSystem extends EntitySystem {
 
 				aComponentMapper.get(unit).currentAnimation = aComponentMapper.get(unit).allAnimationObjects
 						.get("Idle");
-
-				// Pause UI
-				userInterfaceManager.pauseUI();
 			}
 
 			// Turn off Map Cells
@@ -147,8 +145,15 @@ public class UnitMovementSystem extends EntitySystem {
 			UnitMovementSystem.unit = null;
 			
 			// Set UI to Action Menu
-			userInterfaceManager.setStates(userInterfaceManager.allUserInterfaceStates.get("MovementSelection"), userInterfaceManager.allUserInterfaceStates.get("ActionMenu"));
-			userInterfaceManager.pauseUI();
+			if (unitStatsComponent.isAlly) {
+				userInterfaceManager.setStates(userInterfaceManager.allUserInterfaceStates.get("MovementSelection"), userInterfaceManager.allUserInterfaceStates.get("ActionMenu"));
+				userInterfaceManager.pauseUI();
+			}
+			
+			// Move Map Cursor
+			MapCursor mapCursor = (MapCursor) userInterfaceManager.allUserInterfaceStates.get("MapCursor");
+			pComponentMapper.get(mapCursor.getMapCursorEntity()).x = unitPositionComponent.x;
+			pComponentMapper.get(mapCursor.getMapCursorEntity()).y = unitPositionComponent.y;
 		}
 	}
 

@@ -59,7 +59,7 @@ public class MovementSelection extends UserInterfaceState{
 	public void resetState() {
 		animationComponentMapper.get(mapCursor).currentAnimation.isDrawing = false;
 		staticImageComponentMapper.get(mapCursor).isEnabled = false;
-		movementUtilityCalculator.resetMovementAlgorithms();
+		movementUtilityCalculator.resetMovementUtilities();
 	}
 
 	@Override
@@ -88,7 +88,9 @@ public class MovementSelection extends UserInterfaceState{
 			
 			// Start movement
 			UnitMovementSystem.setEntity(UserInterfaceManager.unitSelected);
-			userInterfaceManager.pauseUI();
+			if (userInterfaceManager.checkProcessing()) {
+				userInterfaceManager.pauseUI();
+			}
 			
 			// Accept Sound
 			soundSystem.playSound(UISounds.accept);

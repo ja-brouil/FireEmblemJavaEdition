@@ -64,10 +64,5 @@ public class InventoryBoxUpdate implements UpdateUI{
 		iComponentMapper.get(UIManager.currentGameUnit).selectedItemIndex = 0;
 	}
 	
-	public void setTextInfo() {
-		inventoryMenuBox.getItemStatsTextComponent().textArray.get(3).text = "Atk " + Integer.toString(itemComponentMapper.get(inventoryComponent.selectedItem).might);
-		inventoryMenuBox.getItemStatsTextComponent().textArray.get(2).text = "Hit " + Integer.toString(itemComponentMapper.get(inventoryComponent.selectedItem).hit);
-		inventoryMenuBox.getItemStatsTextComponent().textArray.get(1).text = "Crit " + Integer.toString(itemComponentMapper.get(inventoryComponent.selectedItem).crit);
-		inventoryMenuBox.getItemStatsTextComponent().textArray.get(0).text = "Uses " + Integer.toString(itemComponentMapper.get(inventoryComponent.selectedItem).uses);
-	}
+	
 }

@@ -130,9 +130,9 @@ public class UnitInfoBox extends MenuBox {
 	
 	@Override
 	public void update(MapCursor mapCursor) {
+		turnOff();
 		// Do not draw anything if map cursor has no units
 		if (UserInterfaceManager.unitSelected == null) {
-			noDrawingPosition();
 			return;
 		}
 		

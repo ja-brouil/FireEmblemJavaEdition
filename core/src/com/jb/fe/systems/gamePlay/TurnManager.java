@@ -97,6 +97,7 @@ public class TurnManager extends EntitySystem {
 			
 			// All Units are done, move to the AI turn
 			// UI for AI here, move the cursor and camera to where the AI is thinking of moving next
+			userInterfaceManager.pauseUI();
 			turn_Status = Turn_Status.TRANSITION_INTO_ENEMY;
 			
 			// Get all enemies
@@ -110,6 +111,7 @@ public class TurnManager extends EntitySystem {
 			// Stop Music
 			musicSystem.stopCurrentSong();
 			
+			
 		} else if (turn_Status.equals(Turn_Status.ENEMY_TURN)){
 			// Enemy Phase
 			// Are we empty? Yes -> done, go to player phase | No, keep going
@@ -117,6 +119,7 @@ public class TurnManager extends EntitySystem {
 				turn_Status = Turn_Status.TRANSITION_INTO_ALLY;
 				
 				// Set AI
+				userInterfaceManager.setStates(userInterfaceManager.allUserInterfaceStates.get("ActionMenu"), userInterfaceManager.allUserInterfaceStates.get("MapCursor"));
 				userInterfaceManager.pauseUI();
 				musicSystem.stopCurrentSong();
 				return;

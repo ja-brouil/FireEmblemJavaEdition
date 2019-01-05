@@ -22,6 +22,7 @@ import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.movement.MovementUtilityCalculator;
+import com.jb.fe.systems.movement.UnitMovementSystem;
 
 public class AISystem extends EntitySystem{
 
@@ -137,10 +138,11 @@ public class AISystem extends EntitySystem{
 				processAggresiveAI();
 			} else {
 				artifical_IntelligenceComponent.isProcessing = false;
+				movementUtilityCalculator.resetMovementUtilities();
 				enemyUnit = null;
 			}
 		} else {
-			// Become aggresive once an enemy has been detected
+			// Become aggressive once an enemy has been detected
 			artifical_IntelligenceComponent.ai_Type = AI_TYPE.AGGRESSIVE;
 			findUnitToAttack();
 		}
@@ -226,6 +228,7 @@ public class AISystem extends EntitySystem{
 		}
 		movementUtilityCalculator.createPathFindingQueue(finalMoveCell, enemyUnit);
 		enemyUnitComponent.isMoving = true;
+		UnitMovementSystem.setEntity(enemyUnit);
 		enemyUnit = null;
 	}
 	
@@ -265,6 +268,7 @@ public class AISystem extends EntitySystem{
 								enemyUnitComponent.destinationCell = mapCell;
 								movementUtilityCalculator.createPathFindingQueue(enemyUnitComponent.destinationCell, enemyUnit);
 								enemyUnitComponent.isMoving = true;
+								UnitMovementSystem.setEntity(enemyUnit);
 								enemyUnit = null;
 								return;
 							}
@@ -272,6 +276,7 @@ public class AISystem extends EntitySystem{
 							enemyUnitComponent.destinationCell = mapCell;
 							movementUtilityCalculator.createPathFindingQueue(enemyUnitComponent.destinationCell, enemyUnit);
 							enemyUnitComponent.isMoving = true;
+							UnitMovementSystem.setEntity(enemyUnit);
 							enemyUnit = null;
 							return;
 						}

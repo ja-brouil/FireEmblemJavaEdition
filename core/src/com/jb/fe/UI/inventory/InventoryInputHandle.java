@@ -39,79 +39,35 @@ public class InventoryInputHandle implements InputHandling{
 		InventoryComponent inventoryComponent = iComponentMapper.get(UIManager.currentGameUnit);
 		inventoryComponent.selectedItem = inventoryComponent.inventory[inventoryComponent.selectedItemIndex];
 		
-		// Up
-		if (Gdx.input.isKeyPressed(Keys.UP)) {
-			inventoryComponent.selectedItemIndex--;
-			if (allowHandMovement()) {
-				pComponentMapper.get(hand).y += 20;
-				currentDelay = 0;
-				// Set new equip item
-				inventoryComponent.selectedItem = inventoryComponent.inventory[inventoryComponent.selectedItemIndex];
-				UIComponent.soundSystem.playSound(UISounds.movement);
-			}
-		}
 		
-		// Down
-		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-			inventoryComponent.selectedItemIndex++;
-			if (allowHandMovement()) {
-				pComponentMapper.get(hand).y -= 20;
-				currentDelay = 0;
-				inventoryComponent.selectedItem = inventoryComponent.inventory[inventoryComponent.selectedItemIndex];
-				UIComponent.soundSystem.playSound(UISounds.movement);
-			}
-		}
-		
-		
-		// A
-		if (Gdx.input.isKeyJustPressed(Keys.Z)) {
-			UIComponent.soundSystem.playSound(UISounds.accept);
-			unitDamagePreview.getComponent(UIComponent.class).inputHandling.turnOn();
-			uiComponent.uiManager.setCurrentUI(unitDamagePreview);
-			uiComponent.inputIsEnabled = false;
-			uiComponent.updateIsEnabled = false;
-			inventoryMenuBox.turnOff();
-			currentDelay = 0;
-		}
-		
-		// B
-		if (Gdx.input.isKeyJustPressed(Keys.X)) {
-			// Cancel and go back to the action menu
-			uiComponent.inputIsEnabled = false;
-			uiComponent.updateIsEnabled = false;
-			uiComponent.uiManager.startActionMenu();
-			inventoryMenuBox.turnOff();
-			UIComponent.soundSystem.playSound(UISounds.back);
-			currentDelay = 0;
-		}
 	}
 	
 	private boolean allowHandMovement() {
 		// If there is only 1 item, no movement allowed
-		InventoryComponent inventoryComponent = iComponentMapper.get(UIManager.currentGameUnit);
-		if (iComponentMapper.get(UIManager.currentGameUnit).amountOfItemsCarried <= 1) {
-			
-			if (inventoryComponent.selectedItemIndex < 0) {
-				inventoryComponent.selectedItemIndex = 0;
-				return false;
-			}
-			
-			if (inventoryComponent.selectedItemIndex >= iComponentMapper.get(UIManager.currentGameUnit).amountOfItemsCarried) {
-				inventoryComponent.selectedItemIndex--;
-				return false;
-			}
-			return false;
-		}
-		
-		if (inventoryComponent.selectedItemIndex < 0) {
-			inventoryComponent.selectedItemIndex = 0;
-			return false;
-		}
-		
-		if (inventoryComponent.selectedItemIndex >= iComponentMapper.get(UIManager.currentGameUnit).amountOfItemsCarried) {
-			inventoryComponent.selectedItemIndex--;
-			return false;
-		}
+				InventoryComponent inventoryComponent = iComponentMapper.get(UIManager.currentGameUnit);
+				if (iComponentMapper.get(UIManager.currentGameUnit).amountOfItemsCarried <= 1) {
+					
+					if (inventoryComponent.selectedItemIndex < 0) {
+						inventoryComponent.selectedItemIndex = 0;
+						return false;
+					}
+					
+					if (inventoryComponent.selectedItemIndex >= iComponentMapper.get(UIManager.currentGameUnit).amountOfItemsCarried) {
+						inventoryComponent.selectedItemIndex--;
+						return false;
+					}
+					return false;
+				}
+				
+				if (inventoryComponent.selectedItemIndex < 0) {
+					inventoryComponent.selectedItemIndex = 0;
+					return false;
+				}
+				
+				if (inventoryComponent.selectedItemIndex >= iComponentMapper.get(UIManager.currentGameUnit).amountOfItemsCarried) {
+					inventoryComponent.selectedItemIndex--;
+					return false;
+				}
 		
 		return true;
 	}

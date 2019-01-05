@@ -74,7 +74,7 @@ public class MovementUtilityCalculator {
 		}
 
 		// Remove Colors if not reset
-		resetMovementAlgorithms();
+		resetMovementUtilities();
 
 		// Process Movement and Attack Tiles
 		processTile(getMapCell(unit), unitStatsComponent, unitStatsComponent.movementSteps, unit);
@@ -260,7 +260,7 @@ public class MovementUtilityCalculator {
 	}
 
 	// Reset to default
-	public void resetMovementAlgorithms() {
+	public void resetMovementUtilities() {
 		// Reset Colors
 		for (int outer = 0; outer < allMapCells.length; outer++) {
 			for (int inner = 0; inner < allMapCells[outer].length; inner++) {

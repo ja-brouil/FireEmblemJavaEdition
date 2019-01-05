@@ -93,8 +93,6 @@ public class MovementSelection extends UserInterfaceState{
 			// Accept Sound
 			soundSystem.playSound(UISounds.accept);
 			
-			// Swap State in the manager here
-			
 		} else {
 			soundSystem.playSound(UISounds.invalid);
 		}

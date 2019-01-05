@@ -3,17 +3,24 @@ package com.jb.fe.UI.factories;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.jb.fe.UI.Text.TextObject;
+import com.jb.fe.UI.combatUnitSelector.UnitDamageSelectorFactory;
+import com.jb.fe.UI.inventory.InventoryMenuBox;
 import com.jb.fe.UI.soundTemp.UISounds;
 import com.jb.fe.audio.SoundObject;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.AnimationObject;
+import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.StaticImageComponent;
+import com.jb.fe.components.TextComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.level.Level;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.graphics.ZOrder;
+import com.jb.fe.systems.movement.UnitMapCellUpdater;
+import com.jb.fe.systems.movement.UnitMovementSystem;
 
 /*
  * Main Battlefield UI Factory
@@ -60,8 +67,8 @@ public class UIFactory {
 		return mapCursor;
 	}
 	
-	/*
-	public Entity createActionMenu(UnitMovementSystem unitMovementSystem, UnitMapCellUpdater unitMapCellUpdater) {
+	
+	public static Entity createActionMenu(UnitMovementSystem unitMovementSystem, UnitMapCellUpdater unitMapCellUpdater, AssetManager assetManager) {
 		Entity actionMenu = new Entity();
 		
 		// Components
@@ -75,12 +82,7 @@ public class UIFactory {
 		uiTextComponent.textArray.addFirst(new TextObject(0, 150, "Trade", 0.25f));
 		uiTextComponent.textArray.addFirst(new TextObject(0, 200, "Wait", 0.25f));
 		uiTextComponent.isDrawing = false;
-		
-		UIComponent uiComponent = new UIComponent(uiManager, soundSystem);
-		uiComponent.updateUI = new ActionMenuUpdate(uiComponent, actionMenu, hand, mapCursor, inventoryMenuBox);
-		uiComponent.inputHandling = new ActionMenuInput(mapCursor, actionMenu, hand, unitMapCellUpdater, uiComponent);
-		uiComponent.inputIsEnabled = false;
-		uiComponent.updateIsEnabled = false;
+
 		
 		StaticImageComponent actionMenuStaticImage = new StaticImageComponent(assetManager, "UI/endturnbox/endturnbox.png");
 		actionMenuStaticImage.alpha = 0.8f;
@@ -94,15 +96,13 @@ public class UIFactory {
 		actionMenu.add(nameComponent);
 		actionMenu.add(positionComponent);
 		actionMenu.add(uiTextComponent);
-		actionMenu.add(uiComponent);
 		actionMenu.add(actionMenuStaticImage);
 		actionMenu.add(zOrderComponent);
 		
-		uiManager.setActionMenu(actionMenu);
 		return actionMenu;
 	}
 	
-	public void createHand() {
+	public static Entity createHand(AssetManager assetManager) {
 		Entity hand = new Entity();
 		// Components
 		StaticImageComponent staticImageComponent = new StaticImageComponent(assetManager, "UI/Cursor/hand.png");
@@ -116,10 +116,11 @@ public class UIFactory {
 		hand.add(positionComponent);
 		hand.add(nameComponent);
 		hand.add(zOrderComponent);
-		this.hand = hand;
-		engine.addEntity(hand);
+
+		return hand;
 	}
 	
+	/*
 	public void createInventoryMenu() {
 		inventoryMenuBox = new InventoryMenuBox(assetManager, engine, hand, actionMenu, null, uiManager);
 		inventoryMenuBox.inventoryInputHandle.unitDamagePreview = createDamagePreviewBox();

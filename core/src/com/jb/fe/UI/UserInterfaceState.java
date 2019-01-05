@@ -7,6 +7,7 @@ import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
+import com.jb.fe.components.TextComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
@@ -24,6 +25,7 @@ public abstract class UserInterfaceState {
 	protected ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	protected ComponentMapper<NameComponent> nComponentMapper = ComponentMapper.getFor(NameComponent.class);
 	protected ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
+	protected ComponentMapper<TextComponent> tComponentMapper = ComponentMapper.getFor(TextComponent.class);
 	
 	public UserInterfaceState(AssetManager assetManager, SoundSystem soundSystem, UserInterfaceManager userInterfaceManager) {
 		this.assetManager = assetManager;
@@ -53,7 +55,7 @@ public abstract class UserInterfaceState {
 	public abstract void handleInput(float delta);
 	
 	/**
-	 * Called to update logic of the user interface state
+	 * Called every frame. Use only if needed to run logic every frame
 	 * @param delta
 	 */
 	public abstract void update(float delta);

@@ -52,7 +52,6 @@ public class UnitMovementSystem extends EntitySystem {
 			return;
 		}
 
-		System.out.println("here");
 		MovementStatsComponent unitStatsComponent = sComponentMapper.get(unit);
 
 		// Destination Cell and Starting Cell
@@ -121,9 +120,6 @@ public class UnitMovementSystem extends EntitySystem {
 				// an action first.
 				unitStatsComponent.unit_State = Unit_State.CAN_DO_ACTION;
 
-				// Resume UI
-				userInterfaceManager.pauseUI();
-
 			} else {
 				Artifical_IntelligenceComponent artifical_IntelligenceComponent = aiComponentMapper.get(unit);
 				artifical_IntelligenceComponent.isProcessing = false;
@@ -149,6 +145,10 @@ public class UnitMovementSystem extends EntitySystem {
 
 			// Remove unit
 			UnitMovementSystem.unit = null;
+			
+			// Set UI to Action Menu
+			userInterfaceManager.setStates(userInterfaceManager.allUserInterfaceStates.get("MovementSelection"), userInterfaceManager.allUserInterfaceStates.get("ActionMenu"));
+			userInterfaceManager.pauseUI();
 		}
 	}
 

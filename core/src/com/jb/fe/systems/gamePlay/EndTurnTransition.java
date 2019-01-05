@@ -55,6 +55,11 @@ public class EndTurnTransition {
 	}
 
 	public void update(float delta) {
+		// Turn off UI
+		if (userInterfaceManager.checkProcessing()) {
+			userInterfaceManager.pauseUI();
+		}
+		
 		// Enemy Transition State
 		Entity transitionGraphic;
 		if (turnManager.getTurnStatus().equals(Turn_Status.TRANSITION_INTO_ALLY)) {
@@ -107,6 +112,9 @@ public class EndTurnTransition {
 					musicSystem.setCurrentSong("Enemy Phase", true);
 					musicSystem.playCurrentSong();
 				}
+				
+				// Turn On UI
+				userInterfaceManager.pauseUI();
 				
 			}
 		}

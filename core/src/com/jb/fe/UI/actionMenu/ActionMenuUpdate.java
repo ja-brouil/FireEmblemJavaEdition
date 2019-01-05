@@ -80,15 +80,6 @@ public class ActionMenuUpdate implements UpdateUI {
 		}
 	}
 	
-	private void preventHandOutOfBounds(PositionComponent positionComponent) {
-		if (positionComponent.y < 76) {
-			positionComponent.y = 76;
-		}
-		
-		if (positionComponent.y > 121) {
-			positionComponent.y = 121;
-		}
-	}
 	
 	public void doAction(Action_Menu_Options action_Menu_Options, Entity mapCursor) {
 		if (action_Menu_Options.equals(Action_Menu_Options.Action)) {
@@ -162,14 +153,8 @@ public class ActionMenuUpdate implements UpdateUI {
 		uiComponent.updateIsEnabled = false;
 	}
 	
-	public static enum Action_Menu_Options {
-		Action, Items, Trade, Wait;
-	}
 	
-	public static enum Action_Menu_State {
-		Idle, Process
-	}
-	
+
 	public void setInventoryMenu(InventoryMenuBox inventoryMenuBox) {
 		this.inventoryMenuBox = inventoryMenuBox;
 	}

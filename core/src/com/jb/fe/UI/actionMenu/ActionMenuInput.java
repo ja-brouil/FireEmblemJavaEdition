@@ -69,40 +69,6 @@ public class ActionMenuInput implements InputHandling {
 	
 	@Override
 	public void handleInput() {
-		currentDelayTime += Gdx.graphics.getDeltaTime();
-		if (currentDelayTime < delayTime) {
-			return;
-		}
-		
-		currentOptionSelected = allOptions[indexOption];
-		
-		// Up
-		if (Gdx.input.isKeyPressed(Keys.UP)) {
-			pComponentMapper.get(hand).y += 15;
-			currentDelayTime = 0;
-			if (indexOption - 1 < 0) {
-				indexOption = 0;
-				currentOptionSelected = allOptions[indexOption];
-			} else {
-				UIComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Movement"));
-				indexOption--;
-				currentOptionSelected = allOptions[indexOption];
-			}
-		}
-		
-		// Down
-		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-			pComponentMapper.get(hand).y -= 15;
-			currentDelayTime = 0;
-			if (indexOption + 1 > allOptions.length - 1) {
-				indexOption = allOptions.length - 1;
-				currentOptionSelected = allOptions[indexOption];
-			} else {
-				UIComponent.soundSystem.playSound(mapCursor.getComponent(SoundComponent.class).allSoundObjects.get("Movement"));
-				indexOption++;
-				currentOptionSelected = allOptions[indexOption];
-			}
-		}
 		
 		// A Button
 		if (Gdx.input.isKeyJustPressed(Keys.Z)) {
@@ -116,15 +82,6 @@ public class ActionMenuInput implements InputHandling {
 		
 		// B Button | send unit back | set mapcursor back
 		if (Gdx.input.isKeyJustPressed(Keys.X)) {
-			// Set Unit
-			entityToProcess = UIManager.currentGameUnit;
-			MovementStatsComponent movementStatsComponent = mComponentMapper.get(entityToProcess);
-			movementStatsComponent.currentCell = movementStatsComponent.previousCell;
-			movementStatsComponent.unit_State = Unit_State.CAN_DO_BOTH;
-			PositionComponent positionComponent = pComponentMapper.get(entityToProcess);
-			positionComponent.x = movementStatsComponent.currentCell.position.x;
-			positionComponent.y = movementStatsComponent.currentCell.position.y;
-			
 			// Map Cursor
 			mapCursor.getComponent(MapCursorStateComponent.class).mapCursorState = MapCursorState.MOVEMENT_ONLY;
 			pComponentMapper.get(mapCursor).x = positionComponent.x;

@@ -5,6 +5,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.jb.fe.UI.actionMenu.ActionMenu;
 import com.jb.fe.UI.infoBoxes.TerrainInfoBox;
 import com.jb.fe.UI.infoBoxes.UnitInfoBox;
 import com.jb.fe.UI.infoBoxes.VictoryInfoBox;
@@ -132,6 +133,10 @@ public class GameScreen extends ScreenAdapter{
 		infoBoxUpdate.getAllBattleFieldMenuBoxes().add(unitInfoBox);
 		infoBoxUpdate.getAllBattleFieldMenuBoxes().add(terrainInfoBox);
 		infoBoxUpdate.getAllBattleFieldMenuBoxes().add(victoryInfoBox);
+		
+		// Action Menu Box
+		ActionMenu actionMenu = new ActionMenu(assetManager, soundSystem, userInterfaceManager, unitMapCellUpdater, mapCursor.getMapCursorEntity(), engine);
+		userInterfaceManager.allUserInterfaceStates.put("ActionMenu", actionMenu);
 		
 		userInterfaceManager.startSystem();
 	}

@@ -23,7 +23,7 @@ import com.jb.fe.systems.movement.UnitMapCellUpdater;
 import com.jb.fe.systems.movement.UnitMovementSystem;
 
 /*
- * Main Battlefield UI Factory
+ * Factory for various UI pieces
  */
 public class UIFactory {
 		
@@ -126,11 +126,38 @@ public class UIFactory {
 		return inventoryMenuBox;
 	}
 	
-	/*
-	public Entity createDamagePreviewBox() {
-		Entity unitDamagePreview = UnitDamageSelectorFactory.createUnitDamagePreviewEntity(assetManager, uiManager, mapCursor, inventoryMenuBox);
-		engine.addEntity(unitDamagePreview);
-		return unitDamagePreview;
+	public static Entity createUnitDamagePreviewEntity(AssetManager assetManager) {
+		Entity damagePreviewMenuBox = new Entity();
+		
+		// Graphics
+		StaticImageComponent staticImageComponent = new StaticImageComponent(assetManager, "UI/damageBox/damageBox.png");
+		staticImageComponent.isEnabled = false;
+		staticImageComponent.width = 70;
+		staticImageComponent.height = 100;
+		PositionComponent positionComponent = new PositionComponent();
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
+		
+		// Text Component
+		TextComponent textComponent = new TextComponent();
+		textComponent.isDrawing = false;
+		textComponent.textArray.addFirst(new TextObject(50, 50, "Attacking Unit Name", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 40, "Def HP", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 30, "Atk HP", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 35, "Def Might", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 25, "Atk Might", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 20, "Def Hit", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 15, "Atk Hit", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 10, "Def Crit", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 0, "Atk Crit", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 0, "Defending Unit Name", 0.20f));
+		textComponent.textArray.addFirst(new TextObject(50, 0, "Defending Unit Item Equipped", 0.20f));
+
+
+		// Add everything
+		damagePreviewMenuBox.add(staticImageComponent);
+		damagePreviewMenuBox.add(positionComponent);
+		damagePreviewMenuBox.add(zOrderComponent);
+		damagePreviewMenuBox.add(textComponent);
+		return damagePreviewMenuBox;
 	}
-	*/
 }

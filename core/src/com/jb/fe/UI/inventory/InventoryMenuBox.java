@@ -15,9 +15,6 @@ import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.graphics.ZOrder;
 
 public class InventoryMenuBox extends MenuBox {
-
-	public InventoryBoxUpdate inventoryBoxUpdate;
-	public InventoryInputHandle inventoryInputHandle;
 	
 	// Item Box Info
 	private Entity itemInvInfoBox;
@@ -76,7 +73,7 @@ public class InventoryMenuBox extends MenuBox {
 		itemStatsTextComponent.isDrawing = false;
 		
 		// Placeholder test
-		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 33, itemStatsInfoPosition.y + 48, "Affin", 0.2f, Align.center));
+		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 40, itemStatsInfoPosition.y + 48, "Weapon Stats", 0.2f, Align.center));
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 8, itemStatsInfoPosition.y + 34, "Atk 10", 0.2f, Align.left));
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 8, itemStatsInfoPosition.y + 14, "Hit 100", 0.2f, Align.left));
 		itemStatsTextComponent.textArray.addFirst(new TextObject(itemStatsInfoPosition.x + 42, itemStatsInfoPosition.y + 34, "Crit 5", 0.2f, Align.left));
@@ -91,14 +88,6 @@ public class InventoryMenuBox extends MenuBox {
 	
 	public Entity getItemInvBoxEntity() {
 		return itemInvInfoBox;
-	}
-	
-	public void setUnit(Entity unit) {
-		inventoryBoxUpdate.setUnit(unit);
-	}
-	
-	public void setUnitDamageSelection(Entity unitDamageSelection) {
-		inventoryInputHandle.unitDamagePreview = unitDamageSelection;
 	}
 	
 	@Override
@@ -116,7 +105,6 @@ public class InventoryMenuBox extends MenuBox {
 		
 		itemStatsInfoImage.isEnabled = true;
 		itemStatsTextComponent.isDrawing = true;
-		
 	}
 
 	@Override

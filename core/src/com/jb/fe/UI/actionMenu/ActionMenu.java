@@ -108,6 +108,8 @@ public class ActionMenu extends UserInterfaceState {
 				return;
 			} else {
 				// Send to Inventory Menu
+				soundSystem.playSound(UISounds.accept);
+				userInterfaceManager.setStates(this, userInterfaceManager.allUserInterfaceStates.get("InventoryMenu"));
 			}
 		} else if (allActionMenuOptions[currentOption] == Action_Menu_Options.Items) {
 			// Items | for now just do nothing
@@ -191,6 +193,10 @@ public class ActionMenu extends UserInterfaceState {
 		if (positionComponent.y > 121) {
 			positionComponent.y = 121;
 		}
+	}
+	
+	public Entity getHandEntity() {
+		return hand;
 	}
 
 }

@@ -231,4 +231,8 @@ public class MapCursor extends UserInterfaceState {
 			UserInterfaceManager.unitSelected = null;
 		}
 	}
+	
+	public InfoBoxUpdate getInfoBoxUpdate() {
+		return infoBoxUpdate;
+	}
 }

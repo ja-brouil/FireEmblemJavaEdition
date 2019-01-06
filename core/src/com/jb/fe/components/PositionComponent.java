@@ -17,11 +17,18 @@ public class PositionComponent implements Component{
 		this.y = 0;
 	}
 	
+	/**
+	 * X and Y position
+	 */
 	@Override
 	public String toString() {
 		return "Position X:" + x + " Y: " + y;
 	}
 	
+	/**
+	 * Divided number for coordinates
+	 * @return
+	 */
 	public String toStringDivided() {
 		return "Position X:" + (x / MapCell.CELL_SIZE) + " Y: " + (y / MapCell.CELL_SIZE);
 	}

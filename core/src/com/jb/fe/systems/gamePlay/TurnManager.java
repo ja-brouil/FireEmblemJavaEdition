@@ -36,6 +36,8 @@ public class TurnManager extends EntitySystem {
 	
 	// AI Engine
 	private AISystem aiSystem;
+	private float currentDelay;
+	private float aiDelay;
 	
 	// Transition
 	private EndTurnTransition endTurnTransition;
@@ -54,6 +56,7 @@ public class TurnManager extends EntitySystem {
 		enemyUnits = new Queue<Entity>();
 		allyUnits = new Array<Entity>();
 		turn_Status = Turn_Status.TRANSITION_INTO_ALLY;
+		aiDelay = 0.1f;
 	}
 
 	@Override
@@ -117,10 +120,6 @@ public class TurnManager extends EntitySystem {
 			// Are we empty? Yes -> done, go to player phase | No, keep going
 			if (enemyUnits.size == 0 && unitBeingProcessed == null) {
 				turn_Status = Turn_Status.TRANSITION_INTO_ALLY;
-				
-				// Set AI
-				userInterfaceManager.setStates(userInterfaceManager.allUserInterfaceStates.get("ActionMenu"), userInterfaceManager.allUserInterfaceStates.get("MapCursor"));
-				userInterfaceManager.pauseUI();
 				musicSystem.stopCurrentSong();
 				return;
 			}
@@ -136,7 +135,12 @@ public class TurnManager extends EntitySystem {
 			
 			// Are we still processing the unit? Yes -> do nothing, No -> move on to the next unit
 			if (!aiComponentMapper.get(unitBeingProcessed).isProcessing) {
+				currentDelay += delta;
+				if (currentDelay <= aiDelay) {
+					return;
+				}
 				unitBeingProcessed = null;
+				currentDelay = 0;
 			}
 		} else if (turn_Status.equals(Turn_Status.TRANSITION_INTO_ALLY)) {
 			endTurnTransition.update(delta);

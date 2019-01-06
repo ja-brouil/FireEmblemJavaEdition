@@ -9,8 +9,18 @@ import com.jb.fe.UI.UserInterfaceState;
 import com.jb.fe.UI.factories.UIFactory;
 import com.jb.fe.UI.soundTemp.UISounds;
 import com.jb.fe.components.InventoryComponent;
+import com.jb.fe.components.TextComponent;
+import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.graphics.ZOrder;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
+/**
+ * Box entity = item info
+ * Other entity = inventory size
+ * Displays the inventory menu state
+ * @author jamesbrouillet
+ *
+ */
 
 public class InventoryMenuState extends UserInterfaceState {
 
@@ -33,17 +43,46 @@ public class InventoryMenuState extends UserInterfaceState {
 	@Override
 	public void startState() {
 		unitInventoryComponent = iComponentMapper.get(UserInterfaceManager.unitSelected);
+		unitInventoryComponent.selectedItemIndex = 0;
 		unitInventoryComponent.selectedItem = unitInventoryComponent.inventory[unitInventoryComponent.selectedItemIndex];
+		
+		// Set new inventory
+		tComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).textArray.forEach((textObject) -> {
+			textObject.isEnabled = false;
+			textObject.text = "";
+		});
+		
+		TextComponent textComponent = tComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity());
+		for (int i = 0; i < unitInventoryComponent.amountOfItemsCarried; i++) {
+			textComponent.textArray.get(i).text = nComponentMapper.get(unitInventoryComponent.inventory[i]).name;
+			textComponent.textArray.get(i).isEnabled = true;
+			textComponent.textArray.get(i).y = (23 + ((5 - i) * 15) + 40);
+		}
+		
+		// Box Dimensions
+		staticImageComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).height = 20 * unitInventoryComponent.amountOfItemsCarried;
+		staticImageComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).isEnabled = true;
+		pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).y = 40 + ((unitInventoryComponent.MAX_INVENTORY_SIZE - unitInventoryComponent.amountOfItemsCarried) * 16.8f);
+		setTextInfo();
+		inventoryMenuBox.turnOn();
+				
+		// Hand
+		staticImageComponentMapper.get(hand).isEnabled = true;
+		hand.getComponent(ZOrderComponent.class).zOrder = ZOrder.UI_MIDDLE_LAYER;
+		pComponentMapper.get(hand).x = pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x - 5;
+		pComponentMapper.get(hand).y = tComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).textArray.get(0).y - 10;
 	}
 
 	@Override
 	public void resetState() {
-
+		staticImageComponentMapper.get(hand).isEnabled = false;
+		inventoryMenuBox.turnOff();
 	}
 
 	@Override
 	public void nextState() {
-
+		userInterfaceManager.setStates(this, userInterfaceManager.allUserInterfaceStates.get("UnitDamagePreview"));
+		soundSystem.playSound(UISounds.accept);
 	}
 
 	@Override
@@ -61,6 +100,7 @@ public class InventoryMenuState extends UserInterfaceState {
 				currentDelay = 0;
 				// Set new equip item
 				unitInventoryComponent.selectedItem = unitInventoryComponent.inventory[unitInventoryComponent.selectedItemIndex];
+				setTextInfo();
 				soundSystem.playSound(UISounds.movement);
 			}
 		}
@@ -72,36 +112,23 @@ public class InventoryMenuState extends UserInterfaceState {
 				pComponentMapper.get(hand).y -= 20;
 				currentDelay = 0;
 				unitInventoryComponent.selectedItem = unitInventoryComponent.inventory[unitInventoryComponent.selectedItemIndex];
+				setTextInfo();
 				soundSystem.playSound(UISounds.movement);
 			}
 		}
 
 		// A
 		if (Gdx.input.isKeyJustPressed(Keys.Z)) {
-			nextState();
-			
-			/*
-			soundSystem.playSound(UISounds.accept);
-			unitDamagePreview.getComponent(UIComponent.class).inputHandling.turnOn();
-			uiComponent.uiManager.setCurrentUI(unitDamagePreview);
-			uiComponent.inputIsEnabled = false;
-			uiComponent.updateIsEnabled = false;
-			inventoryMenuBox.turnOff();
 			currentDelay = 0;
-			*/
+			nextState();
 		}
 
 		// B
 		if (Gdx.input.isKeyJustPressed(Keys.X)) {
 			// Cancel and go back to the action menu
-			/*
-			uiComponent.inputIsEnabled = false;
-			uiComponent.updateIsEnabled = false;
-			uiComponent.uiManager.startActionMenu();
-			inventoryMenuBox.turnOff();
-			UIComponent.soundSystem.playSound(UISounds.back);
+			soundSystem.playSound(UISounds.back);
 			currentDelay = 0;
-			*/
+			userInterfaceManager.setStates(this, userInterfaceManager.allUserInterfaceStates.get("ActionMenu"));
 		}
 	}
 
@@ -137,9 +164,9 @@ public class InventoryMenuState extends UserInterfaceState {
 	}
 	
 	private void setTextInfo() {
-		tComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).textArray.get(3).text = "Atk " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).might);
-		tComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).textArray.get(2).text = "Hit " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).might);
-		tComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).textArray.get(1).text = "Crit " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).might);
-		tComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).textArray.get(0).text = "Uses " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).might);
+		tComponentMapper.get(inventoryMenuBox.getBoxEntity()).textArray.get(3).text = "Atk " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).might);
+		tComponentMapper.get(inventoryMenuBox.getBoxEntity()).textArray.get(2).text = "Hit " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).hit);
+		tComponentMapper.get(inventoryMenuBox.getBoxEntity()).textArray.get(1).text = "Crit " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).crit);
+		tComponentMapper.get(inventoryMenuBox.getBoxEntity()).textArray.get(0).text = "Uses " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).uses);
 	}
 }

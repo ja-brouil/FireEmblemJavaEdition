@@ -6,9 +6,11 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jb.fe.UI.actionMenu.ActionMenu;
+import com.jb.fe.UI.combatUnitSelector.UnitDamageMenuState;
 import com.jb.fe.UI.infoBoxes.TerrainInfoBox;
 import com.jb.fe.UI.infoBoxes.UnitInfoBox;
 import com.jb.fe.UI.infoBoxes.VictoryInfoBox;
+import com.jb.fe.UI.inventory.InventoryMenuState;
 import com.jb.fe.UI.mapcursor.MapCursor;
 import com.jb.fe.UI.mapcursor.MovementSelection;
 import com.jb.fe.level.Level;
@@ -19,6 +21,7 @@ import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.gamePlay.AISystem;
 import com.jb.fe.systems.gamePlay.CombatSystem;
+import com.jb.fe.systems.gamePlay.CombatSystemCalculator;
 import com.jb.fe.systems.gamePlay.TurnManager;
 import com.jb.fe.systems.inputAndUI.InfoBoxUpdate;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
@@ -50,6 +53,7 @@ public class GameScreen extends ScreenAdapter{
 	private UserInterfaceManager userInterfaceManager;
 	private CombatSystem combatSystem;
 	private MovementUtilityCalculator movementUtilityCalculator;
+	private CombatSystemCalculator combatSystemCalculator;
 	
 	public GameScreen(MusicSystem musicSystem, SoundSystem soundSystem, Engine engine, AssetManager assetManager, SpriteBatch spriteBatch, OrthographicCamera gameCamera) {
 		this.engine = engine;
@@ -68,6 +72,7 @@ public class GameScreen extends ScreenAdapter{
 		infoBoxUpdate = new InfoBoxUpdate();
 		userInterfaceManager = new UserInterfaceManager();
 		combatSystem = new CombatSystem();
+		combatSystemCalculator = new CombatSystemCalculator();
 		
 		// Add Systems to the Engine
 		engine.addSystem(mapRenderSystem);
@@ -138,6 +143,15 @@ public class GameScreen extends ScreenAdapter{
 		ActionMenu actionMenu = new ActionMenu(assetManager, soundSystem, userInterfaceManager, unitMapCellUpdater, mapCursor.getMapCursorEntity(), engine);
 		userInterfaceManager.allUserInterfaceStates.put("ActionMenu", actionMenu);
 		
+		// Inventory Box
+		InventoryMenuState inventoryMenuState = new InventoryMenuState(assetManager, soundSystem, userInterfaceManager, engine, actionMenu.getHandEntity());
+		userInterfaceManager.allUserInterfaceStates.put("InventoryMenu", inventoryMenuState);
+		
+		// Combat Preview
+		UnitDamageMenuState unitDamageMenuState = new UnitDamageMenuState(assetManager, soundSystem, userInterfaceManager, combatSystemCalculator, engine, mapCursor.getMapCursorEntity());
+		userInterfaceManager.allUserInterfaceStates.put("UnitDamagePreview", unitDamageMenuState);
+		
+		// Start UI
 		userInterfaceManager.startSystem();
 	}
 }

@@ -160,4 +160,39 @@ public class UIFactory {
 		damagePreviewMenuBox.add(textComponent);
 		return damagePreviewMenuBox;
 	}
+	
+	public static Entity createArrow(AssetManager assetManager) {
+		Entity dialogueArrow = new Entity();
+		
+		// Graphics
+		StaticImageComponent staticImageComponent = new StaticImageComponent(assetManager, "UI/Dialogue/arrowDialogue.png");
+		staticImageComponent.isEnabled = false;
+		PositionComponent positionComponent = new PositionComponent(168, 5);
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.UI_TOP_LAYER);
+		
+		dialogueArrow.add(staticImageComponent);
+		dialogueArrow.add(positionComponent);
+		dialogueArrow.add(zOrderComponent);
+		return dialogueArrow;
+	}
+	
+	public static Entity createDialogueBox(AssetManager assetManager) {
+		Entity dialogueBox = new Entity();
+		
+		// Graphics
+		StaticImageComponent staticImageComponent = new StaticImageComponent(assetManager, "UI/Dialogue/dialogueBox.png");
+		staticImageComponent.isEnabled = false;
+		staticImageComponent.height = 50;
+		PositionComponent positionComponent = new PositionComponent(10,10);
+		ZOrderComponent zOrderComponent = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
+		
+		// Text
+		TextComponent dialogueText = new TextComponent();
+		
+		dialogueBox.add(dialogueText);
+		dialogueBox.add(staticImageComponent);
+		dialogueBox.add(positionComponent);
+		dialogueBox.add(zOrderComponent);
+		return dialogueBox;
+	}
 }

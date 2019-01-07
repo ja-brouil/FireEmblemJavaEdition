@@ -89,6 +89,11 @@ public class TurnManager extends EntitySystem {
 	
 	@Override
 	public void update(float delta) {
+		// Dialogue Phase takes over anything here
+		if (userInterfaceManager.currentState.equals(userInterfaceManager.allUserInterfaceStates.get("Dialogue"))) {
+			return;
+		}
+		
 		// Player Phase
 		if (turn_Status.equals(Turn_Status.PLAYER_TURN)) {
 			for (Entity allyUnit : allyUnits) {

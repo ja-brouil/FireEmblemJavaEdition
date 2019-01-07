@@ -10,6 +10,7 @@ import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.level.Level;
 import com.jb.fe.systems.SystemPriorityDictionnary;
+import com.jb.fe.systems.movement.UnitMapCellUpdater;
 
 public class CombatSystem extends EntitySystem{
 
@@ -18,14 +19,16 @@ public class CombatSystem extends EntitySystem{
 	public static boolean isProcessing;
 	
 	private Level level;
+	private UnitMapCellUpdater unitMapCellUpdater;
 	
 	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
 	private ComponentMapper<ItemComponent> iComponentMapper = ComponentMapper.getFor(ItemComponent.class);
 	private ComponentMapper<InventoryComponent> invComponentMapper = ComponentMapper.getFor(InventoryComponent.class);
 	private ComponentMapper<MovementStatsComponent> mComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	
-	public CombatSystem() {
+	public CombatSystem(UnitMapCellUpdater unitMapCellUpdater) {
 		priority = SystemPriorityDictionnary.CombatPhase;
+		this.unitMapCellUpdater = unitMapCellUpdater;
 		isProcessing = false;
 	}
 
@@ -61,6 +64,7 @@ public class CombatSystem extends EntitySystem{
 				removeUnitFromLevelArray(level.allEnemies, defendingUnit);
 			}
 			
+			unitMapCellUpdater.updateCellInfo();
 			isProcessing = false;
 			return;
 		}	
@@ -95,6 +99,9 @@ public class CombatSystem extends EntitySystem{
 		
 		// Turn off system
 		isProcessing = false;
+		
+		// Update cells
+		unitMapCellUpdater.updateCellInfo();
 	}
 	
 	private void removeUnitFromLevelArray(Array<Entity> levelArray, Entity unitToRemove) {

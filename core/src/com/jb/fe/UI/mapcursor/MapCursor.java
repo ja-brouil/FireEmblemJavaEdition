@@ -52,6 +52,7 @@ public class MapCursor extends UserInterfaceState {
 	@Override
 	public void startState() {
 		UserInterfaceManager.unitSelected = null;
+		checkUnit();
 		mapCursorChecks();
 		infoBoxUpdate.update(this);
 		infoBoxUpdate.turnOnBoxes();

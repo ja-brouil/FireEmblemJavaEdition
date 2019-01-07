@@ -19,6 +19,7 @@ public class UnitMapCellUpdater extends EntitySystem{
 	private ImmutableArray<Entity> allGameEntities;
 	
 	// Map Cells
+	private Level level;
 	private MapCell[][] allMapCells;
 	
 	// Unit Stats
@@ -34,19 +35,6 @@ public class UnitMapCellUpdater extends EntitySystem{
 	@Override
 	public void addedToEngine(Engine engine) {
 		allGameEntities =  engine.getEntitiesFor(Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class).get());
-		
-		engine.addEntityListener(Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class).get(), new EntityListener() {
-			
-			@Override
-			public void entityRemoved(Entity entity) {
-				allGameEntities =  engine.getEntitiesFor(Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class).get());
-			}
-			
-			@Override
-			public void entityAdded(Entity entity) {
-				allGameEntities =  engine.getEntitiesFor(Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class).get());
-			}
-		});
 	}
 	
 	// Update Cell and Units
@@ -58,7 +46,6 @@ public class UnitMapCellUpdater extends EntitySystem{
 				allMapCells[outer][inner].occupyingUnit = null;
 			}
 		}
-		
 		
 		// Update Units + Reset Moving Variable
 		for (Entity unit : allGameEntities) {
@@ -72,9 +59,10 @@ public class UnitMapCellUpdater extends EntitySystem{
 			unitStatsComponent.currentCell = allMapCells[x][y];
 			unitStatsComponent.isMoving = false;
 			allMapCells[x][y].isOccupied = true;
-			allMapCells[x][y].occupyingUnit = unit;
-
+			allMapCells[x][y].occupyingUnit = unit;	
 		}
+		
+		level.allLevelMapCells = allMapCells;
 	}
 	
 	// Get all Game Units
@@ -89,6 +77,21 @@ public class UnitMapCellUpdater extends EntitySystem{
 	
 	
 	public void startSystem(Level level) {
+		this.level = level;
 		allMapCells = level.allLevelMapCells;
+		getEngine().addEntityListener(Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class).get(), new EntityListener() {
+			
+			@Override
+			public void entityRemoved(Entity entity) {
+				allGameEntities =  getEngine().getEntitiesFor(Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class).get());
+				updateCellInfo();
+			}
+			
+			@Override
+			public void entityAdded(Entity entity) {
+				allGameEntities =  getEngine().getEntitiesFor(Family.all(PositionComponent.class, MovementStatsComponent.class, AnimationComponent.class).get());
+				updateCellInfo();
+			}
+		});
 	}
 }

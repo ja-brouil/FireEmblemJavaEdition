@@ -8,7 +8,7 @@ import com.jb.fe.audio.SoundObject;
  * Player for all the sounds
  */
 
-public class SoundSystem extends EntitySystem{
+public class SoundSystem extends EntitySystem {
 	
 	public SoundSystem() {
 		setProcessing(false);

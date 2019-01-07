@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jb.fe.UI.actionMenu.ActionMenu;
 import com.jb.fe.UI.combatUnitSelector.UnitDamageMenuState;
+import com.jb.fe.UI.dialogue.DialogueState;
 import com.jb.fe.UI.infoBoxes.TerrainInfoBox;
 import com.jb.fe.UI.infoBoxes.UnitInfoBox;
 import com.jb.fe.UI.infoBoxes.VictoryInfoBox;
@@ -71,7 +72,7 @@ public class GameScreen extends ScreenAdapter{
 		aiSystem = new AISystem();
 		infoBoxUpdate = new InfoBoxUpdate();
 		userInterfaceManager = new UserInterfaceManager();
-		combatSystem = new CombatSystem();
+		combatSystem = new CombatSystem(unitMapCellUpdater);
 		combatSystemCalculator = new CombatSystemCalculator();
 		
 		// Add Systems to the Engine
@@ -151,7 +152,16 @@ public class GameScreen extends ScreenAdapter{
 		UnitDamageMenuState unitDamageMenuState = new UnitDamageMenuState(assetManager, soundSystem, userInterfaceManager, combatSystemCalculator, engine, mapCursor.getMapCursorEntity());
 		userInterfaceManager.allUserInterfaceStates.put("UnitDamagePreview", unitDamageMenuState);
 		
+		// Text Dialogue
+		DialogueState dialogueState = new DialogueState(assetManager, soundSystem, userInterfaceManager, engine);
+		dialogueState.addDialogue("Eirika:\nSeth, it looks like these bandits are \nattacking this town.");
+		dialogueState.addDialogue("Eirika:\nWe need to save our people!.");
+		dialogueState.addDialogue("Seth:\nI am at your side my lady.");
+		dialogueState.setNextState(mapCursor);
+		userInterfaceManager.allUserInterfaceStates.put("Dialogue", dialogueState);
+		
 		// Start UI
 		userInterfaceManager.startSystem();
+		userInterfaceManager.setStates(mapCursor, dialogueState);
 	}
 }

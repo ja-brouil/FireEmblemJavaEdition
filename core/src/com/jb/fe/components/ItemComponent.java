@@ -1,7 +1,7 @@
 package com.jb.fe.components;
 
 import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.JsonValue;
 import com.jb.fe.components.WeaponClass.WeaponType;
 
 public class ItemComponent implements Component{
@@ -25,20 +25,61 @@ public class ItemComponent implements Component{
 	
 	public boolean isBroken; 	// For pooling purposes
 	
-	// Iron Sword default
-	public ItemComponent() {
-		uses =  45; // 45 + MathUtils.random(-10, 10);
-		might = 5 + MathUtils.random(0, 3);
-		hit = 90 + MathUtils.random(0, 10);
-		crit = 0 + MathUtils.random(0, 10);
-		maxRange = 1;
-		minRange = 1;
-		weaponClass = new WeaponClass(WeaponType.SWORD);
-		itemType = ItemType.PHYSICAL;
-		effectiveBonus = 1;
-		weaponSoundName = "Iron Sword Sound";
+	public ItemComponent(JsonValue itemJsonValue) {
+		uses = itemJsonValue.getInt("Uses");
+		might = itemJsonValue.getInt("Might");
+		hit = itemJsonValue.getInt("Hit");
+		crit = itemJsonValue.getInt("Crit");
+		maxRange = itemJsonValue.getInt("MaxRange");
+		minRange = itemJsonValue.getInt("MinRange");
+		weaponClass = new WeaponClass(getWeaponType(itemJsonValue.getString("ItemClass")));
+		itemType = getItemType(itemJsonValue.getString("ItemType"));
+		effectiveBonus = itemJsonValue.getInt("EffectiveBonus");
+		weaponSoundName = itemJsonValue.getString("ItemSoundName");
 		isBroken = false;
 		isUsable = true;
+	}
+	
+	private WeaponType getWeaponType(String weaponType) {
+		if (weaponType.equalsIgnoreCase("Sword")) {
+			return WeaponType.SWORD;
+		} else if (weaponType.equalsIgnoreCase("Axe")) {
+			return WeaponType.AXE;
+		}  else if (weaponType.equalsIgnoreCase("Lance")) {
+			return WeaponType.LANCE;
+		}  else if (weaponType.equalsIgnoreCase("Bow")) {
+			return WeaponType.BOW;
+		}  else if (weaponType.equalsIgnoreCase("Dark")) {
+			return WeaponType.DARK;
+		}  else if (weaponType.equalsIgnoreCase("Elemental")) {
+			return WeaponType.ELEMENTAL;
+		}  else if (weaponType.equalsIgnoreCase("Healing")) {
+			return WeaponType.HEALING;
+		}  else if (weaponType.equalsIgnoreCase("Light")) {
+			return WeaponType.LIGHT;
+		}  else if (weaponType.equalsIgnoreCase("Staves")) {
+			return WeaponType.STAVES;
+		}  else if (weaponType.equalsIgnoreCase("Promotion")) {
+			return WeaponType.PROMOTION;
+		}  else if (weaponType.equalsIgnoreCase("No Weakness")) {
+			return WeaponType.NO_WEAKNESS;
+		}
+		
+		// Default fall through
+		return WeaponType.NO_WEAKNESS;
+	}
+	
+	private ItemType getItemType(String itemType) {
+		if (itemType.equalsIgnoreCase("Physical")) {
+			return ItemType.PHYSICAL;
+		} else if (itemType.equalsIgnoreCase("Magic")) {
+			return ItemType.MAGIC;
+		} else if (itemType.equalsIgnoreCase("Usable")) {
+			return ItemType.USABLE;
+		}
+		
+		// Default fall through
+		return ItemType.PHYSICAL;
 	}
 	
 	public interface Effect {
@@ -47,5 +88,18 @@ public class ItemComponent implements Component{
 	
 	public static enum ItemType {
 		PHYSICAL, MAGIC, USABLE
+	}
+	
+	@Override
+	public String toString() {
+		return "\nUses: " + uses +
+				"\nMight: " + might +
+				"\nHit: " + hit +
+				"\nCrit: " + crit +
+				"\nMaxRange: " + maxRange +
+				"\nMinRange: " + minRange +
+				"\nWeaponClass: " + weaponClass.toString() +
+				"\nItemType: "+ itemType.toString() +
+				"\nEffective Bonus: " + effectiveBonus;
 	}
 }

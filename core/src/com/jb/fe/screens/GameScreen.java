@@ -155,7 +155,7 @@ public class GameScreen extends ScreenAdapter{
 		// Text Dialogue
 		DialogueState dialogueState = new DialogueState(assetManager, soundSystem, userInterfaceManager, engine);
 		dialogueState.addDialogue("Eirika:\nSeth, it looks like these bandits are \nattacking this town.");
-		dialogueState.addDialogue("Eirika:\nWe need to save our people!.");
+		dialogueState.addDialogue("Eirika:\nWe need to save our people!");
 		dialogueState.addDialogue("Seth:\nI am at your side my lady.");
 		dialogueState.setNextState(mapCursor);
 		userInterfaceManager.allUserInterfaceStates.put("Dialogue", dialogueState);

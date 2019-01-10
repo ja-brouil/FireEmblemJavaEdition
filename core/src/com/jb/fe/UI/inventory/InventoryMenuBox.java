@@ -18,7 +18,11 @@ public class InventoryMenuBox extends MenuBox {
 	
 	// Item Box Info
 	private Entity itemInvInfoBox;
+	private Entity topinventoryDecorationEntity;
+	private Entity bottomInventoryDecorationEntity;
 	private StaticImageComponent itemInventoryBoxImage;
+	private StaticImageComponent topDecorationStaticImage;
+	private StaticImageComponent bottomDecorationStaticImage;
 	private PositionComponent itemInvPositionComponent;
 	private ZOrderComponent zOrderComponentInv;
 	private TextComponent itemBoxTextComponent;
@@ -34,7 +38,7 @@ public class InventoryMenuBox extends MenuBox {
 		
 		// Inventory Info
 		itemInvInfoBox = new Entity();
-		itemInventoryBoxImage = new StaticImageComponent(assetManager, "UI/itemBox/itemBox.png");
+		itemInventoryBoxImage = new StaticImageComponent(assetManager, "UI/itemBox/itemBoxNoDeco.png");
 		itemInventoryBoxImage.isEnabled = false;
 		itemInventoryBoxImage.width = 90;
 		itemInventoryBoxImage.height = 120;
@@ -84,10 +88,48 @@ public class InventoryMenuBox extends MenuBox {
 		boxEntity.add(zOrderComponentStats);
 		boxEntity.add(itemStatsTextComponent);
 		engine.addEntity(boxEntity);
+		
+		/*
+		// Top Decoration
+		topinventoryDecorationEntity = new Entity();
+		topDecorationStaticImage = new StaticImageComponent(assetManager, "UI/itemBox/topDecoration.png");
+		topDecorationStaticImage.width = 90;
+		topDecorationStaticImage.height = 12;
+		topDecorationStaticImage.isEnabled = false;
+		PositionComponent topPositionComponent = new PositionComponent(10,70);
+		ZOrderComponent topZOrderComponent = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
+		
+		topinventoryDecorationEntity.add(topDecorationStaticImage);
+		topinventoryDecorationEntity.add(topPositionComponent);
+		topinventoryDecorationEntity.add(topZOrderComponent);
+		engine.addEntity(topinventoryDecorationEntity);
+		
+		// Bottom Decoration
+		bottomInventoryDecorationEntity = new Entity();
+		bottomDecorationStaticImage = new StaticImageComponent(assetManager, "UI/itemBox/bottomDecoration.png");
+		bottomDecorationStaticImage.width = 90;
+		bottomDecorationStaticImage.height = 4;
+		bottomDecorationStaticImage.isEnabled = false;
+		PositionComponent bottomPositionComponent = new PositionComponent(10, 40);
+		ZOrderComponent bottomZOrderComponent = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
+		
+		bottomInventoryDecorationEntity.add(bottomDecorationStaticImage);
+		bottomInventoryDecorationEntity.add(bottomPositionComponent);
+		bottomInventoryDecorationEntity.add(bottomZOrderComponent);
+		engine.addEntity(bottomInventoryDecorationEntity);
+		*/
 	}
 	
 	public Entity getItemInvBoxEntity() {
 		return itemInvInfoBox;
+	}
+	
+	public Entity getBottomEntityDecoration() {
+		return bottomInventoryDecorationEntity;
+	}
+	
+	public Entity getTopDecorationEntity() {
+		return topinventoryDecorationEntity;
 	}
 	
 	@Override
@@ -97,6 +139,9 @@ public class InventoryMenuBox extends MenuBox {
 		
 		itemStatsInfoImage.isEnabled = false;
 		itemStatsTextComponent.isDrawing = false;
+		
+		//bottomDecorationStaticImage.isEnabled = false;
+		//topDecorationStaticImage.isEnabled = false;
 	}
 	
 	public void turnOn() {
@@ -105,6 +150,9 @@ public class InventoryMenuBox extends MenuBox {
 		
 		itemStatsInfoImage.isEnabled = true;
 		itemStatsTextComponent.isDrawing = true;
+		
+		//bottomDecorationStaticImage.isEnabled = true;
+		//topDecorationStaticImage.isEnabled = true;
 	}
 
 	@Override

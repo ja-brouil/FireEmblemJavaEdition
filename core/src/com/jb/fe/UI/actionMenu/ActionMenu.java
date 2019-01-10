@@ -129,7 +129,6 @@ public class ActionMenu extends UserInterfaceState {
 
 	@Override
 	public void handleInput(float delta) {
-		
 		currentDelayTime += delta;
 		if (currentDelayTime <= keyDelayTime) { return; }
 		

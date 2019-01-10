@@ -72,7 +72,7 @@ public class UnitInfoBox extends MenuBox {
 		positionComponent = new PositionComponent(-500, -500);
 		backgroundStaticImageComponent = new StaticImageComponent(assetManager, "UI/unitInfo/unitInfoBox.png");
 		backgroundStaticImageComponent.isEnabled = true;
-		backgroundStaticImageComponent.alpha = 0.8f;
+		//backgroundStaticImageComponent.alpha = 0.8f;
 		backgroundStaticImageComponent.width = 90;
 		backgroundStaticImageComponent.height = 40;
 		backgroundZorder = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);

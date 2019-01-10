@@ -45,7 +45,7 @@ public class InventoryMenuState extends UserInterfaceState {
 		unitInventoryComponent = iComponentMapper.get(UserInterfaceManager.unitSelected);
 		unitInventoryComponent.selectedItemIndex = 0;
 		unitInventoryComponent.selectedItem = unitInventoryComponent.inventory[unitInventoryComponent.selectedItemIndex];
-		
+
 		// Set new inventory
 		tComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).textArray.forEach((textObject) -> {
 			textObject.isEnabled = false;
@@ -64,6 +64,8 @@ public class InventoryMenuState extends UserInterfaceState {
 		staticImageComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).isEnabled = true;
 		pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).y = 40 + ((unitInventoryComponent.MAX_INVENTORY_SIZE - unitInventoryComponent.amountOfItemsCarried) * 16.8f);
 		setTextInfo();
+		
+		// Turn everything on
 		inventoryMenuBox.turnOn();
 				
 		// Hand

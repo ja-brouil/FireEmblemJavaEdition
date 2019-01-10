@@ -38,7 +38,7 @@ public class VictoryInfoBox extends MenuBox {
 		staticImageComponent = new StaticImageComponent(assetManager, "UI/victoryBox/victoryConditionBox.png");
 		staticImageComponent.width = 55;
 		staticImageComponent.height = 15;
-		staticImageComponent.alpha = 0.8f;
+		//staticImageComponent.alpha = 0.8f;
 		zOrderComponent = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
 		
 		textComponent = new TextComponent();

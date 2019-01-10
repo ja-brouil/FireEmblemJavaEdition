@@ -85,7 +85,7 @@ public class UIFactory {
 
 		
 		StaticImageComponent actionMenuStaticImage = new StaticImageComponent(assetManager, "UI/endturnbox/endturnbox.png");
-		actionMenuStaticImage.alpha = 0.8f;
+		//actionMenuStaticImage.alpha = 0.8f;
 		actionMenuStaticImage.isEnabled = false;
 		actionMenuStaticImage.width = FireEmblemGame.WIDTH / 5;
 		actionMenuStaticImage.height = 70;
@@ -119,7 +119,6 @@ public class UIFactory {
 
 		return hand;
 	}
-	
 	
 	public static InventoryMenuBox createInventoryMenu(AssetManager assetManager, Engine engine) {
 		InventoryMenuBox inventoryMenuBox = new InventoryMenuBox(assetManager, engine);

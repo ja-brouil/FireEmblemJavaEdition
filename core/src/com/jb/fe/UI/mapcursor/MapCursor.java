@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.jb.fe.UI.UserInterfaceState;
 import com.jb.fe.UI.factories.UIFactory;
 import com.jb.fe.components.AnimationComponent;
+import com.jb.fe.components.ItemComponent;
+import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.MovementStatsComponent.Unit_State;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
@@ -97,8 +99,12 @@ public class MapCursor extends UserInterfaceState {
 					+ "X Coordinate: " + positionComponent.x / MapCell.CELL_SIZE + "\n"
 					+ "Y Coordinate: " + positionComponent.y / MapCell.CELL_SIZE);
 			if (UserInterfaceManager.unitSelected != null) {
+				System.out.println("------------------------------------");
 				System.out.println("Occupying Unit: " + nComponentMapper.get(UserInterfaceManager.unitSelected).name);
+				System.out.println("------------------------------------");
 				System.out.println("Unit Stats: " + uComponentMapper.get(UserInterfaceManager.unitSelected).toString());
+				System.out.println("------------------------------------");
+				System.out.println("Current Unit equipped weapon: \n" + iComponentMapper.get(UserInterfaceManager.unitSelected).selectedItem.getComponent(NameComponent.class).name + iComponentMapper.get(UserInterfaceManager.unitSelected).selectedItem.getComponent(ItemComponent.class).toString());
 			}
 		}
 		// Debug

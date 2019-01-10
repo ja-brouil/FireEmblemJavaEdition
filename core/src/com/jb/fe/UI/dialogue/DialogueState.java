@@ -101,7 +101,6 @@ public class DialogueState extends UserInterfaceState {
 		currentTimer += delta;
 		if (currentTimer > dialogueTextSpeed) {
 			// Increase letters shown
-			System.out.println(textComponent.textArray.first().isEnabled);
 			if (tempDialogueString.equals("TEMP")){
 				tempDialogueString = textComponent.textArray.first().text;
 				textComponent.textArray.first().isEnabled = true;

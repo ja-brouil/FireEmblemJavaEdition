@@ -17,6 +17,7 @@ import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.components.ZOrderComponent;
+import com.jb.fe.systems.gamePlay.ItemManager;
 import com.jb.fe.systems.graphics.ZOrder;
 
 // Fix diamond of the box later
@@ -80,8 +81,8 @@ public class UnitFactory {
 		movementStatsComponent.movementSteps = 5;
 		
 		// Inventory
-		inventoryComponent.addItem(ItemFactory.createWeapon("Iron Sword"));
-		inventoryComponent.addItem(ItemFactory.createWeapon("Rapier"));
+		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem("Rapier")));
+		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem("Iron Sword")));
 		inventoryComponent.selectedItem = inventoryComponent.inventory[0];
 
 		// Add Components
@@ -171,7 +172,8 @@ public class UnitFactory {
 		}
 		
 		// Inventory Component
-		inventoryComponent.addItem(ItemFactory.createWeapon("Iron Sword"));
+		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem("Steel Sword")));
+		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem("Silver Lance")));
 		inventoryComponent.selectedItem = inventoryComponent.inventory[0];
 		
 		// Add Components
@@ -195,8 +197,9 @@ public class UnitFactory {
 		String name = unitStats.get("Name", String.class);
 		float x = unitStats.get("x", Float.class);
 		float y = unitStats.get("y", Float.class);
+		int moveSteps = unitStats.get("Move", Integer.class);
 		boolean isAlly = unitStats.get("isAlly", Boolean.class);
-		
+		String equippedItemName = unitStats.get("Weapon", String.class);
 		
 		// Components
 		NameComponent nameComponent = new NameComponent(name);
@@ -248,7 +251,7 @@ public class UnitFactory {
 		animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Idle");
 		
 		// Unit Stats
-		movementStatsComponent.movementSteps = 3;
+		movementStatsComponent.movementSteps = moveSteps;
 		movementStatsComponent.isAlly = isAlly;
 		
 		// Add AI component if not ally
@@ -264,7 +267,7 @@ public class UnitFactory {
 		}
 		
 		// Inventory Component
-		inventoryComponent.addItem(ItemFactory.createWeapon("Iron Sword"));
+		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem(equippedItemName)));
 		inventoryComponent.selectedItem = inventoryComponent.inventory[0];
 		
 		// Add Components

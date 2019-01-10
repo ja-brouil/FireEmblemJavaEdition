@@ -40,5 +40,9 @@ public class WeaponClass {
 			break;
 		}
 	}
+	
+	public String toString() {
+		return itemClass.toString();
+	}
 
 }

@@ -60,7 +60,7 @@ public class TerrainInfoBox extends MenuBox {
 		// Graphics
 		staticImageComponent = new StaticImageComponent(assetManager, "UI/terrainInfo/terrainInfoBox.png");
 		staticImageComponent.isEnabled = true;
-		staticImageComponent.alpha = 0.8f;
+		//staticImageComponent.alpha = 0.8f;
 		zOrderComponent = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
 		
 		boxEntity.add(staticImageComponent);

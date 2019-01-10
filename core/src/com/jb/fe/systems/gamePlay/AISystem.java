@@ -13,12 +13,12 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Array;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
+import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
 import com.jb.fe.components.InventoryComponent;
 import com.jb.fe.components.ItemComponent;
-import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
+import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.UnitStatsComponent;
-import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.movement.MovementUtilityCalculator;
@@ -36,6 +36,9 @@ public class AISystem extends EntitySystem{
 	
 	// Movement Calculator
 	private MovementUtilityCalculator movementUtilityCalculator;
+	
+	// Combat Calculator
+	private CombatSystemCalculator combatSystemCalculator;
 	
 	// Component Mappers 
 	private ComponentMapper<MovementStatsComponent> movementComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
@@ -55,6 +58,7 @@ public class AISystem extends EntitySystem{
 	
 	// Entity to process
 	private Entity enemyUnit;
+	private Entity currentUnitToAttack;
 	
 	public AISystem() {
 		// This system should only be started when the AI is needed.
@@ -227,7 +231,6 @@ public class AISystem extends EntitySystem{
 			finalMoveCell = enemyUnitComponent.currentCell;
 		}
 		movementUtilityCalculator.createPathFindingQueue(finalMoveCell, enemyUnit);
-		enemyUnitComponent.isMoving = true;
 		UnitMovementSystem.setEntity(enemyUnit);
 		enemyUnit = null;
 	}
@@ -242,7 +245,7 @@ public class AISystem extends EntitySystem{
 	private void findUnitToAttack() {
 		// Initialize stats for finding enemy -> Add moving to Eirika if we find her -> add other checks here
 		int lowestHP = 100000;
-		Entity currentUnitToAttack = null;
+		currentUnitToAttack = null;
 		UnitStatsComponent allyUnitStatsComponent;
 		for (Entity allyUnit : reachableUnits) {
 			allyUnitStatsComponent = uComponentMapper.get(allyUnit);
@@ -257,7 +260,9 @@ public class AISystem extends EntitySystem{
 		findTileToMoveTo(currentUnitToAttack);
 	}
 	
-	// Find Tile to Move to -> This algorithm will have to be modified for ranged units
+	// Find Tile to Move to -> if we reached this far, that means there is an enemy that we can attack and move to
+	// First part: if the tile that we can move to is occupied by us, don't move.
+	// Second part: if the tile is not occupied by us, then just move to that tile
 	private void findTileToMoveTo(Entity unitToAttack) {
 		// Check if unit is melee or ranged
 		if (iComponentMapper.get(invComponentMapper.get(unitToAttack).selectedItem).maxRange == 1) {
@@ -269,7 +274,7 @@ public class AISystem extends EntitySystem{
 								movementUtilityCalculator.createPathFindingQueue(enemyUnitComponent.destinationCell, enemyUnit);
 								enemyUnitComponent.isMoving = true;
 								UnitMovementSystem.setEntity(enemyUnit);
-								enemyUnit = null;
+								aiComponentMapper.get(enemyUnit).shouldAttack = true;
 								return;
 							}
 						} else {
@@ -277,7 +282,7 @@ public class AISystem extends EntitySystem{
 							movementUtilityCalculator.createPathFindingQueue(enemyUnitComponent.destinationCell, enemyUnit);
 							enemyUnitComponent.isMoving = true;
 							UnitMovementSystem.setEntity(enemyUnit);
-							enemyUnit = null;
+							aiComponentMapper.get(enemyUnit).shouldAttack = true;
 							return;
 						}
 				}
@@ -288,7 +293,30 @@ public class AISystem extends EntitySystem{
 	}
 	
 	// Process Combat
-	
+	public void processCombat() {
+		if (enemyUnit != null && aiComponentMapper.get(enemyUnit).shouldAttack) {
+			System.out.println("FIGHTING");
+			System.out.println(enemyUnit.getComponent(NameComponent.class).name);
+			System.out.println(currentUnitToAttack.getComponent(NameComponent.class).name);
+			
+			// Set Units
+			CombatSystem.attackingUnit = enemyUnit;
+			CombatSystem.defendingUnit = currentUnitToAttack;
+			combatSystemCalculator.setUnits(enemyUnit, currentUnitToAttack);
+			
+			// Calulate Numbers
+			CombatSystemCalculator.AttackingDamage = combatSystemCalculator.calculateDamage();
+			
+			// Swap
+			combatSystemCalculator.setUnits(currentUnitToAttack, enemyUnit);
+			CombatSystemCalculator.DefendingDamage = combatSystemCalculator.calculateDamage();
+			
+			// Process
+			CombatSystem.isProcessing = true;
+			aiComponentMapper.get(enemyUnit).shouldAttack = false;
+			enemyUnit = null;
+		}
+	}
 	
 	/*
 	 * Sort entities based on alliance
@@ -320,5 +348,9 @@ public class AISystem extends EntitySystem{
 	
 	public void setMovementCalculator(MovementUtilityCalculator movementUtilityCalculator) {
 		this.movementUtilityCalculator = movementUtilityCalculator;
+	}
+	
+	public void setCombatSystemCalculator(CombatSystemCalculator combatSystemCalculator) {
+		this.combatSystemCalculator = combatSystemCalculator;
 	}
 }

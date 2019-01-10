@@ -36,6 +36,7 @@ public class CombatSystem extends EntitySystem{
 	public void update(float delta) {
 		if (!isProcessing) { return; }
 		
+		
 		// Process attacking unit first
 		UnitStatsComponent defendingUnitStats = uComponentMapper.get(defendingUnit);
 		if (CombatSystemCalculator.AttackingDamage != -10000) {

@@ -72,5 +72,19 @@
         "ItemSoundName": "Lance",
         "ItemType": "Physical",
         "IsBroken": false
+    }, "Demon Edge" : {
+        "Name": "Demon Edge",
+        "Uses": 5,
+        "Might": 15,
+        "Weight": 20,
+        "Hit": 100,
+        "Crit": 0,
+        "MaxRange": 1,
+        "MinRange": 1,
+        "EffectiveBonus": 1,
+        "ItemClass": "Sword",
+        "ItemSoundName": "Sword",
+        "ItemType": "Physical",
+        "IsBroken": false
     }
 }

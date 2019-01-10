@@ -119,6 +119,7 @@ public class GameScreen extends ScreenAdapter{
 		combatSystem.loadLevel(currentLevel);
 		movementUtilityCalculator = new MovementUtilityCalculator(level, unitMapCellUpdater);
 		aiSystem.setMovementCalculator(movementUtilityCalculator);
+		aiSystem.setCombatSystemCalculator(combatSystemCalculator);
 		
 		createUserInterface();
 	}

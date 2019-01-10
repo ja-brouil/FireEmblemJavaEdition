@@ -7,15 +7,17 @@ public class Artifical_IntelligenceComponent implements Component{
 	// Active
 	public boolean isProcessing;
 	
+	// Process combat
+	public boolean shouldAttack;
+	
 	// AI Type
 	public AI_TYPE ai_Type;
 	
 	public Artifical_IntelligenceComponent() {
 		isProcessing = true;
+		shouldAttack = false;
 		ai_Type = AI_TYPE.AGGRESSIVE;
 	}
-	
-	// Locate all enemies
 	
 	public enum AI_TYPE {
 		PASSIVE,

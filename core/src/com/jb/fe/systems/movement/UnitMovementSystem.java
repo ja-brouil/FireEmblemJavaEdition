@@ -15,6 +15,7 @@ import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityDictionnary;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.gamePlay.AISystem;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
 
 /**
@@ -39,6 +40,7 @@ public class UnitMovementSystem extends EntitySystem {
 	// System for Unit Update
 	private UnitMapCellUpdater unitMapCellUpdater;
 	private UserInterfaceManager userInterfaceManager;
+	private AISystem aiSystem;
 
 	// Sound
 	private SoundSystem soundSystem;
@@ -123,6 +125,8 @@ public class UnitMovementSystem extends EntitySystem {
 
 			} else {
 				Artifical_IntelligenceComponent artifical_IntelligenceComponent = aiComponentMapper.get(unit);
+				// Process Combat in AI System
+				aiSystem.processCombat();
 				artifical_IntelligenceComponent.isProcessing = false;
 
 				aComponentMapper.get(unit).currentAnimation = aComponentMapper.get(unit).allAnimationObjects
@@ -161,6 +165,7 @@ public class UnitMovementSystem extends EntitySystem {
 		unitMapCellUpdater = getEngine().getSystem(UnitMapCellUpdater.class);
 		soundSystem = getEngine().getSystem(SoundSystem.class);
 		userInterfaceManager = getEngine().getSystem(UserInterfaceManager.class);
+		aiSystem = getEngine().getSystem(AISystem.class);
 	}
 
 	public static void setEntity(Entity unit) {

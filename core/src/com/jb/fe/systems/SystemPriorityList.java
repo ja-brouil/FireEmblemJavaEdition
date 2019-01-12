@@ -1,8 +1,8 @@
 package com.jb.fe.systems;
 
-public final class SystemPriorityDictionnary {
+public final class SystemPriorityList {
 
-	private SystemPriorityDictionnary() {}
+	private SystemPriorityList() {}
 	
 	// Change Priority Here
 	public static final int HandleInputAndUI = 0;

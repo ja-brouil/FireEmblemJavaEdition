@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Queue;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.MovementStatsComponent.Unit_State;
-import com.jb.fe.systems.SystemPriorityDictionnary;
+import com.jb.fe.systems.SystemPriorityList;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
@@ -52,7 +52,7 @@ public class TurnManager extends EntitySystem {
 	private ComponentMapper<Artifical_IntelligenceComponent> aiComponentMapper = ComponentMapper.getFor(Artifical_IntelligenceComponent.class);
 
 	public TurnManager() {
-		priority = SystemPriorityDictionnary.TurnManager;
+		priority = SystemPriorityList.TurnManager;
 		enemyUnits = new Queue<Entity>();
 		allyUnits = new Array<Entity>();
 		turn_Status = Turn_Status.TRANSITION_INTO_ALLY;

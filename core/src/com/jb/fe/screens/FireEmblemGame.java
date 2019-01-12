@@ -56,7 +56,7 @@ public class FireEmblemGame extends Game {
 
 		// Camera
 		gameCamera = new OrthographicCamera(WIDTH, HEIGHT);
-		gameCamera.translate(WIDTH / 2, HEIGHT / 2);
+		gameCamera.position.set(WIDTH / 2, HEIGHT / 2, 0);
 		gameCamera.update();
 		
 		// Asset Manager

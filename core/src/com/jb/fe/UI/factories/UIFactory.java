@@ -3,7 +3,6 @@ package com.jb.fe.UI.factories;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.jb.fe.UI.Text.TextObject;
 import com.jb.fe.UI.inventory.InventoryMenuBox;
 import com.jb.fe.UI.soundTemp.UISounds;
@@ -27,7 +26,7 @@ import com.jb.fe.systems.movement.UnitMovementSystem;
  */
 public class UIFactory {
 		
-	public static Entity createMapCursor(Level level, AssetManager assetManager, OrthographicCamera camera) {
+	public static Entity createMapCursor(Level level, AssetManager assetManager) {
 		Entity mapCursor = new Entity();
 		
 		// Components
@@ -37,7 +36,7 @@ public class UIFactory {
 		animationComponent.currentAnimation.width = FireEmblemGame.WIDTH / 15;
 		animationComponent.currentAnimation.height = FireEmblemGame.HEIGHT / 10;
 		
-		PositionComponent positionComponent = new PositionComponent(160,32);
+		PositionComponent positionComponent = new PositionComponent();
 		
 		StaticImageComponent staticImageComponent = new StaticImageComponent(assetManager, "UI/Cursor/staticCursor.png");
 		staticImageComponent.isEnabled = false;

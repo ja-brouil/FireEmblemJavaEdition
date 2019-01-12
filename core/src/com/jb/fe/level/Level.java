@@ -53,8 +53,8 @@ public class Level {
 		levelMap = assetManager.get(mapFileLocation, TiledMap.class);
 		
 		// Allies
-		Entity eirika = UnitFactory.createEirika(assetManager, "Eirika", "units/eirika/eirika copy.png", 100,
-				60, true, engine);
+		Entity eirika = UnitFactory.createEirika(assetManager, "Eirika", "units/eirika/eirika copy.png", 0,
+				0, true, engine);
 		engine.addEntity(eirika);
 		allAllies.add(eirika);
 		
@@ -62,17 +62,17 @@ public class Level {
 		setMapBounderies();
 		
 		// Start MapCell Array
-		allLevelMapCells = new MapCell[mapWidthLimit / MapCell.CELL_SIZE][mapHeightLimit / MapCell.CELL_SIZE];
+		allLevelMapCells = new MapCell[mapWidthLimit][mapHeightLimit];
 		
 		// Start Victory Condition
 		victoryCondition = new VictoryCondition();
 	}
 
 	/*
-	 * Property Keys:  width orientation hexside length tileheight tilewidth height
+	 * Property Keys:  width orientation hexsidelength tileheight tilewidth height
 	 */
 	public void setMapBounderies() {
-		mapWidthLimit = levelMap.getProperties().get("width", Integer.class) * MapCell.CELL_SIZE;
-		mapHeightLimit = levelMap.getProperties().get("height", Integer.class) * MapCell.CELL_SIZE;
+		mapWidthLimit = levelMap.getProperties().get("width", Integer.class);
+		mapHeightLimit = levelMap.getProperties().get("height", Integer.class);
 	}
 }

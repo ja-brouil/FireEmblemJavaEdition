@@ -1,6 +1,7 @@
 package com.jb.fe.UI;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.InventoryComponent;
@@ -63,4 +64,11 @@ public abstract class UserInterfaceState {
 	 * @param delta
 	 */
 	public void update(float delta) {};
+	
+	/**
+	 * Returns main entity
+	 */
+	public Entity getMainEntity() {
+		return null;
+	};
 }

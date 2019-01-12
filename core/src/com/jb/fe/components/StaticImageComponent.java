@@ -24,6 +24,7 @@ public class StaticImageComponent implements Component{
 	// Alpha
 	public float alpha = 1f;
 	
+	
 	public StaticImageComponent(AssetManager assetManager, String fileLocation) {
 		if (!assetManager.isLoaded(fileLocation, Texture.class)) {
 			assetManager.load(fileLocation, Texture.class);

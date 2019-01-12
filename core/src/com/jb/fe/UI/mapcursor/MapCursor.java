@@ -5,13 +5,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.jb.fe.UI.UserInterfaceState;
 import com.jb.fe.UI.factories.UIFactory;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.ItemComponent;
-import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.MovementStatsComponent.Unit_State;
+import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.level.Level;
@@ -39,10 +38,10 @@ public class MapCursor extends UserInterfaceState {
 	private float timerDelay;
 	private float currentDelay;
 	
-	public MapCursor(AssetManager assetManager, Level level, OrthographicCamera camera, Engine engine, SoundSystem soundSystem, UserInterfaceManager userInterfaceManager, InfoBoxUpdate infoBoxUpdate) {
+	public MapCursor(AssetManager assetManager, Level level, Engine engine, SoundSystem soundSystem, UserInterfaceManager userInterfaceManager, InfoBoxUpdate infoBoxUpdate) {
 		super(assetManager, soundSystem, userInterfaceManager);
 		mapCursorQuandrant = MAP_CURSOR_QUADRANT.TOP_LEFT;
-		mapCursor = UIFactory.createMapCursor(level, assetManager, camera);
+		mapCursor = UIFactory.createMapCursor(level, assetManager);
 		engine.addEntity(mapCursor);
 		
 		this.infoBoxUpdate = infoBoxUpdate;
@@ -121,19 +120,19 @@ public class MapCursor extends UserInterfaceState {
 		}
 
 		// Down
-		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+		else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
 			positionComponent.y -= MapCell.CELL_SIZE;
 			currentDelay = 0;
 		}
 
 		// Left
-		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+		else if (Gdx.input.isKeyPressed(Keys.LEFT)) {
 			positionComponent.x -= MapCell.CELL_SIZE;
 			currentDelay = 0;
 		}
 
 		// Right
-		if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+		else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			positionComponent.x += MapCell.CELL_SIZE;
 			currentDelay = 0;
 		}
@@ -171,8 +170,8 @@ public class MapCursor extends UserInterfaceState {
 			return false;
 		}
 		
-		if (positionComponent.x > level.mapWidthLimit - (animationComponent.currentAnimation.width * 2)) {
-			positionComponent.x = level.mapWidthLimit - (animationComponent.currentAnimation.width * 2);
+		if (positionComponent.x > (level.mapWidthLimit * MapCell.CELL_SIZE) - animationComponent.currentAnimation.width) {
+			positionComponent.x = (level.mapWidthLimit * MapCell.CELL_SIZE) - animationComponent.currentAnimation.width;
 			return false;
 		}
 		
@@ -181,8 +180,8 @@ public class MapCursor extends UserInterfaceState {
 			return false;
 		}
 		
-		if (positionComponent.y > level.mapHeightLimit - animationComponent.currentAnimation.height) {
-			positionComponent.y = level.mapHeightLimit - animationComponent.currentAnimation.height;
+		if (positionComponent.y > (level.mapHeightLimit * MapCell.CELL_SIZE) - animationComponent.currentAnimation.height) {
+			positionComponent.y = (level.mapHeightLimit * MapCell.CELL_SIZE) - animationComponent.currentAnimation.height;
 			return false;
 		}
 		
@@ -241,5 +240,10 @@ public class MapCursor extends UserInterfaceState {
 	
 	public InfoBoxUpdate getInfoBoxUpdate() {
 		return infoBoxUpdate;
+	}
+	
+	@Override
+	public Entity getMainEntity() {
+		return mapCursor;
 	}
 }

@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.jb.fe.UI.Text.TextObject;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.TextComponent;
-import com.jb.fe.systems.SystemPriorityDictionnary;
+import com.jb.fe.systems.SystemPriorityList;
 
 public class TextRenderer extends EntitySystem{
 
@@ -29,7 +29,7 @@ public class TextRenderer extends EntitySystem{
 	private GlyphLayout glyphLayout;
 	
 	public TextRenderer(SpriteBatch spriteBatch, AssetManager assetManager) {
-		priority = SystemPriorityDictionnary.TextRenderer;
+		priority = SystemPriorityList.TextRenderer;
 		this.spriteBatch = spriteBatch;
 		
 		assetManager.load("UI/font/outline.fnt", BitmapFont.class);

@@ -13,7 +13,7 @@ import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.map.MapCell;
-import com.jb.fe.systems.SystemPriorityDictionnary;
+import com.jb.fe.systems.SystemPriorityList;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.gamePlay.AISystem;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
@@ -46,7 +46,7 @@ public class UnitMovementSystem extends EntitySystem {
 	private SoundSystem soundSystem;
 
 	public UnitMovementSystem() {
-		priority = SystemPriorityDictionnary.MovementUpdate;
+		priority = SystemPriorityList.MovementUpdate;
 	}
 
 	@Override

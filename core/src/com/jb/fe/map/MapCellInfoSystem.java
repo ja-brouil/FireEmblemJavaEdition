@@ -43,7 +43,7 @@ public class MapCellInfoSystem {
 
 			// Tile Type
 			String prop = tiledObject.getProperties().get("TileType", String.class);
-
+			
 			// Regular Cells
 			if (prop.equals("")) {
 				mapCell.position.x = tiledObject.getProperties().get("x", Float.class);
@@ -169,6 +169,7 @@ public class MapCellInfoSystem {
 				
 			}
 		}
+		
 	}
 	
 	// Create Selector

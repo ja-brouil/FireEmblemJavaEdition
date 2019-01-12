@@ -169,8 +169,8 @@ public class MovementSelection extends UserInterfaceState{
 			return false;
 		}
 		
-		if (positionComponent.x > level.mapWidthLimit - (animationComponent.currentAnimation.width * 2)) {
-			positionComponent.x = level.mapWidthLimit - (animationComponent.currentAnimation.width * 2);
+		if (positionComponent.x > (level.mapWidthLimit * MapCell.CELL_SIZE) - (animationComponent.currentAnimation.width)) {
+			positionComponent.x = (level.mapWidthLimit * MapCell.CELL_SIZE) - (animationComponent.currentAnimation.width);
 			return false;
 		}
 		
@@ -179,11 +179,16 @@ public class MovementSelection extends UserInterfaceState{
 			return false;
 		}
 		
-		if (positionComponent.y > level.mapHeightLimit - animationComponent.currentAnimation.height) {
-			positionComponent.y = level.mapHeightLimit - animationComponent.currentAnimation.height;
+		if (positionComponent.y > (level.mapWidthLimit * MapCell.CELL_SIZE) - animationComponent.currentAnimation.height) {
+			positionComponent.y = (level.mapWidthLimit * MapCell.CELL_SIZE) - animationComponent.currentAnimation.height;
 			return false;
 		}
 		
 		return true;
+	}
+	
+	@Override
+	public Entity getMainEntity() {
+		return mapCursor;
 	}
 }

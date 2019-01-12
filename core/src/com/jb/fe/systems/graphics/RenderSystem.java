@@ -15,7 +15,7 @@ import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.ZOrderComponent;
-import com.jb.fe.systems.SystemPriorityDictionnary;
+import com.jb.fe.systems.SystemPriorityList;
 
 public class RenderSystem extends EntitySystem {
 	
@@ -54,7 +54,7 @@ public class RenderSystem extends EntitySystem {
 		};
 		
 		// Engine Priority
-		priority = SystemPriorityDictionnary.GraphicsRender;
+		priority = SystemPriorityList.GraphicsRender;
 	}
 	
 	// Entity Listener

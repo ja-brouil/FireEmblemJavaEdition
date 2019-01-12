@@ -17,13 +17,14 @@ import com.jb.fe.UI.mapcursor.MovementSelection;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCellInfoSystem;
 import com.jb.fe.map.MapEntityLoading;
-import com.jb.fe.map.MapRenderSystem;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.camera.CameraSystem;
 import com.jb.fe.systems.gamePlay.AISystem;
 import com.jb.fe.systems.gamePlay.CombatSystem;
 import com.jb.fe.systems.gamePlay.CombatSystemCalculator;
 import com.jb.fe.systems.gamePlay.TurnManager;
+import com.jb.fe.systems.graphics.MapRenderSystem;
 import com.jb.fe.systems.inputAndUI.InfoBoxUpdate;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
 import com.jb.fe.systems.movement.MovementUtilityCalculator;
@@ -34,7 +35,6 @@ public class GameScreen extends ScreenAdapter{
 
 	private Engine engine;
 	private AssetManager assetManager;
-	private OrthographicCamera gameCamera;
 	private SoundSystem soundSystem;
 	
 	// Level
@@ -46,6 +46,7 @@ public class GameScreen extends ScreenAdapter{
 	private MapEntityLoading mapEntityLoading;
 	
 	// Systems Required
+	private CameraSystem cameraSystem;
 	private UnitMapCellUpdater unitMapCellUpdater;
 	private UnitMovementSystem unitMovementSystem;
 	private TurnManager turnManagerSystem;
@@ -60,9 +61,9 @@ public class GameScreen extends ScreenAdapter{
 		this.engine = engine;
 		this.soundSystem = soundSystem;
 		this.assetManager = assetManager;
-		this.gameCamera = gameCamera;
 		
 		// Start Systems
+		cameraSystem = new CameraSystem(gameCamera, spriteBatch);
 		mapRenderSystem = new MapRenderSystem(gameCamera, spriteBatch);
 		mapCellInfoSystem = new MapCellInfoSystem(assetManager, engine);
 		mapEntityLoading = new MapEntityLoading(engine, assetManager);
@@ -76,6 +77,7 @@ public class GameScreen extends ScreenAdapter{
 		combatSystemCalculator = new CombatSystemCalculator();
 		
 		// Add Systems to the Engine
+		engine.addSystem(cameraSystem);
 		engine.addSystem(mapRenderSystem);
 		engine.addSystem(unitMapCellUpdater);
 		engine.addSystem(unitMovementSystem);
@@ -87,7 +89,9 @@ public class GameScreen extends ScreenAdapter{
 		engine.addSystem(combatSystem);
 	
 		// Start First Level
-		currentLevel = new Level("levels/level1/level1.tmx", assetManager, engine);
+		//currentLevel = new Level("levels/level1/level1.tmx", assetManager, engine);
+		//currentLevel = new Level("levels/level2/level2.tmx", assetManager, engine);
+		currentLevel = new Level("levels/level3/level3.tmx", assetManager, engine);
 		currentLevel.startLevel();
 		
 		// Set Audio
@@ -109,6 +113,7 @@ public class GameScreen extends ScreenAdapter{
 	 * @param level
 	 */
 	public void setNewMap(Level level) {
+		cameraSystem.startSystem(level);
 		mapRenderSystem.setCurrentLevel(level);
 		mapCellInfoSystem.processTiles(level);
 		mapEntityLoading.loadMap(level);
@@ -126,7 +131,7 @@ public class GameScreen extends ScreenAdapter{
 	
 	private void createUserInterface() {
 		// User Interface Creation
-		MapCursor mapCursor = new MapCursor(assetManager, currentLevel, gameCamera, engine, soundSystem, userInterfaceManager, infoBoxUpdate);
+		MapCursor mapCursor = new MapCursor(assetManager, currentLevel, engine, soundSystem, userInterfaceManager, infoBoxUpdate);
 		MovementSelection movementSelection = new MovementSelection(assetManager, soundSystem, userInterfaceManager, mapCursor.getMapCursorEntity(), currentLevel, unitMapCellUpdater, movementUtilityCalculator);
 		
 		// Add everything

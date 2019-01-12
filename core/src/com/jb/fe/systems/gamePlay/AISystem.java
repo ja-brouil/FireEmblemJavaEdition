@@ -20,7 +20,7 @@ import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.map.MapCell;
-import com.jb.fe.systems.SystemPriorityDictionnary;
+import com.jb.fe.systems.SystemPriorityList;
 import com.jb.fe.systems.movement.MovementUtilityCalculator;
 import com.jb.fe.systems.movement.UnitMovementSystem;
 
@@ -62,7 +62,7 @@ public class AISystem extends EntitySystem{
 	
 	public AISystem() {
 		// This system should only be started when the AI is needed.
-		priority = SystemPriorityDictionnary.AI_System;
+		priority = SystemPriorityList.AI_System;
 		setProcessing(false);
 		
 		reachableUnits = new Array<Entity>();
@@ -295,16 +295,12 @@ public class AISystem extends EntitySystem{
 	// Process Combat
 	public void processCombat() {
 		if (enemyUnit != null && aiComponentMapper.get(enemyUnit).shouldAttack) {
-			System.out.println("FIGHTING");
-			System.out.println(enemyUnit.getComponent(NameComponent.class).name);
-			System.out.println(currentUnitToAttack.getComponent(NameComponent.class).name);
-			
 			// Set Units
 			CombatSystem.attackingUnit = enemyUnit;
 			CombatSystem.defendingUnit = currentUnitToAttack;
 			combatSystemCalculator.setUnits(enemyUnit, currentUnitToAttack);
 			
-			// Calulate Numbers
+			// Calculate Numbers
 			CombatSystemCalculator.AttackingDamage = combatSystemCalculator.calculateDamage();
 			
 			// Swap

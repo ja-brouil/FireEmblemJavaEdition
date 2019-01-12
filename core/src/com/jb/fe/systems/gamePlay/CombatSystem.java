@@ -9,7 +9,7 @@ import com.jb.fe.components.ItemComponent;
 import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.level.Level;
-import com.jb.fe.systems.SystemPriorityDictionnary;
+import com.jb.fe.systems.SystemPriorityList;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 
 public class CombatSystem extends EntitySystem{
@@ -27,7 +27,7 @@ public class CombatSystem extends EntitySystem{
 	private ComponentMapper<MovementStatsComponent> mComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	
 	public CombatSystem(UnitMapCellUpdater unitMapCellUpdater) {
-		priority = SystemPriorityDictionnary.CombatPhase;
+		priority = SystemPriorityList.CombatPhase;
 		this.unitMapCellUpdater = unitMapCellUpdater;
 		isProcessing = false;
 	}
@@ -35,7 +35,6 @@ public class CombatSystem extends EntitySystem{
 	@Override
 	public void update(float delta) {
 		if (!isProcessing) { return; }
-		
 		
 		// Process attacking unit first
 		UnitStatsComponent defendingUnitStats = uComponentMapper.get(defendingUnit);

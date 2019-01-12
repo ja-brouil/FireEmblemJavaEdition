@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.jb.fe.UI.UserInterfaceState;
-import com.jb.fe.systems.SystemPriorityDictionnary;
+import com.jb.fe.systems.SystemPriorityList;
 
 public class UserInterfaceManager extends EntitySystem {
 	
@@ -18,7 +18,7 @@ public class UserInterfaceManager extends EntitySystem {
 	// User Interface Menu
 	public UserInterfaceManager() {
 		allUserInterfaceStates = new HashMap<>();
-		priority = SystemPriorityDictionnary.HandleInputAndUI;	
+		priority = SystemPriorityList.HandleInputAndUI;	
 	}
 	
 	@Override

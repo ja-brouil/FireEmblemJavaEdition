@@ -22,6 +22,10 @@ public class CameraSystem extends EntitySystem {
 	private int xConstant = 120;
 	private int yConstant = 80;
 	
+	// Camera Location outside access
+	public static float cameraX;
+	public static float cameraY;
+	
 	// User Interface
 	private UserInterfaceManager userInterfaceManager;
 	
@@ -53,15 +57,18 @@ public class CameraSystem extends EntitySystem {
 		PositionComponent mapCursorPosition = pComponentMapper.get(userInterfaceManager.currentState.getMainEntity());
 		
 		// Update Camera position based on where the map cursor is
-		
-		setCameraBoundery();
 		checkCameraUpdate();
+		setCameraBoundery();
 		spriteBatch.setProjectionMatrix(gameCam.combined);
 		gameCam.update();
 		
+		// Update Location
+		cameraX = gameCam.position.x;
+		cameraY = gameCam.position.y;
 		
 		// DEBUG
 		if (Gdx.input.isKeyJustPressed(Keys.B)) {
+			System.out.println("----------------");
 			System.out.println("CAMERA POSITION: " + gameCam.position);
 			System.out.println("Cam + Cursor Possiton diff: X: " + Math.abs(gameCam.position.x - mapCursorPosition.x) + " Y: " + Math.abs(gameCam.position.y - mapCursorPosition.y));
 		}
@@ -71,18 +78,18 @@ public class CameraSystem extends EntitySystem {
 	private void setCameraBoundery() {
 		
 		if (gameCam.position.x - xConstant < 0) {
-			gameCam.position.x = xConstant + MapCell.CELL_SIZE;
+			gameCam.position.x = xConstant;
 		}
 		
-		if (gameCam.position.x + xConstant  > maxLevelWidth) {
-			gameCam.position.x = maxLevelWidth - xConstant  ;
+		if (gameCam.position.x + xConstant > maxLevelWidth) {
+			gameCam.position.x = maxLevelWidth - xConstant;
 		}
 		
 		if (gameCam.position.y - yConstant < 0) {
-			gameCam.position.y = yConstant + MapCell.CELL_SIZE;
+			gameCam.position.y = yConstant;
 		}
 		
-		if (gameCam.position.y + yConstant   > maxLevelHeight) {
+		if (gameCam.position.y + yConstant > maxLevelHeight) {
 			gameCam.position.y = maxLevelHeight - yConstant;
 		}
 		
@@ -91,23 +98,20 @@ public class CameraSystem extends EntitySystem {
 	private void checkCameraUpdate() {
 		PositionComponent mapCursorPosition = pComponentMapper.get(userInterfaceManager.currentState.getMainEntity());
 		
-		// Top of the Map
-		if (Math.abs(gameCam.position.y - mapCursorPosition.y) >= yConstant) {
-			if (gameCam.position.y - mapCursorPosition.y > 0) {
-				gameCam.position.y -= 16;
-			} else {
-				gameCam.position.y += 16;
-			}
+			if (Math.abs(mapCursorPosition.x - gameCam.position.x) >= xConstant && mapCursorPosition.x - gameCam.position.x > 0) {
+				gameCam.translate(MapCell.CELL_SIZE, 0);
+			} 
 			
-		}
-		
-		if (Math.abs(gameCam.position.x - mapCursorPosition.x) >= xConstant) {
-			if (gameCam.position.x - mapCursorPosition.x > 0) {
-				gameCam.position.x -= 16;
-			} else {
-				gameCam.position.x += 16;
+			if (Math.abs(mapCursorPosition.x - gameCam.position.x) > xConstant && mapCursorPosition.x - gameCam.position.x < 0) {
+				gameCam.translate(-MapCell.CELL_SIZE, 0);
 			}
-			
-		}
+
+			if (Math.abs(mapCursorPosition.y - gameCam.position.y ) >= yConstant && mapCursorPosition.y - gameCam.position.y > 0) {
+				gameCam.translate(0, MapCell.CELL_SIZE);
+			}
+
+			if (Math.abs(mapCursorPosition.y - gameCam.position.y) > yConstant && mapCursorPosition.y - gameCam.position.y < 0) {
+				gameCam.translate(0, -MapCell.CELL_SIZE);
+			}
 	}
 }

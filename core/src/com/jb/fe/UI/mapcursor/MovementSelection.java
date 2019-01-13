@@ -179,8 +179,8 @@ public class MovementSelection extends UserInterfaceState{
 			return false;
 		}
 		
-		if (positionComponent.y > (level.mapWidthLimit * MapCell.CELL_SIZE) - animationComponent.currentAnimation.height) {
-			positionComponent.y = (level.mapWidthLimit * MapCell.CELL_SIZE) - animationComponent.currentAnimation.height;
+		if (positionComponent.y > (level.mapHeightLimit * MapCell.CELL_SIZE) - animationComponent.currentAnimation.height) {
+			positionComponent.y = (level.mapHeightLimit * MapCell.CELL_SIZE) - animationComponent.currentAnimation.height;
 			return false;
 		}
 		

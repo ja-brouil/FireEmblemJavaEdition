@@ -9,8 +9,9 @@
         "MaxRange" : 1,
         "MinRange" : 1,
         "EffectiveBonus" : 1,
-        "ItemType" : "Sword",
+        "ItemClass" : "Sword",
         "ItemSoundName" : "Sword",
+        "ItemType": "Physical",
         "IsBroken" : false
     },
     "Iron Sword" : {
@@ -23,8 +24,9 @@
         "MaxRange" : 1,
         "MinRange" : 1,
         "EffectiveBonus" : 1,
-        "ItemType" : "Sword",
+        "ItemClass" : "Sword",
         "ItemSoundName" : "Sword",
+        "ItemType": "Physical",
         "IsBroken" : false
     },
     "Steel Sword" : {
@@ -37,8 +39,52 @@
         "MaxRange" : 1,
         "MinRange" : 1,
         "EffectiveBonus" : 1,
-        "ItemType" : "Sword",
+        "ItemClass" : "Sword",
         "ItemSoundName" : "Sword",
+        "ItemType": "Physical",
         "IsBroken" : false
+    },
+    "Iron Axe" : {
+        "Name": "Iron Axe",
+        "Uses": 45,
+        "Might": 8,
+        "Weight": 10,
+        "Hit": 75,
+        "Crit": 0,
+        "MaxRange": 1,
+        "MinRange": 1,
+        "EffectiveBonus": 1,
+        "ItemClass": "Axe",
+        "ItemSoundName": "Axe",
+        "ItemType" : "Physical",
+        "IsBroken": false
+    }, "Silver Lance": {
+        "Name": "Silver Lance",
+        "Uses": 20,
+        "Might": 10,
+        "Weight": 14,
+        "Hit": 75,
+        "Crit": 0,
+        "MaxRange": 1,
+        "MinRange": 1,
+        "EffectiveBonus": 1,
+        "ItemClass": "Lance",
+        "ItemSoundName": "Lance",
+        "ItemType": "Physical",
+        "IsBroken": false
+    }, "Demon Edge" : {
+        "Name": "Demon Edge",
+        "Uses": 5,
+        "Might": 15,
+        "Weight": 20,
+        "Hit": 100,
+        "Crit": 0,
+        "MaxRange": 1,
+        "MinRange": 1,
+        "EffectiveBonus": 1,
+        "ItemClass": "Sword",
+        "ItemSoundName": "Sword",
+        "ItemType": "Physical",
+        "IsBroken": false
     }
 }

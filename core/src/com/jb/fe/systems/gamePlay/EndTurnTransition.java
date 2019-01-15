@@ -11,6 +11,7 @@ import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.camera.CameraSystem;
 import com.jb.fe.systems.gamePlay.TurnManager.Turn_Status;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
 
@@ -95,7 +96,7 @@ public class EndTurnTransition {
 
 			// Finish animation | this needs to be changed to when its off the viewport of
 			// the camera later
-			if (positionComponent.x > FireEmblemGame.WIDTH) {
+			if (positionComponent.x > FireEmblemGame.WIDTH + (CameraSystem.cameraX - CameraSystem.xConstant)) {
 				positionComponent.x = 0;
 				staticImageComponent.setNewImageLocation(0, 0, 240, 32);
 				staticImageComponent.isEnabled = false;

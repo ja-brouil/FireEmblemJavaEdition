@@ -19,13 +19,6 @@ public class MapCell {
 	public Entity blueSquare;
 	public Entity redSquare;
 	
-	// Cell Type
-	public static enum CellType {
-		Grass, Forest, Fortress, Throne, Village, Impassable;
-	}
-	
-	public CellType cellType;
-	
 	// Game Play
 	public float defenceBonus;
 	public float avoidanceBonus;
@@ -51,10 +44,9 @@ public class MapCell {
 	public MapCell() {
 		position = new PositionComponent();
 		adjTiles = new Array<MapCell>();
-		cellType = CellType.Grass;
 		defenceBonus = 0;
 		avoidanceBonus = 0;
-		movementCost = MovementTileValues.NORMAL;
+		movementCost = 1;
 		isVisited = false;
 		occupyingUnit = null;
 		parentTile = null;
@@ -64,31 +56,6 @@ public class MapCell {
 		hCost = 0;
 		parentTileAStar = null;
 		tileName = "PlaceHolder";
-	}
-	
-	public static class MovementTileValues {
-		public static final int NORMAL = 1;
-		public static final int FOREST = 2;
-		public static final int FORTRESS = 2;
-		public static final int IMPASSABLE = 100;
-	}
-	
-	public static class DefenseTileBonus {
-		public static final int GRASS_DEF = 0;
-		public static final int THRONE_DEF = 3;
-		public static final int FOREST_DEF = 1;
-		public static final int FORTRESS_DEF = 2;
-		public static final int VILLAGE_DEF = 1;
-		public static final int IMPASSABLE_DEF = 0;
-	}
-	
-	public static class AvoidanceTileBonus {
-		public static final int GRASS_AVD = 0;
-		public static final int THRONE_AVD = 20;
-		public static final int FOREST_AVD = 20;
-		public static final int FORTRESS_AVD = 10;
-		public static final int VILLAGE_AVD = 5;
-		public static final int IMPASSABLE_AVD = 0;
 	}
 	
 	public int getFCost() {

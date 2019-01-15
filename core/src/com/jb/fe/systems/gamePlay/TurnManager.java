@@ -56,7 +56,7 @@ public class TurnManager extends EntitySystem {
 		enemyUnits = new Queue<Entity>();
 		allyUnits = new Array<Entity>();
 		turn_Status = Turn_Status.TRANSITION_INTO_ALLY;
-		aiDelay = 0.1f;
+		aiDelay = 0.5f;
 	}
 
 	@Override

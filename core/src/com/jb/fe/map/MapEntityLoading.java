@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.jb.fe.components.NameComponent;
@@ -33,7 +34,7 @@ public class MapEntityLoading {
 		loadEnemies(level.levelMap.getLayers().get("Enemies").getObjects());
 		
 		// Load Allies
-		loadAllies(level.levelMap.getLayers().get("Allies").getObjects());
+		setAllies(level.levelMap.getLayers().get("Allies").getObjects());
 	}
 	
 	private void loadEnemies(MapObjects enemyObjectLayer) {
@@ -46,26 +47,36 @@ public class MapEntityLoading {
 	}
 	
 	
-	private void loadAllies(MapObjects allyMapObjectLayer) {
-		// Check if ally exists
-		allyMapObjectLayer.forEach((allyObject) -> {
+	private void setAllies(MapObjects allyMapObjectLayer) {
+		for (MapObject allyObject : allyMapObjectLayer) {
 			MapProperties allyObjectProp = allyObject.getProperties();
-			String nameObject = allyObjectProp.get("Name", String.class);
+			String allyObjectNameString = allyObjectProp.get("Name", String.class);
+			
+			// Create all objects that aren't in the array list
 			for (int i = 0; i < currentLevel.allAllies.size; i++) {
-				String nameInArray = nComponentMapper.get(currentLevel.allAllies.get(i)).name;
-				if (nameObject.equals(nameInArray)){
-					// set new position
+				String allyArrayListName = nComponentMapper.get(currentLevel.allAllies.get(i)).name;
+				if (allyArrayListName.equalsIgnoreCase(allyObjectNameString)) {
 					PositionComponent positionComponent = pComponentMapper.get(currentLevel.allAllies.get(i));
 					positionComponent.x = allyObjectProp.get("x", Float.class);
 					positionComponent.y = allyObjectProp.get("y", Float.class);
-				} else {
-					// Create Entity based on the stats
-					Entity ally = createUnit(allyObjectProp);
-					engine.addEntity(ally);
-					currentLevel.allAllies.add(ally);
+					allyMapObjectLayer.remove(allyObject);
 				}
 			}
-		});
+		}
+		
+		for (MapObject allyObject : allyMapObjectLayer) {
+			MapProperties allyObjectProp = allyObject.getProperties();
+			Entity newAlly = createUnit(allyObjectProp);
+			engine.addEntity(newAlly);
+			currentLevel.allAllies.add(newAlly);
+		}
+	}
+	
+	/**
+	 * Calls this only on the first level to create the allies that don't exist.
+	 */
+	public void loadFirstAllies() {
+		
 	}
 	
 	// Unit Class Ceation

@@ -15,6 +15,7 @@ import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.systems.SystemPriorityList;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.camera.CameraSystem;
 import com.jb.fe.systems.gamePlay.AISystem;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
 
@@ -41,12 +42,15 @@ public class UnitMovementSystem extends EntitySystem {
 	private UnitMapCellUpdater unitMapCellUpdater;
 	private UserInterfaceManager userInterfaceManager;
 	private AISystem aiSystem;
+	private CameraSystem cameraSystem;
+	private boolean cameraReset;
 
 	// Sound
 	private SoundSystem soundSystem;
 
 	public UnitMovementSystem() {
 		priority = SystemPriorityList.MovementUpdate;
+		cameraReset = false;
 	}
 
 	@Override
@@ -56,7 +60,15 @@ public class UnitMovementSystem extends EntitySystem {
 		}
 
 		MovementStatsComponent unitStatsComponent = sComponentMapper.get(unit);
-
+		MapCursor mapCursor = (MapCursor) userInterfaceManager.allUserInterfaceStates.get("MapCursor");
+		
+		// Reset Camera if it's off screen
+		if (!cameraReset) {
+			cameraSystem.cameraMovementReset(unit,mapCursor.getMapCursorEntity());
+			cameraReset = true;
+			return;
+		}
+		
 		// Destination Cell and Starting Cell
 		MapCell startingCell = unitStatsComponent.currentCell;
 		MapCell nextCell = unitStatsComponent.pathfindingQueue.first();
@@ -91,6 +103,7 @@ public class UnitMovementSystem extends EntitySystem {
 					* unitStatsComponent.animationMovementSpeed * Gdx.graphics.getDeltaTime();
 			unitPositionComponent.y += (nextCell.position.y - startingCell.position.y)
 					* unitStatsComponent.animationMovementSpeed * Gdx.graphics.getDeltaTime();
+			
 		} else {
 			// Finalize movement to prevent rounding errors
 			unitPositionComponent.x = nextCell.position.x;
@@ -144,9 +157,6 @@ public class UnitMovementSystem extends EntitySystem {
 
 			// Update all units position
 			unitMapCellUpdater.updateCellInfo();
-
-			// Remove unit
-			UnitMovementSystem.unit = null;
 			
 			// Set UI to Action Menu
 			if (unitStatsComponent.isAlly) {
@@ -155,9 +165,15 @@ public class UnitMovementSystem extends EntitySystem {
 			}
 			
 			// Move Map Cursor
-			MapCursor mapCursor = (MapCursor) userInterfaceManager.allUserInterfaceStates.get("MapCursor");
 			pComponentMapper.get(mapCursor.getMapCursorEntity()).x = unitPositionComponent.x;
 			pComponentMapper.get(mapCursor.getMapCursorEntity()).y = unitPositionComponent.y;
+			
+			// Reset camera
+			cameraSystem.cameraMovementReset(unit, mapCursor.getMainEntity());
+			cameraReset = false;
+			
+			// Remove unit
+			UnitMovementSystem.unit = null;
 		}
 	}
 
@@ -166,6 +182,7 @@ public class UnitMovementSystem extends EntitySystem {
 		soundSystem = getEngine().getSystem(SoundSystem.class);
 		userInterfaceManager = getEngine().getSystem(UserInterfaceManager.class);
 		aiSystem = getEngine().getSystem(AISystem.class);
+		cameraSystem = getEngine().getSystem(CameraSystem.class);
 	}
 
 	public static void setEntity(Entity unit) {

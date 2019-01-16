@@ -13,6 +13,7 @@ import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.TextComponent;
 import com.jb.fe.components.ZOrderComponent;
+import com.jb.fe.systems.camera.CameraSystem;
 import com.jb.fe.systems.graphics.ZOrder;
 import com.jb.fe.systems.movement.MovementUtilityCalculator;
 
@@ -90,6 +91,10 @@ public class TerrainInfoBox extends MenuBox {
 			positionComponent.x = 4;
 			positionComponent.y = 5;
 		}
+		
+		// Add Camera Offset
+		positionComponent.x += (CameraSystem.cameraX - CameraSystem.xConstant);
+		positionComponent.y += (CameraSystem.cameraY - CameraSystem.yConstant);
 		
 		// Update Text
 		textComponent.textArray.get(0).text = MovementUtilityCalculator.getMapCellStatic(mapCursor.getMapCursorEntity()).tileName;

@@ -12,6 +12,7 @@ import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.TextComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.screens.FireEmblemGame;
+import com.jb.fe.systems.camera.CameraSystem;
 import com.jb.fe.systems.graphics.ZOrder;
 
 public class InventoryMenuBox extends MenuBox {
@@ -21,8 +22,6 @@ public class InventoryMenuBox extends MenuBox {
 	private Entity topinventoryDecorationEntity;
 	private Entity bottomInventoryDecorationEntity;
 	private StaticImageComponent itemInventoryBoxImage;
-	private StaticImageComponent topDecorationStaticImage;
-	private StaticImageComponent bottomDecorationStaticImage;
 	private PositionComponent itemInvPositionComponent;
 	private ZOrderComponent zOrderComponentInv;
 	private TextComponent itemBoxTextComponent;
@@ -89,35 +88,6 @@ public class InventoryMenuBox extends MenuBox {
 		boxEntity.add(itemStatsTextComponent);
 		engine.addEntity(boxEntity);
 		
-		/*
-		// Top Decoration
-		topinventoryDecorationEntity = new Entity();
-		topDecorationStaticImage = new StaticImageComponent(assetManager, "UI/itemBox/topDecoration.png");
-		topDecorationStaticImage.width = 90;
-		topDecorationStaticImage.height = 12;
-		topDecorationStaticImage.isEnabled = false;
-		PositionComponent topPositionComponent = new PositionComponent(10,70);
-		ZOrderComponent topZOrderComponent = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
-		
-		topinventoryDecorationEntity.add(topDecorationStaticImage);
-		topinventoryDecorationEntity.add(topPositionComponent);
-		topinventoryDecorationEntity.add(topZOrderComponent);
-		engine.addEntity(topinventoryDecorationEntity);
-		
-		// Bottom Decoration
-		bottomInventoryDecorationEntity = new Entity();
-		bottomDecorationStaticImage = new StaticImageComponent(assetManager, "UI/itemBox/bottomDecoration.png");
-		bottomDecorationStaticImage.width = 90;
-		bottomDecorationStaticImage.height = 4;
-		bottomDecorationStaticImage.isEnabled = false;
-		PositionComponent bottomPositionComponent = new PositionComponent(10, 40);
-		ZOrderComponent bottomZOrderComponent = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
-		
-		bottomInventoryDecorationEntity.add(bottomDecorationStaticImage);
-		bottomInventoryDecorationEntity.add(bottomPositionComponent);
-		bottomInventoryDecorationEntity.add(bottomZOrderComponent);
-		engine.addEntity(bottomInventoryDecorationEntity);
-		*/
 	}
 	
 	public Entity getItemInvBoxEntity() {
@@ -139,9 +109,6 @@ public class InventoryMenuBox extends MenuBox {
 		
 		itemStatsInfoImage.isEnabled = false;
 		itemStatsTextComponent.isDrawing = false;
-		
-		//bottomDecorationStaticImage.isEnabled = false;
-		//topDecorationStaticImage.isEnabled = false;
 	}
 	
 	public void turnOn() {
@@ -151,10 +118,13 @@ public class InventoryMenuBox extends MenuBox {
 		itemStatsInfoImage.isEnabled = true;
 		itemStatsTextComponent.isDrawing = true;
 		
-		//bottomDecorationStaticImage.isEnabled = true;
-		//topDecorationStaticImage.isEnabled = true;
+		// Set correct position
+		itemStatsInfoPosition.x = (CameraSystem.cameraX - CameraSystem.xConstant) + (FireEmblemGame.WIDTH - itemStatsInfoImage.width - 12);
+		itemStatsInfoPosition.y = (CameraSystem.cameraY - CameraSystem.yConstant) + 10;
+		
+		itemInvPositionComponent.x = 10 + (CameraSystem.cameraX - CameraSystem.xConstant);
 	}
 
 	@Override
 	public void update(MapCursor mapCursor) {}
-}
+} 

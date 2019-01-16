@@ -8,6 +8,7 @@ import com.jb.fe.UI.factories.TurnChangeTransitionFactory;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.SoundComponent;
 import com.jb.fe.components.StaticImageComponent;
+import com.jb.fe.level.Level;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
@@ -39,6 +40,10 @@ public class EndTurnTransition {
 	private float speed = 10;
 	private float maxTime = 1f;
 	private float currentTime = 0;
+	private int baseYPosition = 64;
+	
+	// Current Level
+	private Level currentLevel;
 
 	public EndTurnTransition(AssetManager assetManager, Engine engine, SoundSystem soundSystem, MusicSystem musicSystem,
 			TurnManager turnManager) {
@@ -92,12 +97,11 @@ public class EndTurnTransition {
 			// Break drawing
 			staticImageComponent.setNewImageLocation((int) positionComponent.x, 0, (int) staticImageComponent.width,
 					(int) staticImageComponent.height);
-			staticImageComponent.width = FireEmblemGame.WIDTH - positionComponent.x;
+			staticImageComponent.width = FireEmblemGame.WIDTH - positionComponent.x + (CameraSystem.cameraX - CameraSystem.xConstant);
 
 			// Finish animation | this needs to be changed to when its off the viewport of
 			// the camera later
 			if (positionComponent.x > FireEmblemGame.WIDTH + (CameraSystem.cameraX - CameraSystem.xConstant)) {
-				positionComponent.x = 0;
 				staticImageComponent.setNewImageLocation(0, 0, 240, 32);
 				staticImageComponent.isEnabled = false;
 				staticImageComponent.width = 240;
@@ -106,7 +110,11 @@ public class EndTurnTransition {
 				
 				if (turnManager.getTurnStatus().equals(Turn_Status.TRANSITION_INTO_ALLY)) {
 					turnManager.setTurnStatus(Turn_Status.PLAYER_TURN);
-					musicSystem.setCurrentSong("Ally Battle Theme SD", true);
+					if (currentLevel.allEnemies.size == 1) {
+						musicSystem.setCurrentSong("Ally One Unit Left", true);
+					} else {
+						musicSystem.setCurrentSong("Ally Battle Theme SD", true);
+					}
 					musicSystem.playCurrentSong();
 					userInterfaceManager.setStates(userInterfaceManager.allUserInterfaceStates.get("MapCursor"), userInterfaceManager.allUserInterfaceStates.get("MapCursor"));
 					userInterfaceManager.pauseUI();
@@ -115,11 +123,33 @@ public class EndTurnTransition {
 					musicSystem.setCurrentSong("Enemy Phase", true);
 					musicSystem.playCurrentSong();
 				}
+				
+				// Set End Turn Image Location
+				turnManager.setImageLocationHasBeenDone(false);
 			}
 		}
 
 	}
 
+	public void setImageLocation() {
+		
+		// Get position
+		PositionComponent staticImagePosition;
+		if (turnManager.getTurnStatus().equals(Turn_Status.TRANSITION_INTO_ALLY)) {
+			staticImagePosition = pComponentMapper.get(allyEndTurn);
+		} else {
+			staticImagePosition = pComponentMapper.get(enemyEndTurn);
+		}
+		
+		// Set position based on camera
+		staticImagePosition.y = baseYPosition + (CameraSystem.cameraY - CameraSystem.yConstant);
+		staticImagePosition.x = CameraSystem.cameraX - CameraSystem.xConstant;
+		
+		// Finished
+		turnManager.setImageLocationHasBeenDone(true);
+		
+	}
+	
 	private void playSound(Entity transitionGraphic) {
 		if (!soundAlreadyPlayed) {
 			soundSystem.playSound(soundComponentMapper.get(transitionGraphic).allSoundObjects.get("Transition"));
@@ -128,5 +158,9 @@ public class EndTurnTransition {
 	
 	public void setUserInterfaceManager(UserInterfaceManager userInterfaceManager) {
 		this.userInterfaceManager = userInterfaceManager;
+	}
+	
+	public void startEndTurn(Level currentLevel) {
+		this.currentLevel = currentLevel;
 	}
 }

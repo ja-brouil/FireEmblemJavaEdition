@@ -17,6 +17,7 @@ import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.camera.CameraSystem;
 import com.jb.fe.systems.inputAndUI.InfoBoxUpdate;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
 
@@ -189,22 +190,27 @@ public class MapCursor extends UserInterfaceState {
 	}
 	
 	// Call this anytime the cursor moves
-	private void mapCursorChecks() {
+	public void mapCursorChecks() {
 		quandrantCheck();
 		checkUnit();
 		infoBoxUpdate.update(this);
 	}
 	
+	public void mapCursorCameraCheck() {
+		quandrantCheck();
+		infoBoxUpdate.update(this);
+	}
+	
 	private void quandrantCheck() {
 		// Get Quadrant for info box movement
-		if (pComponentMapper.get(mapCursor).x >= (FireEmblemGame.WIDTH / 2)) {
-			if (pComponentMapper.get(mapCursor).y >= (FireEmblemGame.HEIGHT / 2)) {
+		if (pComponentMapper.get(mapCursor).x >= (FireEmblemGame.WIDTH / 2) + (CameraSystem.cameraX - CameraSystem.xConstant)) {
+			if (pComponentMapper.get(mapCursor).y >= (FireEmblemGame.HEIGHT / 2) + (CameraSystem.cameraY - CameraSystem.yConstant)) {
 				mapCursorQuandrant = MAP_CURSOR_QUADRANT.TOP_RIGHT;
 			} else {
 				mapCursorQuandrant = MAP_CURSOR_QUADRANT.BOTTOM_RIGHT;
 			}
 		} else {
-			if (pComponentMapper.get(mapCursor).y < (FireEmblemGame.HEIGHT / 2)) {
+			if (pComponentMapper.get(mapCursor).y < (FireEmblemGame.HEIGHT / 2) + (CameraSystem.cameraY - CameraSystem.yConstant)) {
 				mapCursorQuandrant = MAP_CURSOR_QUADRANT.BOTTOM_LEFT;
 			} else {
 				mapCursorQuandrant = MAP_CURSOR_QUADRANT.TOP_LEFT;

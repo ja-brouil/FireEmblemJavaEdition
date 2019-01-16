@@ -89,8 +89,8 @@ public class GameScreen extends ScreenAdapter{
 		engine.addSystem(combatSystem);
 	
 		// Start First Level
-		//currentLevel = new Level("levels/level1/level1.tmx", assetManager, engine);
-		currentLevel = new Level("levels/level2/level2.tmx", assetManager, engine);
+		currentLevel = new Level("levels/level1/level1.tmx", assetManager, engine);
+		//currentLevel = new Level("levels/level2/level2.tmx", assetManager, engine);
 		//currentLevel = new Level("levels/level3/level3.tmx", assetManager, engine);
 		//currentLevel = new Level("levels/level4/level4.tmx", assetManager, engine);
 		currentLevel.startLevel();
@@ -99,6 +99,7 @@ public class GameScreen extends ScreenAdapter{
 		musicSystem.addNewSong("Ally Battle Theme", "music/FE Level1 HD Good.mp3", assetManager);
 		musicSystem.addNewSong("Ally Battle Theme SD", "music/FE Level1 SD.mp3", assetManager);
 		musicSystem.addNewSong("Enemy Phase", "music/enemy theme.mp3", assetManager);
+		musicSystem.addNewSong("Ally One Unit Left", "music/oneUnitLeft.mp3", assetManager);
 		
 		// Set Level
 		setNewMap(currentLevel);
@@ -120,7 +121,7 @@ public class GameScreen extends ScreenAdapter{
 		mapEntityLoading.loadMap(level);
 		unitMapCellUpdater.startSystem(level);
 		unitMovementSystem.startSystem();
-		turnManagerSystem.startSystem(level.assetManager);
+		turnManagerSystem.startSystem(level.assetManager, level);
 		unitMapCellUpdater.updateCellInfo();
 		combatSystem.loadLevel(currentLevel);
 		movementUtilityCalculator = new MovementUtilityCalculator(level, unitMapCellUpdater);

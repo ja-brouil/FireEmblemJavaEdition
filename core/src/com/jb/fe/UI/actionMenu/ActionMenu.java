@@ -16,6 +16,7 @@ import com.jb.fe.components.TextComponent;
 import com.jb.fe.components.MovementStatsComponent.Unit_State;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.camera.CameraSystem;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 import com.jb.fe.systems.movement.UnitMovementSystem;
@@ -185,11 +186,11 @@ public class ActionMenu extends UserInterfaceState {
 	
 	// Utilities
 	private void preventHandOutOfBounds(PositionComponent positionComponent) {
-		if (positionComponent.y < 76) {
+		if (positionComponent.y < 76 + (CameraSystem.cameraY - CameraSystem.yConstant)) {
 			positionComponent.y = 76;
 		}
 		
-		if (positionComponent.y > 121) {
+		if (positionComponent.y > 121 + (CameraSystem.cameraY - CameraSystem.yConstant)) {
 			positionComponent.y = 121;
 		}
 	}

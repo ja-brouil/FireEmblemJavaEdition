@@ -6,7 +6,6 @@ public final class SystemPriorityList {
 	
 	// Change Priority Here
 	public static final int HandleInputAndUI = 0;
-	public static final int MapCursorOutOfbounds = 1;
 	public static final int CameraUpdate = 2;
 	public static final int AI_System = 6;
 	public static final int TurnManager = 3;

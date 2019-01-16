@@ -18,6 +18,7 @@ import com.jb.fe.components.TextComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.screens.FireEmblemGame;
+import com.jb.fe.systems.camera.CameraSystem;
 import com.jb.fe.systems.graphics.ZOrder;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
 
@@ -157,6 +158,10 @@ public class UnitInfoBox extends MenuBox {
 			positionComponent.x = 3;
 			positionComponent.y = FireEmblemGame.HEIGHT - 40;
 		}
+		
+		// Add Camera Offset
+		positionComponent.x += (CameraSystem.cameraX - CameraSystem.xConstant);
+		positionComponent.y += (CameraSystem.cameraY - CameraSystem.yConstant);
 		
 		// Set HP Bar Positions
 		emptyHPPositionComponent.x = positionComponent.x + emptyHPBarX;

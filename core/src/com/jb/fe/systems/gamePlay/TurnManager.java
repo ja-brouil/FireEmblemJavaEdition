@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Queue;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.MovementStatsComponent.Unit_State;
+import com.jb.fe.level.Level;
 import com.jb.fe.systems.SystemPriorityList;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
@@ -42,6 +43,7 @@ public class TurnManager extends EntitySystem {
 	// Transition
 	private EndTurnTransition endTurnTransition;
 	private UserInterfaceManager userInterfaceManager;
+	private boolean endTurnLocationHasBeenSet;
 	
 	// Audio
 	private MusicSystem musicSystem;
@@ -57,6 +59,7 @@ public class TurnManager extends EntitySystem {
 		allyUnits = new Array<Entity>();
 		turn_Status = Turn_Status.TRANSITION_INTO_ALLY;
 		aiDelay = 0.5f;
+		endTurnLocationHasBeenSet = false;
 	}
 
 	@Override
@@ -147,9 +150,10 @@ public class TurnManager extends EntitySystem {
 				unitBeingProcessed = null;
 				currentDelay = 0;
 			}
-		} else if (turn_Status.equals(Turn_Status.TRANSITION_INTO_ALLY)) {
-			endTurnTransition.update(delta);
-		} else if (turn_Status.equals(Turn_Status.TRANSITION_INTO_ENEMY)) {
+		} else if (turn_Status.equals(Turn_Status.TRANSITION_INTO_ALLY) || turn_Status.equals(Turn_Status.TRANSITION_INTO_ENEMY)) {
+			if (!endTurnLocationHasBeenSet) {
+				endTurnTransition.setImageLocation();
+			}
 			endTurnTransition.update(delta);
 		}
 	}
@@ -175,14 +179,18 @@ public class TurnManager extends EntitySystem {
 		this.turn_Status = turn_Status;
 	}
 	
+	public void setImageLocationHasBeenDone(boolean hasBeenDone) {
+		endTurnLocationHasBeenSet = hasBeenDone;
+	}
 	
-	public void startSystem(AssetManager assetManager) {
+	public void startSystem(AssetManager assetManager, Level currentLevel) {
 		aiSystem = getEngine().getSystem(AISystem.class);
 		musicSystem = getEngine().getSystem(MusicSystem.class);
 		soundSystem = getEngine().getSystem(SoundSystem.class);
 		endTurnTransition = new EndTurnTransition(assetManager, getEngine(), soundSystem, musicSystem, this);
 		userInterfaceManager = getEngine().getSystem(UserInterfaceManager.class);
 		endTurnTransition.setUserInterfaceManager(userInterfaceManager);
+		endTurnTransition.startEndTurn(currentLevel);
 	}
 	
 	public UserInterfaceManager getUserInterfaceManager() {

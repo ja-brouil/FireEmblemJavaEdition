@@ -15,6 +15,7 @@ import com.jb.fe.components.TextComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.level.Level;
 import com.jb.fe.level.VictoryCondition.VictoryConditionType;
+import com.jb.fe.systems.camera.CameraSystem;
 import com.jb.fe.systems.graphics.ZOrder;
 
 public class VictoryInfoBox extends MenuBox {
@@ -57,7 +58,8 @@ public class VictoryInfoBox extends MenuBox {
 	}
 	
 	@Override
-	public void update(MapCursor mapCursor) {
+	public void update(MapCursor mapCursor) {	
+		// Update Location of Main Box
 		if (mapCursor.getMapCursorQuandrant().equals(MAP_CURSOR_QUADRANT.TOP_LEFT)) {
 			sPosition = SCREEN_POSITION.TOP_RIGHT;
 			positionComponent.x = 180;
@@ -75,6 +77,12 @@ public class VictoryInfoBox extends MenuBox {
 			positionComponent.x = 180;
 			positionComponent.y = 140;
 		}
+		
+		// Add Camera Offset
+		positionComponent.x += (CameraSystem.cameraX - CameraSystem.xConstant);
+		positionComponent.y += (CameraSystem.cameraY - CameraSystem.yConstant);
+		
+		// Set Text
 		textComponent.textArray.first().x = positionComponent.x + 27;
 		textComponent.textArray.first().y = positionComponent.y + 10;
 	}

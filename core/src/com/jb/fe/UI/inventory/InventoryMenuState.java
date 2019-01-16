@@ -12,6 +12,7 @@ import com.jb.fe.components.InventoryComponent;
 import com.jb.fe.components.TextComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.camera.CameraSystem;
 import com.jb.fe.systems.graphics.ZOrder;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
 /**
@@ -45,7 +46,7 @@ public class InventoryMenuState extends UserInterfaceState {
 		unitInventoryComponent = iComponentMapper.get(UserInterfaceManager.unitSelected);
 		unitInventoryComponent.selectedItemIndex = 0;
 		unitInventoryComponent.selectedItem = unitInventoryComponent.inventory[unitInventoryComponent.selectedItemIndex];
-
+		
 		// Set new inventory
 		tComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).textArray.forEach((textObject) -> {
 			textObject.isEnabled = false;
@@ -56,13 +57,13 @@ public class InventoryMenuState extends UserInterfaceState {
 		for (int i = 0; i < unitInventoryComponent.amountOfItemsCarried; i++) {
 			textComponent.textArray.get(i).text = nComponentMapper.get(unitInventoryComponent.inventory[i]).name;
 			textComponent.textArray.get(i).isEnabled = true;
-			textComponent.textArray.get(i).y = (23 + ((5 - i) * 15) + 40);
+			textComponent.textArray.get(i).y = (23 + ((5 - i) * 15) + 40) + (CameraSystem.cameraY - CameraSystem.yConstant);
 		}
 		
 		// Box Dimensions
 		staticImageComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).height = 20 * unitInventoryComponent.amountOfItemsCarried;
 		staticImageComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).isEnabled = true;
-		pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).y = 40 + ((unitInventoryComponent.MAX_INVENTORY_SIZE - unitInventoryComponent.amountOfItemsCarried) * 16.8f);
+		pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).y = (40 + (CameraSystem.cameraY - CameraSystem.yConstant)) + ((unitInventoryComponent.MAX_INVENTORY_SIZE - unitInventoryComponent.amountOfItemsCarried) * 16.8f);
 		setTextInfo();
 		
 		// Turn everything on
@@ -71,8 +72,8 @@ public class InventoryMenuState extends UserInterfaceState {
 		// Hand
 		staticImageComponentMapper.get(hand).isEnabled = true;
 		hand.getComponent(ZOrderComponent.class).zOrder = ZOrder.UI_MIDDLE_LAYER;
-		pComponentMapper.get(hand).x = pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x - 5;
-		pComponentMapper.get(hand).y = tComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).textArray.get(0).y - 10;
+		pComponentMapper.get(hand).x = pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x - 5 + (CameraSystem.cameraX - CameraSystem.xConstant);
+		pComponentMapper.get(hand).y = tComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).textArray.get(0).y - 10 + (CameraSystem.cameraY - CameraSystem.yConstant);
 	}
 
 	@Override

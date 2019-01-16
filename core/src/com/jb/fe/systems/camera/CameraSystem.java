@@ -69,6 +69,7 @@ public class CameraSystem extends EntitySystem {
 				System.out.println("----------------");
 				System.out.println("CAMERA POSITION: " + gameCam.position);
 				System.out.println("Cam + Cursor Possiton diff: X: " + Math.abs(gameCam.position.x - mapCursorPosition.x) + " Y: " + Math.abs(gameCam.position.y - mapCursorPosition.y));
+				System.out.println("Camera Constants Difference: X: " + (cameraX - xConstant) + " Y: " + (cameraY - yConstant));
 			}
 		} else {
 			if (UserInterfaceManager.unitSelected == null) {
@@ -85,7 +86,6 @@ public class CameraSystem extends EntitySystem {
 			cameraX = gameCam.position.x;
 			cameraY = gameCam.position.y;
 		}
-		
 	}
 	
 	private void setCameraBoundery() {
@@ -105,6 +105,10 @@ public class CameraSystem extends EntitySystem {
 		if (gameCam.position.y + yConstant > maxLevelHeight) {
 			gameCam.position.y = maxLevelHeight - yConstant;
 		}
+		
+		// Update Location
+		cameraX = gameCam.position.x;
+		cameraY = gameCam.position.y;
 		
 	}
 	
@@ -126,6 +130,13 @@ public class CameraSystem extends EntitySystem {
 			if (Math.abs(mapCursorPosition.y - gameCam.position.y) > yConstant && mapCursorPosition.y - gameCam.position.y < 0) {
 				gameCam.translate(0, -MapCell.CELL_SIZE);
 			}
+			
+			if (userInterfaceManager.currentState.getClass().equals(MapCursor.class)) {
+				// Update Location
+				cameraX = gameCam.position.x;
+				cameraY = gameCam.position.y;
+				((MapCursor) userInterfaceManager.currentState).mapCursorCameraCheck();
+			}	
 	}
 	
 	private void checkCameraUpdate(Entity entityToFollow) {
@@ -161,6 +172,22 @@ public class CameraSystem extends EntitySystem {
 		gameCam.position.y = unitPosition.y;
 		
 		checkCameraUpdate(mapCursor);
+		setCameraBoundery();
+		spriteBatch.setProjectionMatrix(gameCam.combined);
+		gameCam.update();
+		
+		// Update Location
+		cameraX = gameCam.position.x;
+		cameraY = gameCam.position.y;
+	}
+	
+	public void followUnitCamera(Entity unit) {
+		PositionComponent unitPosition = pComponentMapper.get(unit);
+		
+		gameCam.position.x = unitPosition.x;
+		gameCam.position.y = unitPosition.y;
+		
+		checkCameraUpdate(unit);
 		setCameraBoundery();
 		spriteBatch.setProjectionMatrix(gameCam.combined);
 		gameCam.update();

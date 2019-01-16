@@ -103,6 +103,8 @@ public class UnitMovementSystem extends EntitySystem {
 					* unitStatsComponent.animationMovementSpeed * Gdx.graphics.getDeltaTime();
 			unitPositionComponent.y += (nextCell.position.y - startingCell.position.y)
 					* unitStatsComponent.animationMovementSpeed * Gdx.graphics.getDeltaTime();
+			// Move Camera with unit
+			cameraSystem.followUnitCamera(unit);
 			
 		} else {
 			// Finalize movement to prevent rounding errors
@@ -110,6 +112,7 @@ public class UnitMovementSystem extends EntitySystem {
 			unitPositionComponent.y = nextCell.position.y;
 			unitStatsComponent.currentCell = nextCell;
 			unitStatsComponent.pathfindingQueue.removeFirst();
+			cameraSystem.followUnitCamera(unit);
 		}
 
 		// Prevent weird crashes when FPS drops or game is paused

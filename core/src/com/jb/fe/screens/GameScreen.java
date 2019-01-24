@@ -89,8 +89,8 @@ public class GameScreen extends ScreenAdapter{
 		engine.addSystem(combatSystem);
 	
 		// Start First Level
-		currentLevel = new Level("levels/level1/level1.tmx", assetManager, engine);
-		//currentLevel = new Level("levels/level2/level2.tmx", assetManager, engine);
+		//currentLevel = new Level("levels/level1/level1.tmx", assetManager, engine);
+		currentLevel = new Level("levels/level2/level2.tmx", assetManager, engine);
 		//currentLevel = new Level("levels/level3/level3.tmx", assetManager, engine);
 		//currentLevel = new Level("levels/level4/level4.tmx", assetManager, engine);
 		currentLevel.startLevel();

@@ -9,6 +9,7 @@ import com.jb.fe.UI.UserInterfaceState;
 import com.jb.fe.UI.factories.UIFactory;
 import com.jb.fe.UI.soundTemp.UISounds;
 import com.jb.fe.components.InventoryComponent;
+import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.TextComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.systems.audio.SoundSystem;
@@ -32,13 +33,12 @@ public class InventoryMenuState extends UserInterfaceState {
 	private float currentDelay;
 
 	private InventoryComponent unitInventoryComponent;
-
+	
 	public InventoryMenuState(AssetManager assetManager, SoundSystem soundSystem,
 			UserInterfaceManager userInterfaceManager, Engine engine, Entity hand) {
 		super(assetManager, soundSystem, userInterfaceManager);
 		this.hand = hand;
 		inventoryMenuBox = UIFactory.createInventoryMenu(assetManager, engine);
-		
 	}
 
 	@Override
@@ -53,27 +53,32 @@ public class InventoryMenuState extends UserInterfaceState {
 			textObject.text = "";
 		});
 		
+		// Turn everything on
+		inventoryMenuBox.turnOn();
+		
 		TextComponent textComponent = tComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity());
 		for (int i = 0; i < unitInventoryComponent.amountOfItemsCarried; i++) {
 			textComponent.textArray.get(i).text = nComponentMapper.get(unitInventoryComponent.inventory[i]).name;
 			textComponent.textArray.get(i).isEnabled = true;
 			textComponent.textArray.get(i).y = (23 + ((5 - i) * 15) + 40) + (CameraSystem.cameraY - CameraSystem.yConstant);
+			textComponent.textArray.get(i).x = pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x + 30;
+			System.out.println(pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x);
+			System.out.println(pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x + 30);
 		}
 		
 		// Box Dimensions
 		staticImageComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).height = 20 * unitInventoryComponent.amountOfItemsCarried;
 		staticImageComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).isEnabled = true;
 		pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).y = (40 + (CameraSystem.cameraY - CameraSystem.yConstant)) + ((unitInventoryComponent.MAX_INVENTORY_SIZE - unitInventoryComponent.amountOfItemsCarried) * 16.8f);
-		setTextInfo();
 		
-		// Turn everything on
-		inventoryMenuBox.turnOn();
+		// Set new Text
+		setTextInfo();
 				
 		// Hand
 		staticImageComponentMapper.get(hand).isEnabled = true;
 		hand.getComponent(ZOrderComponent.class).zOrder = ZOrder.UI_MIDDLE_LAYER;
-		pComponentMapper.get(hand).x = pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x - 5 + (CameraSystem.cameraX - CameraSystem.xConstant);
-		pComponentMapper.get(hand).y = tComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).textArray.get(0).y - 10 + (CameraSystem.cameraY - CameraSystem.yConstant);
+		pComponentMapper.get(hand).x = pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x - 5;
+		pComponentMapper.get(hand).y = tComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).textArray.get(0).y - 10;
 	}
 
 	@Override
@@ -167,9 +172,27 @@ public class InventoryMenuState extends UserInterfaceState {
 	}
 	
 	private void setTextInfo() {
-		tComponentMapper.get(inventoryMenuBox.getBoxEntity()).textArray.get(3).text = "Atk " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).might);
-		tComponentMapper.get(inventoryMenuBox.getBoxEntity()).textArray.get(2).text = "Hit " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).hit);
-		tComponentMapper.get(inventoryMenuBox.getBoxEntity()).textArray.get(1).text = "Crit " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).crit);
-		tComponentMapper.get(inventoryMenuBox.getBoxEntity()).textArray.get(0).text = "Uses " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).uses);
+		// Item Info
+		TextComponent itemTextComponent = tComponentMapper.get(inventoryMenuBox.getBoxEntity());
+		PositionComponent itemBoxPositionComponent = pComponentMapper.get(inventoryMenuBox.getBoxEntity());
+		
+		itemTextComponent.textArray.get(4).x = itemBoxPositionComponent.x + 40;
+		itemTextComponent.textArray.get(4).y = itemBoxPositionComponent.y + 48;
+		
+		itemTextComponent.textArray.get(3).text = "Atk " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).might);
+		itemTextComponent.textArray.get(3).x = itemBoxPositionComponent.x + 8;
+		itemTextComponent.textArray.get(3).y = itemBoxPositionComponent.y + 34;
+		
+		itemTextComponent.textArray.get(2).text = "Hit " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).hit);
+		itemTextComponent.textArray.get(2).x = itemBoxPositionComponent.x + 8;
+		itemTextComponent.textArray.get(2).y = itemBoxPositionComponent.y + 14;
+		
+		itemTextComponent.textArray.get(1).text = "Crit " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).crit);
+		itemTextComponent.textArray.get(1).x = itemBoxPositionComponent.x + 42;
+		itemTextComponent.textArray.get(1).y = itemBoxPositionComponent.y + 34;
+		
+		itemTextComponent.textArray.get(0).text = "Uses " + Integer.toString(itemComponentMapper.get(unitInventoryComponent.selectedItem).uses);
+		itemTextComponent.textArray.get(0).x = itemBoxPositionComponent.x + 42;
+		itemTextComponent.textArray.get(0).y = itemBoxPositionComponent.y + 14;
 	}
 }

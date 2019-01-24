@@ -92,6 +92,7 @@ public class TurnManager extends EntitySystem {
 	
 	@Override
 	public void update(float delta) {
+		
 		// Dialogue Phase takes over anything here
 		if (userInterfaceManager.currentState.equals(userInterfaceManager.allUserInterfaceStates.get("Dialogue"))) {
 			return;
@@ -127,10 +128,17 @@ public class TurnManager extends EntitySystem {
 			// Enemy Phase
 			// Are we empty? Yes -> done, go to player phase | No, keep going
 			if (enemyUnits.size == 0 && unitBeingProcessed == null) {
+				userInterfaceManager.update(delta);
 				turn_Status = Turn_Status.TRANSITION_INTO_ALLY;
 				musicSystem.stopCurrentSong();
 				return;
 			}
+			
+			// Keep UI shut off
+			if (userInterfaceManager.checkProcessing()) {
+				userInterfaceManager.setProcessing(false);
+			}
+			
 			
 			// Unit
 			if (unitBeingProcessed == null) {
@@ -153,6 +161,7 @@ public class TurnManager extends EntitySystem {
 		} else if (turn_Status.equals(Turn_Status.TRANSITION_INTO_ALLY) || turn_Status.equals(Turn_Status.TRANSITION_INTO_ENEMY)) {
 			if (!endTurnLocationHasBeenSet) {
 				endTurnTransition.setImageLocation();
+				userInterfaceManager.turnOffUIDuringAIPhase();
 			}
 			endTurnTransition.update(delta);
 		}

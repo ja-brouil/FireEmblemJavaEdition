@@ -63,6 +63,8 @@ public class DialogueState extends UserInterfaceState {
 	public void startState() {
 		staticImageComponentMapper.get(dialogueBox).isEnabled = true;
 		staticImageComponentMapper.get(arrow).isEnabled = true;
+		//pComponentMapper.get(dialogueBox).x = 10 + (CameraSystem.cameraX - CameraSystem.xConstant);
+		//pComponentMapper.get(dialogueBox).y = 10 + (CameraSystem.cameraY - CameraSystem.yConstant);
 		tComponentMapper.get(dialogueBox).isDrawing = true;
 		isWaitingForInput = false;
 		
@@ -161,7 +163,7 @@ public class DialogueState extends UserInterfaceState {
 	 * @param text Text to Display
 	 */
 	public void addDialogue(String text) {
-		TextObject textObject = new TextObject(20, 50, text);
+		TextObject textObject = new TextObject(20 /*+ (CameraSystem.cameraX - CameraSystem.xConstant)*/, 50 /*+ (CameraSystem.cameraY - CameraSystem.yConstant)*/, text);
 		textObject.textFontSize = 0.2f;
 		textObject.textColor = Color.BLACK;
 		tComponentMapper.get(dialogueBox).textArray.addLast(textObject);

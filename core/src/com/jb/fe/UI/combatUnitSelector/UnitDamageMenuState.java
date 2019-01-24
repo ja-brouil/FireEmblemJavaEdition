@@ -15,6 +15,7 @@ import com.jb.fe.components.TextComponent;
 import com.jb.fe.map.MapCell;
 import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.camera.CameraSystem;
 import com.jb.fe.systems.gamePlay.CombatSystem;
 import com.jb.fe.systems.gamePlay.CombatSystemCalculator;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
@@ -152,10 +153,11 @@ public class UnitDamageMenuState extends UserInterfaceState {
 	private void setText(boolean isRight) {
 		int xOffset = 0;
 		if (isRight) {
-			xOffset = FireEmblemGame.WIDTH - 80;
+			xOffset = (int) (FireEmblemGame.WIDTH - 80 + (CameraSystem.cameraX - CameraSystem.xConstant));
 		} else {
-			xOffset = 10;
+			xOffset = (int) (10 + (CameraSystem.cameraX - CameraSystem.xConstant));
 		}
+		int yOffset = (int) CameraSystem.cameraY - CameraSystem.yConstant;
 
 		TextComponent textComponent = tComponentMapper.get(unitDamageSelectorMenuBox);
 		textComponent.isDrawing = true;
@@ -164,44 +166,44 @@ public class UnitDamageMenuState extends UserInterfaceState {
 		textComponent.textArray.get(0).text = nComponentMapper
 				.get(combatSystemCalculator.getDefendingInventory().selectedItem).name;
 		textComponent.textArray.get(0).x = 5 + xOffset;
-		textComponent.textArray.get(0).y = 53;
+		textComponent.textArray.get(0).y = 53 + yOffset;
 
 		// Defending Unit name
 		textComponent.textArray.get(1).text = nComponentMapper.get(combatSystemCalculator.getDefendingUnit()).name;
 		textComponent.textArray.get(1).x = 5 + xOffset;
-		textComponent.textArray.get(1).y = 63;
+		textComponent.textArray.get(1).y = 63 + yOffset;
 
 		// Attack Crit
 		textComponent.textArray.get(2).text = nComponentMapper
 				.get(combatSystemCalculator.getDefendingInventory().selectedItem).name;
 		textComponent.textArray.get(2).x = 70 - 10 + xOffset;
-		textComponent.textArray.get(2).y = 30;
+		textComponent.textArray.get(2).y = 30 + yOffset;
 
 		// Attacking Numbers First
 		// Atk Crit
 		textComponent.textArray.get(2).text = Integer.toString(combatSystemCalculator.calculateCritChanceNumber());
 		textComponent.textArray.get(2).x = 70 - 19 + xOffset;
-		textComponent.textArray.get(2).y = 81;
+		textComponent.textArray.get(2).y = 81 + yOffset;
 
 		// Atk Hit
 		textComponent.textArray.get(4).text = Integer.toString(combatSystemCalculator.calculateHitChanceNumber());
 		textComponent.textArray.get(4).x = 70 - 19 + xOffset;
-		textComponent.textArray.get(4).y = 94;
+		textComponent.textArray.get(4).y = 94 + yOffset;
 
 		// Atk Might
 		textComponent.textArray.get(6).text = Integer.toString(combatSystemCalculator.calculateDamagePreview());
 		textComponent.textArray.get(6).x = 70 - 19 + xOffset;
-		textComponent.textArray.get(6).y = 107;
+		textComponent.textArray.get(6).y = 107 + yOffset;
 
 		// Atk HP
 		textComponent.textArray.get(8).text = Integer.toString(combatSystemCalculator.getAttackingUnitStats().health);
 		textComponent.textArray.get(8).x = 70 - 19 + xOffset;
-		textComponent.textArray.get(8).y = 120;
+		textComponent.textArray.get(8).y = 120 + yOffset;
 
 		// Attack Unit Name
 		textComponent.textArray.get(10).text = nComponentMapper.get(combatSystemCalculator.getAttackingUnit()).name;
 		textComponent.textArray.get(10).x = 70 - 40 + xOffset;
-		textComponent.textArray.get(10).y = 134;
+		textComponent.textArray.get(10).y = 134 + yOffset;
 
 		// Attacking unit damage
 		CombatSystemCalculator.AttackingDamage = combatSystemCalculator.calculateDamage();
@@ -214,22 +216,22 @@ public class UnitDamageMenuState extends UserInterfaceState {
 		// Def Crit
 		textComponent.textArray.get(3).text = Integer.toString(combatSystemCalculator.calculateCritChanceNumber());
 		textComponent.textArray.get(3).x = xOffset + 8;
-		textComponent.textArray.get(3).y = 81;
+		textComponent.textArray.get(3).y = 81 + yOffset;
 
 		// Def Hit
 		textComponent.textArray.get(5).text = Integer.toString(combatSystemCalculator.calculateHitChanceNumber());
 		textComponent.textArray.get(5).x = xOffset + 8;
-		textComponent.textArray.get(5).y = 94;
+		textComponent.textArray.get(5).y = 94 + yOffset;
 
 		// Def Might
 		textComponent.textArray.get(7).text = Integer.toString(combatSystemCalculator.calculateDamagePreview());
 		textComponent.textArray.get(7).x = xOffset + 8;
-		textComponent.textArray.get(7).y = 107;
+		textComponent.textArray.get(7).y = 107 + yOffset;
 
 		// Def HP
 		textComponent.textArray.get(9).text = Integer.toString(combatSystemCalculator.getAttackingUnitStats().health);
 		textComponent.textArray.get(9).x = xOffset + 8;
-		textComponent.textArray.get(9).y = 120;
+		textComponent.textArray.get(9).y = 120 + yOffset;
 
 		// Defending unit damage
 		CombatSystemCalculator.DefendingDamage = combatSystemCalculator.calculateDamage();
@@ -258,12 +260,12 @@ public class UnitDamageMenuState extends UserInterfaceState {
 		PositionComponent unitPosition = pComponentMapper.get(UserInterfaceManager.unitSelected);
 		PositionComponent damageBoxPosition = pComponentMapper.get(unitDamageSelectorMenuBox);
 		
-		damageBoxPosition.y = 40;
-		if (unitPosition.x <= FireEmblemGame.WIDTH / 2) {
-			damageBoxPosition.x = FireEmblemGame.WIDTH - (staticImageComponentMapper.get(unitDamageSelectorMenuBox).width + 10);
+		damageBoxPosition.y = 40 + (CameraSystem.cameraY - CameraSystem.yConstant);
+		if (unitPosition.x <= (FireEmblemGame.WIDTH / 2) + (CameraSystem.cameraX - CameraSystem.xConstant)) {
+			damageBoxPosition.x = FireEmblemGame.WIDTH - (staticImageComponentMapper.get(unitDamageSelectorMenuBox).width + 10) + (CameraSystem.cameraX - CameraSystem.xConstant);
 			setText(true);
 		} else {
-			damageBoxPosition.x = 10;
+			damageBoxPosition.x = 10 + (CameraSystem.cameraX - CameraSystem.xConstant);
 			setText(false);
 		}
 	}

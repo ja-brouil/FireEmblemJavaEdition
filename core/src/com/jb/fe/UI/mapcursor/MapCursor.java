@@ -57,7 +57,7 @@ public class MapCursor extends UserInterfaceState {
 		checkUnit();
 		mapCursorChecks();
 		infoBoxUpdate.update(this);
-		infoBoxUpdate.turnOnBoxes();
+		infoBoxUpdate.turnOnBoxes(this);
 	}
 
 	@Override
@@ -87,6 +87,7 @@ public class MapCursor extends UserInterfaceState {
 
 	@Override
 	public void handleInput(float delta) {
+		mapCursorChecks();
 		PositionComponent positionComponent = pComponentMapper.get(mapCursor);
 		currentDelay += delta;
 		
@@ -242,6 +243,18 @@ public class MapCursor extends UserInterfaceState {
 			staticImageComponentMapper.get(mapCursor).isEnabled = false;
 			UserInterfaceManager.unitSelected = null;
 		}
+	}
+	
+	public void AITurnOff() {
+		UserInterfaceManager.unitSelected = null;
+		animationComponentMapper.get(mapCursor).currentAnimation.isDrawing = true;
+		staticImageComponentMapper.get(mapCursor).isEnabled = false;
+		for (Entity allyUnit : level.allAllies) {
+			AnimationComponent animationComponent = animationComponentMapper.get(allyUnit);
+			animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Idle");
+		}
+		
+		infoBoxUpdate.update(this);
 	}
 	
 	public InfoBoxUpdate getInfoBoxUpdate() {

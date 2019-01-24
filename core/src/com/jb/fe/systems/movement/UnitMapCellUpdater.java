@@ -39,6 +39,9 @@ public class UnitMapCellUpdater extends EntitySystem{
 	
 	// Update Cell and Units
 	public void updateCellInfo() {
+		// Update Units
+		getAllGameUnits();
+		
 		// Reset Cell Stats
 		for (int outer = 0; outer < allMapCells.length; outer++) {
 			for (int inner = 0; inner < allMapCells[outer].length; inner++) {

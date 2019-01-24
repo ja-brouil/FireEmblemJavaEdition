@@ -45,12 +45,14 @@ public class UnitInfoBox extends MenuBox {
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<NameComponent> nComponentMapper = ComponentMapper.getFor(NameComponent.class);
 	private ComponentMapper<UnitStatsComponent> uComponentMapper = ComponentMapper.getFor(UnitStatsComponent.class);
+	private ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
 	
 	private float emptyHPBarX, emptyHPBarY, fullHPBarX, fullHPBarY, hpX, hpY, nameX, nameY, portraitX, portraitY;
 	private PositionComponent lastPortrait;
 	
 	public UnitInfoBox(MapCursor mapCursor, AssetManager assetManager, Engine engine) {
 		super(mapCursor, assetManager, engine);
+		
 		// Initial last
 		lastPortrait = new PositionComponent();
 		
@@ -73,7 +75,6 @@ public class UnitInfoBox extends MenuBox {
 		positionComponent = new PositionComponent(-500, -500);
 		backgroundStaticImageComponent = new StaticImageComponent(assetManager, "UI/unitInfo/unitInfoBox.png");
 		backgroundStaticImageComponent.isEnabled = true;
-		//backgroundStaticImageComponent.alpha = 0.8f;
 		backgroundStaticImageComponent.width = 90;
 		backgroundStaticImageComponent.height = 40;
 		backgroundZorder = new ZOrderComponent(ZOrder.UI_LOWER_LAYER);
@@ -139,6 +140,11 @@ public class UnitInfoBox extends MenuBox {
 		
 		// Set Last portrait
 		lastPortrait = pComponentMapper.get(UserInterfaceManager.unitSelected.getComponent(IconComponent.class).iconEntity);
+		
+		// Enable Drawings
+		emptyHPStaticImage.isEnabled = true;
+		healthyStaticImage.isEnabled = true;
+		sComponentMapper.get(UserInterfaceManager.unitSelected.getComponent(IconComponent.class).iconEntity).isEnabled = true;
 
 		// Set Position
 		if (mapCursor.getMapCursorQuandrant().equals(MAP_CURSOR_QUADRANT.TOP_LEFT)) {
@@ -200,6 +206,8 @@ public class UnitInfoBox extends MenuBox {
 		textComponent.textArray.get(0).y = positionComponent.y + nameY;
 		textComponent.textArray.get(1).x = positionComponent.x + hpX;
 		textComponent.textArray.get(1).y = positionComponent.y + hpY;
+		emptyHPStaticImage.isEnabled = false;
+		healthyStaticImage.isEnabled = false;
 	}
 	
 	private String calculateHP(Entity unit) {			

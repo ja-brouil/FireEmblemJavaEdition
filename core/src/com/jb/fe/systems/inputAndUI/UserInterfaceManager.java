@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.jb.fe.UI.UserInterfaceState;
+import com.jb.fe.UI.mapcursor.MapCursor;
 import com.jb.fe.systems.SystemPriorityList;
 
 public class UserInterfaceManager extends EntitySystem {
@@ -40,6 +41,11 @@ public class UserInterfaceManager extends EntitySystem {
 	
 	public void startSystem() {
 		currentState = allUserInterfaceStates.get("MapCursor");
+	}
+	
+	public void turnOffUIDuringAIPhase() {
+		MapCursor tempMapCursor = ((MapCursor) allUserInterfaceStates.get("MapCursor"));
+		tempMapCursor.AITurnOff();
 	}
 	
 	/**

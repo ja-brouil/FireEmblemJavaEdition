@@ -46,8 +46,8 @@ public class MapCellInfoSystem {
 			mapCell.position.y = tileProperties.get("y", Float.class);
 			mapCell.tileName = tileProperties.get("TileType", String.class);
 			mapCell.movementCost = tileProperties.get("MovementCost", Integer.class);
-			mapCell.defenceBonus = tileProperties.get("Def", Integer.class);
-			mapCell.avoidanceBonus = tileProperties.get("Avd", Integer.class);  
+			mapCell.defenceBonus = (int) tileProperties.get("Def", Integer.class);
+			mapCell.avoidanceBonus = (int) tileProperties.get("Avd", Integer.class);  
 
 			// Add Cell to the Array
 			int row = (int) mapCell.position.x / MapCell.CELL_SIZE;

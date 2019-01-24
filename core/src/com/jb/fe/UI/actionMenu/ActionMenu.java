@@ -73,21 +73,25 @@ public class ActionMenu extends UserInterfaceState {
 		staticImageComponentMapper.get(hand).isEnabled = true;
 		textComponent.isDrawing = true;
 		
-		handPositionComponent.x = actionMenuPositionComponent.x - 5;
-		handPositionComponent.y = 121;
-		
 		// Change this with camera view once camera has been implemented | Might need to change sizes here later depending on options
-		if (selectedUnitPosition.x <= FireEmblemGame.WIDTH / 2) {
-			actionMenuPositionComponent.x = FireEmblemGame.WIDTH - (FireEmblemGame.WIDTH / 5) - 10;
+		if (selectedUnitPosition.x <= (FireEmblemGame.WIDTH / 2) + (CameraSystem.cameraX - CameraSystem.xConstant)) {
+			actionMenuPositionComponent.x = (FireEmblemGame.WIDTH - (FireEmblemGame.WIDTH / 5) - 10) + (CameraSystem.cameraX - CameraSystem.xConstant);
 		} else {
-			actionMenuPositionComponent.x = 10;
+			actionMenuPositionComponent.x = 10 + (CameraSystem.cameraX - CameraSystem.xConstant);
 		}
+		
+		// Set Hand
+		handPositionComponent.x = actionMenuPositionComponent.x - 5;
+		handPositionComponent.y = 121 + (CameraSystem.cameraY - CameraSystem.yConstant);
 		
 		for (int i = 0; i < textComponent.textArray.size; i++) {
 			TextObject actionMenuTextObject = textComponent.textArray.get(i);
 			actionMenuTextObject.x = actionMenuPositionComponent.x + 11.75f;
 			actionMenuTextObject.y = actionMenuPositionComponent.y + (i * 15) + 16;
 		}
+		
+		// Set Y for action menu
+		actionMenuPositionComponent.y = 70 + (CameraSystem.cameraY - CameraSystem.yConstant);
 		
 		// Reset Option
 		currentOption = 0;
@@ -187,11 +191,11 @@ public class ActionMenu extends UserInterfaceState {
 	// Utilities
 	private void preventHandOutOfBounds(PositionComponent positionComponent) {
 		if (positionComponent.y < 76 + (CameraSystem.cameraY - CameraSystem.yConstant)) {
-			positionComponent.y = 76;
+			positionComponent.y = 76 + (CameraSystem.cameraY - CameraSystem.yConstant);
 		}
 		
 		if (positionComponent.y > 121 + (CameraSystem.cameraY - CameraSystem.yConstant)) {
-			positionComponent.y = 121;
+			positionComponent.y = 121 + (CameraSystem.cameraY - CameraSystem.yConstant);
 		}
 	}
 	

@@ -45,12 +45,14 @@ public class InfoBoxUpdate {
 		}
 	}
 	
-	public void turnOnBoxes() {
+	public void turnOnBoxes(MapCursor mapCursor) {
 		for (MenuBox battlefieldBox : allBattlefieldMenuBoxes) {
 			battlefieldBox.setUpdateEnabled(true);
 			sComponentMapper.get(battlefieldBox.getBoxEntity()).isEnabled = true;
 			tComponentMapper.get(battlefieldBox.getBoxEntity()).isDrawing = true;
 			battlefieldBox.turnOff();
+			battlefieldBox.update(mapCursor);
 		}
+		
 	}
 }

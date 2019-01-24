@@ -62,8 +62,6 @@ public class InventoryMenuState extends UserInterfaceState {
 			textComponent.textArray.get(i).isEnabled = true;
 			textComponent.textArray.get(i).y = (23 + ((5 - i) * 15) + 40) + (CameraSystem.cameraY - CameraSystem.yConstant);
 			textComponent.textArray.get(i).x = pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x + 30;
-			System.out.println(pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x);
-			System.out.println(pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x + 30);
 		}
 		
 		// Box Dimensions

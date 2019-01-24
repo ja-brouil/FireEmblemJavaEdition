@@ -14,7 +14,7 @@ b:levels/level1/level1tileset:196:application/unknown
 b:levels/level1/Level1TileSetTest.tsx:235:application/unknown
 d:levels/level2:0:application/unknown
 i:levels/level2/level2.png:101820:image/png
-b:levels/level2/level2.tmx:143927:application/unknown
+b:levels/level2/level2.tmx:143926:application/unknown
 b:levels/level2/level2tileset.tsx:196:application/unknown
 d:levels/level3:0:application/unknown
 i:levels/level3/level3.png:43161:image/png

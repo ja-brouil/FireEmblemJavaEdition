@@ -164,21 +164,12 @@ public class CameraSystem extends EntitySystem {
 	 * 
 	 * @param mapCursor | Map cursor
 	 */
-	public void cameraMovementReset(Entity unit, Entity mapCursor) {
+	public void cameraMovementReset(Entity unit, Entity mapCursor, int xOffset, int yOffset) {
 
 		PositionComponent unitPosition = pComponentMapper.get(unit);
 		
-		gameCam.position.x = unitPosition.x;
-		gameCam.position.y = unitPosition.y;
-		
-		
-		if ((int) gameCam.position.x % 16 == 0) {
-			gameCam.translate(8, 0);
-		}
-		
-		if ((int) gameCam.position.y % 16 == 0) {
-			gameCam.translate(0, 8);
-		}
+		gameCam.position.x = unitPosition.x + xOffset;
+		gameCam.position.y = unitPosition.y + yOffset;
 		
 		checkCameraUpdate(mapCursor);
 		setCameraBoundery();
@@ -190,11 +181,28 @@ public class CameraSystem extends EntitySystem {
 		cameraY = gameCam.position.y;
 	}
 	
-	public void followUnitCamera(Entity unit) {
+	public void cameraMovementReset(Entity unit, Entity mapCursor) {
+
 		PositionComponent unitPosition = pComponentMapper.get(unit);
 		
 		gameCam.position.x = unitPosition.x;
 		gameCam.position.y = unitPosition.y;
+		
+		checkCameraUpdate(mapCursor);
+		setCameraBoundery();
+		spriteBatch.setProjectionMatrix(gameCam.combined);
+		gameCam.update();
+		
+		// Update Location
+		cameraX = gameCam.position.x;
+		cameraY = gameCam.position.y;
+	}
+	
+	public void followUnitCamera(Entity unit, int xOffset, int yOffset) {
+		PositionComponent unitPosition = pComponentMapper.get(unit);
+		
+		gameCam.position.x = unitPosition.x + xOffset;
+		gameCam.position.y = unitPosition.y + yOffset;
 		
 		checkCameraUpdate(unit);
 		setCameraBoundery();

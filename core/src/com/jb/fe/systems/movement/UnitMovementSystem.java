@@ -64,7 +64,7 @@ public class UnitMovementSystem extends EntitySystem {
 		
 		// Reset Camera if it's off screen
 		if (!cameraReset) {
-			cameraSystem.cameraMovementReset(unit,mapCursor.getMapCursorEntity());
+			cameraSystem.cameraMovementReset(unit,mapCursor.getMapCursorEntity(),8,8);
 			cameraReset = true;
 			return;
 		}
@@ -78,22 +78,28 @@ public class UnitMovementSystem extends EntitySystem {
 		PositionComponent unitPositionComponent = pComponentMapper.get(unit);
 
 		// Process Unit Movement
+		int xCameraOffset = 0;
+		int yCameraOffset = 0;
 		if (startingCell.position.x - nextCell.position.x > 0
 				&& Math.abs(startingCell.position.y - nextCell.position.y) >= 0f) {
 			// Left
 			animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Left");
+			xCameraOffset = -8;
 		} else if (startingCell.position.x - nextCell.position.x < 0
 				&& Math.abs(startingCell.position.y - nextCell.position.y) >= 0f) {
 			// Right
 			animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Right");
+			xCameraOffset = 8;
 		} else if (startingCell.position.y - nextCell.position.y > 0
 				&& Math.abs(startingCell.position.x - nextCell.position.x) >= 0f) {
 			// Down
 			animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Down");
+			yCameraOffset = -8;
 		} else if (startingCell.position.y - nextCell.position.y < 0
 				&& Math.abs(startingCell.position.x - nextCell.position.x) >= 0f) {
 			// Up
 			animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Up");
+			yCameraOffset = 8;
 		}
 
 		// Move Unit || Smooth out over time
@@ -104,7 +110,7 @@ public class UnitMovementSystem extends EntitySystem {
 			unitPositionComponent.y += (nextCell.position.y - startingCell.position.y)
 					* unitStatsComponent.animationMovementSpeed * Gdx.graphics.getDeltaTime();
 			// Move Camera with unit
-			cameraSystem.followUnitCamera(unit);
+			cameraSystem.followUnitCamera(unit, xCameraOffset, yCameraOffset);
 			
 		} else {
 			// Finalize movement to prevent rounding errors
@@ -112,7 +118,7 @@ public class UnitMovementSystem extends EntitySystem {
 			unitPositionComponent.y = nextCell.position.y;
 			unitStatsComponent.currentCell = nextCell;
 			unitStatsComponent.pathfindingQueue.removeFirst();
-			cameraSystem.followUnitCamera(unit);
+			cameraSystem.followUnitCamera(unit, xCameraOffset, yCameraOffset);
 		}
 
 		// Prevent weird crashes when FPS drops or game is paused
@@ -122,7 +128,7 @@ public class UnitMovementSystem extends EntitySystem {
 			unitPositionComponent.y = nextCell.position.y;
 			unitStatsComponent.currentCell = nextCell;
 			unitStatsComponent.pathfindingQueue.removeFirst();
-			cameraSystem.followUnitCamera(unit);
+			cameraSystem.followUnitCamera(unit, xCameraOffset, yCameraOffset);
 		}
 
 		// Play Sound
@@ -173,7 +179,7 @@ public class UnitMovementSystem extends EntitySystem {
 			pComponentMapper.get(mapCursor.getMapCursorEntity()).y = unitPositionComponent.y;
 			
 			// Reset camera
-			cameraSystem.cameraMovementReset(unit, mapCursor.getMainEntity());
+			cameraSystem.cameraMovementReset(unit, mapCursor.getMainEntity(), xCameraOffset, yCameraOffset);
 			cameraReset = false;
 			
 			// Remove unit

@@ -122,6 +122,7 @@ public class UnitMovementSystem extends EntitySystem {
 			unitPositionComponent.y = nextCell.position.y;
 			unitStatsComponent.currentCell = nextCell;
 			unitStatsComponent.pathfindingQueue.removeFirst();
+			cameraSystem.followUnitCamera(unit);
 		}
 
 		// Play Sound

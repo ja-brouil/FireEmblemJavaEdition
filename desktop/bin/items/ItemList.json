@@ -12,7 +12,10 @@
         "ItemClass" : "Sword",
         "ItemSoundName" : "Sword",
         "ItemType": "Physical",
-        "IsBroken" : false
+        "IsBroken" : false,
+        "FileLocation" : "items/Swords/rapier.png",
+        "Width" : 10,
+        "Height" : 10
     },
     "Iron Sword" : {
         "Name" : "Iron Sword",
@@ -27,7 +30,10 @@
         "ItemClass" : "Sword",
         "ItemSoundName" : "Sword",
         "ItemType": "Physical",
-        "IsBroken" : false
+        "IsBroken" : false,
+        "FileLocation": "items/Swords/ironSword.png",
+        "Width": 10,
+        "Height": 10
     },
     "Steel Sword" : {
         "Name" : "Steel Sword",
@@ -42,7 +48,10 @@
         "ItemClass" : "Sword",
         "ItemSoundName" : "Sword",
         "ItemType": "Physical",
-        "IsBroken" : false
+        "IsBroken" : false,
+        "FileLocation": "items/Swords/steelSword.png",
+        "Width": 10,
+        "Height": 10
     },
     "Iron Axe" : {
         "Name": "Iron Axe",
@@ -57,7 +66,10 @@
         "ItemClass": "Axe",
         "ItemSoundName": "Axe",
         "ItemType" : "Physical",
-        "IsBroken": false
+        "IsBroken": false,
+        "FileLocation": "items/Axes/ironAxe.png",
+        "Width": 10,
+        "Height": 10
     }, "Silver Lance": {
         "Name": "Silver Lance",
         "Uses": 20,
@@ -71,20 +83,9 @@
         "ItemClass": "Lance",
         "ItemSoundName": "Lance",
         "ItemType": "Physical",
-        "IsBroken": false
-    }, "Demon Edge" : {
-        "Name": "Demon Edge",
-        "Uses": 5,
-        "Might": 15,
-        "Weight": 20,
-        "Hit": 100,
-        "Crit": 0,
-        "MaxRange": 1,
-        "MinRange": 1,
-        "EffectiveBonus": 1,
-        "ItemClass": "Sword",
-        "ItemSoundName": "Sword",
-        "ItemType": "Physical",
-        "IsBroken": false
+        "IsBroken": false,
+        "FileLocation": "items/Lances/silverLance.png",
+        "Width": 10,
+        "Height": 10
     }
 }

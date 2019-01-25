@@ -52,6 +52,7 @@ public class InventoryMenuState extends UserInterfaceState {
 			textObject.isEnabled = false;
 			textObject.text = "";
 		});
+	
 		
 		// Turn everything on
 		inventoryMenuBox.turnOn();
@@ -62,6 +63,11 @@ public class InventoryMenuState extends UserInterfaceState {
 			textComponent.textArray.get(i).isEnabled = true;
 			textComponent.textArray.get(i).y = (23 + ((5 - i) * 15) + 40) + (CameraSystem.cameraY - CameraSystem.yConstant);
 			textComponent.textArray.get(i).x = pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x + 30;
+			
+			// Set Icon placement
+			staticImageComponentMapper.get(unitInventoryComponent.inventory[i]).isEnabled = true;
+			pComponentMapper.get(unitInventoryComponent.inventory[i]).x = pComponentMapper.get(inventoryMenuBox.getItemInvBoxEntity()).x + 10;
+			pComponentMapper.get(unitInventoryComponent.inventory[i]).y = (13 + ((5 - i) * 15) + 40) + (CameraSystem.cameraY - CameraSystem.yConstant);
 		}
 		
 		// Box Dimensions
@@ -82,6 +88,9 @@ public class InventoryMenuState extends UserInterfaceState {
 	@Override
 	public void resetState() {
 		staticImageComponentMapper.get(hand).isEnabled = false;
+		for (int i = 0; i < unitInventoryComponent.amountOfItemsCarried; i++) {
+			staticImageComponentMapper.get(unitInventoryComponent.inventory[i]).isEnabled = false;
+		}
 		inventoryMenuBox.turnOff();
 	}
 

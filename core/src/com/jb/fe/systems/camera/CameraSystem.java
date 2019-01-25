@@ -171,6 +171,15 @@ public class CameraSystem extends EntitySystem {
 		gameCam.position.x = unitPosition.x;
 		gameCam.position.y = unitPosition.y;
 		
+		
+		if ((int) gameCam.position.x % 16 == 0) {
+			gameCam.translate(8, 0);
+		}
+		
+		if ((int) gameCam.position.y % 16 == 0) {
+			gameCam.translate(0, 8);
+		}
+		
 		checkCameraUpdate(mapCursor);
 		setCameraBoundery();
 		spriteBatch.setProjectionMatrix(gameCam.combined);
@@ -196,6 +205,7 @@ public class CameraSystem extends EntitySystem {
 		cameraX = gameCam.position.x;
 		cameraY = gameCam.position.y;
 	}
+	
 	
 	public OrthographicCamera getCamera() {
 		return gameCam;

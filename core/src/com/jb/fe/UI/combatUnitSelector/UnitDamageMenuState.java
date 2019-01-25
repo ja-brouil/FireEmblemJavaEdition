@@ -81,6 +81,11 @@ public class UnitDamageMenuState extends UserInterfaceState {
 		for (MapCell mapCell : allRedCells) {
 			staticImageComponentMapper.get(mapCell.redSquare).isEnabled = false;
 		}
+		
+		// Remove Icons
+		for (Entity entityThatCanbeActedOn : allEntitiesThatCanBeActedUpon) {
+			staticImageComponentMapper.get(iComponentMapper.get(entityThatCanbeActedOn).selectedItem).isEnabled = false;
+		}
 	}
 
 	@Override
@@ -93,12 +98,14 @@ public class UnitDamageMenuState extends UserInterfaceState {
 		
 		// Cycle through all the enemies
 		if ((Gdx.input.isKeyJustPressed(Keys.UP) || Gdx.input.isKeyJustPressed(Keys.LEFT)) && allEntitiesThatCanBeActedUpon.size > 0) {
+			staticImageComponentMapper.get(iComponentMapper.get(allEntitiesThatCanBeActedUpon.get(unitSelection)).selectedItem).isEnabled = false;
 			unitSelection--;
 			cycleInt();
 			setCursorPosition();
 			setDefendingUnit();
 			return;
 		}  else if ((Gdx.input.isKeyJustPressed(Keys.DOWN) || Gdx.input.isKeyJustPressed(Keys.RIGHT)) && allEntitiesThatCanBeActedUpon.size > 0) {
+			staticImageComponentMapper.get(iComponentMapper.get(allEntitiesThatCanBeActedUpon.get(unitSelection)).selectedItem).isEnabled = false;
 			unitSelection++;
 			cycleInt();
 			setCursorPosition();
@@ -251,6 +258,7 @@ public class UnitDamageMenuState extends UserInterfaceState {
 	private void setDefendingUnit() {
 		combatSystemCalculator.setUnits(UserInterfaceManager.unitSelected, allEntitiesThatCanBeActedUpon.get(unitSelection));
 		setDamageBoxLocation();
+		setItemEquippedIcon();
 	}
 	
 	/**
@@ -268,6 +276,16 @@ public class UnitDamageMenuState extends UserInterfaceState {
 			damageBoxPosition.x = 10 + (CameraSystem.cameraX - CameraSystem.xConstant);
 			setText(false);
 		}
+	}
+	
+	/**
+	 * Set the location for the item icon
+	 */
+	private void setItemEquippedIcon() {
+		TextComponent textComponent = tComponentMapper.get(unitDamageSelectorMenuBox);
+		staticImageComponentMapper.get(iComponentMapper.get(allEntitiesThatCanBeActedUpon.get(unitSelection)).selectedItem).isEnabled = true;
+		pComponentMapper.get(iComponentMapper.get(allEntitiesThatCanBeActedUpon.get(unitSelection)).selectedItem).x = textComponent.textArray.get(1).x + 45;
+		pComponentMapper.get(iComponentMapper.get(allEntitiesThatCanBeActedUpon.get(unitSelection)).selectedItem).y = textComponent.textArray.get(1).y - 12;
 	}
 	
 	/**

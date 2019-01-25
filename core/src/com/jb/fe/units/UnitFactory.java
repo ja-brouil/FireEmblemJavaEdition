@@ -81,8 +81,8 @@ public class UnitFactory {
 		movementStatsComponent.movementSteps = 5;
 		
 		// Inventory
-		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem("Rapier")));
-		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem("Iron Sword")));
+		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem("Rapier"), assetManager, engine));
+		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem("Iron Sword"), assetManager, engine));
 		inventoryComponent.selectedItem = inventoryComponent.inventory[0];
 
 		// Add Components
@@ -172,8 +172,8 @@ public class UnitFactory {
 		}
 		
 		// Inventory Component
-		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem("Steel Sword")));
-		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem("Silver Lance")));
+		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem("Steel Sword"), assetManager, engine));
+		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem("Silver Lance"), assetManager, engine));
 		inventoryComponent.selectedItem = inventoryComponent.inventory[0];
 		
 		// Add Components
@@ -267,7 +267,7 @@ public class UnitFactory {
 		}
 		
 		// Inventory Component
-		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem(equippedItemName)));
+		inventoryComponent.addItem(ItemFactory.createWeapon(ItemManager.getItem(equippedItemName), assetManager, engine));
 		inventoryComponent.selectedItem = inventoryComponent.inventory[0];
 		
 		// Add Components

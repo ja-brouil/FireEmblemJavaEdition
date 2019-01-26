@@ -1,8 +1,17 @@
 d:assets:0:application/unknown
 b:.DS_Store:6148:application/unknown
 d:items:0:application/unknown
+b:items/.DS_Store:6148:application/unknown
+d:items/Axes:0:application/unknown
+i:items/Axes/ironAxe.png:15183:image/png
 i:items/Game Boy Advance - Fire Emblem The Blazing Blade - Item Icons.png:14883:image/png
-t:items/ItemList.json:2151:application/unknown
+t:items/ItemList.json:2283:application/unknown
+d:items/Lances:0:application/unknown
+i:items/Lances/silverLance.png:15147:image/png
+d:items/Swords:0:application/unknown
+i:items/Swords/ironSword.png:15135:image/png
+i:items/Swords/rapier.png:15193:image/png
+i:items/Swords/steelSword.png:15176:image/png
 d:levels:0:application/unknown
 d:levels/level1:0:application/unknown
 b:levels/level1/.DS_Store:6148:application/unknown
@@ -14,7 +23,7 @@ b:levels/level1/level1tileset:196:application/unknown
 b:levels/level1/Level1TileSetTest.tsx:235:application/unknown
 d:levels/level2:0:application/unknown
 i:levels/level2/level2.png:101820:image/png
-b:levels/level2/level2.tmx:143926:application/unknown
+b:levels/level2/level2.tmx:144994:application/unknown
 b:levels/level2/level2tileset.tsx:196:application/unknown
 d:levels/level3:0:application/unknown
 i:levels/level3/level3.png:43161:image/png

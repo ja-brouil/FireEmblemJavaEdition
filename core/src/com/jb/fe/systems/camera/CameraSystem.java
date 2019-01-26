@@ -55,6 +55,13 @@ public class CameraSystem extends EntitySystem {
 			PositionComponent mapCursorPosition = pComponentMapper.get(userInterfaceManager.currentState.getMainEntity());
 			
 			// Update Camera position based on where the map cursor is
+			if (gameCam.position.x % 16 != 8) {
+				gameCam.position.x += 8;
+			}
+			
+			if (gameCam.position.y % 16 != 0) {
+				gameCam.position.y += 8f;
+			}
 			checkCameraUpdate();
 			setCameraBoundery();
 			spriteBatch.setProjectionMatrix(gameCam.combined);
@@ -78,6 +85,13 @@ public class CameraSystem extends EntitySystem {
 			
 			// Update Camera position based on where the map cursor is
 			checkCameraUpdate(UserInterfaceManager.unitSelected);
+			if (gameCam.position.x % 16 != 8) {
+				gameCam.position.x += 8;
+			}
+			
+			if (gameCam.position.y % 16 != 0) {
+				gameCam.position.y += 8f;
+			}
 			setCameraBoundery();
 			spriteBatch.setProjectionMatrix(gameCam.combined);
 			gameCam.update();
@@ -86,6 +100,7 @@ public class CameraSystem extends EntitySystem {
 			cameraX = gameCam.position.x;
 			cameraY = gameCam.position.y;
 		}
+		
 	}
 	
 	private void setCameraBoundery() {
@@ -114,7 +129,7 @@ public class CameraSystem extends EntitySystem {
 	
 	private void checkCameraUpdate() {
 			PositionComponent mapCursorPosition = pComponentMapper.get(userInterfaceManager.currentState.getMainEntity());
-		
+			
 			if (Math.abs(mapCursorPosition.x - gameCam.position.x) >= xConstant && mapCursorPosition.x - gameCam.position.x > 0) {
 				gameCam.translate(MapCell.CELL_SIZE, 0);
 			} 
@@ -131,17 +146,19 @@ public class CameraSystem extends EntitySystem {
 				gameCam.translate(0, -MapCell.CELL_SIZE);
 			}
 			
+			
+			// Finalize Camera
 			if (userInterfaceManager.currentState.getClass().equals(MapCursor.class)) {
 				// Update Location
 				cameraX = gameCam.position.x;
 				cameraY = gameCam.position.y;
 				((MapCursor) userInterfaceManager.currentState).mapCursorCameraCheck();
-			}	
+			}
 	}
 	
 	private void checkCameraUpdate(Entity entityToFollow) {
 		PositionComponent entityToFollowPosition = pComponentMapper.get(entityToFollow);
-	
+
 		if (Math.abs(entityToFollowPosition.x - gameCam.position.x) >= xConstant && entityToFollowPosition.x - gameCam.position.x > 0) {
 			gameCam.translate(MapCell.CELL_SIZE, 0);
 		} 
@@ -156,37 +173,22 @@ public class CameraSystem extends EntitySystem {
 
 		if (Math.abs(entityToFollowPosition.y - gameCam.position.y) > yConstant && entityToFollowPosition.y - gameCam.position.y < 0) {
 			gameCam.translate(0, -MapCell.CELL_SIZE);
-		}
-	}
 
+		}
+
+	}
 	
 	/**
 	 * 
 	 * @param mapCursor | Map cursor
 	 */
-	public void cameraMovementReset(Entity unit, Entity mapCursor, int xOffset, int yOffset) {
-
-		PositionComponent unitPosition = pComponentMapper.get(unit);
-		
-		gameCam.position.x = unitPosition.x + xOffset;
-		gameCam.position.y = unitPosition.y + yOffset;
-		
-		checkCameraUpdate(mapCursor);
-		setCameraBoundery();
-		spriteBatch.setProjectionMatrix(gameCam.combined);
-		gameCam.update();
-		
-		// Update Location
-		cameraX = gameCam.position.x;
-		cameraY = gameCam.position.y;
-	}
 	
 	public void cameraMovementReset(Entity unit, Entity mapCursor) {
 
 		PositionComponent unitPosition = pComponentMapper.get(unit);
 		
-		gameCam.position.x = unitPosition.x;
-		gameCam.position.y = unitPosition.y;
+		gameCam.position.x = ((int) unitPosition.x);
+		gameCam.position.y = ((int) unitPosition.y);
 		
 		checkCameraUpdate(mapCursor);
 		setCameraBoundery();
@@ -198,11 +200,11 @@ public class CameraSystem extends EntitySystem {
 		cameraY = gameCam.position.y;
 	}
 	
-	public void followUnitCamera(Entity unit, int xOffset, int yOffset) {
+	public void followUnitCamera(Entity unit, float x, float y) {
 		PositionComponent unitPosition = pComponentMapper.get(unit);
 		
-		gameCam.position.x = unitPosition.x + xOffset;
-		gameCam.position.y = unitPosition.y + yOffset;
+		gameCam.position.x = unitPosition.x + x;
+		gameCam.position.y = unitPosition.y + y;
 		
 		checkCameraUpdate(unit);
 		setCameraBoundery();
@@ -213,7 +215,6 @@ public class CameraSystem extends EntitySystem {
 		cameraX = gameCam.position.x;
 		cameraY = gameCam.position.y;
 	}
-	
 	
 	public OrthographicCamera getCamera() {
 		return gameCam;

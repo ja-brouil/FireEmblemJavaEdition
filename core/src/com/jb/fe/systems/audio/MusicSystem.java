@@ -52,9 +52,34 @@ public class MusicSystem extends EntitySystem{
 		playCurrentSong();
 	}
 	
+	public void playSong(String songName, float volume) {
+		if (currentSong != null && currentSong.getSong().isPlaying()) {
+			currentSong.getSong().stop();
+		}
+		
+		if (volume < 0 || volume > 1) {
+			volume = 0;
+		}
+		
+		MusicObject musicObject = allMusicObjects.get(songName);
+		currentSong = musicObject;
+		currentSong.getSong().setVolume(volume);
+		playCurrentSong();
+	}
+	
 	public void playCurrentSong() {
 		if (currentSong != null) {
-			currentSong.getSong().setVolume(currentSong.volume);
+			currentSong.getSong().play();
+		}
+	}
+	
+	public void playCurrentSong(float volume) {
+		if (volume < 0 || volume > 1) {
+			volume = 0;
+		}
+		
+		if (currentSong != null) {
+			currentSong.getSong().setVolume(volume);
 			currentSong.getSong().play();
 		}
 	}

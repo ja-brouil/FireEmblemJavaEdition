@@ -45,7 +45,7 @@ public class FireEmblemGame extends Game {
 	private RenderSystem renderSystem;
 
 	// Screens
-	private HashMap<String, ScreenAdapter> allGameScreens;
+	public static HashMap<String, ScreenAdapter> allGameScreens;
 
 	// Engine
 	private Engine engine;
@@ -81,7 +81,8 @@ public class FireEmblemGame extends Game {
 
 		// Screens
 		allGameScreens = new HashMap<>();
-		allGameScreens.put("GameScreen", new GameScreen(musicSystem, soundSystem, engine, assetManager, spriteBatch, gameCamera));
+		allGameScreens.put("GameScreen", new GameScreen(this, musicSystem, soundSystem, engine, assetManager, spriteBatch, gameCamera));
+		allGameScreens.put("CombatScreen", new CombatScreen(this, (GameScreen) allGameScreens.get("GameScreen")));
 		allGameScreens.put("GameOverScreen", new GameOverScreen());
 		allGameScreens.put("PauseScreen", new PauseScreen());
 		this.setScreen(allGameScreens.get("GameScreen"));
@@ -123,4 +124,11 @@ public class FireEmblemGame extends Game {
 		});
 	}
 	
+	public MusicSystem getMusicSystem() {
+		return musicSystem;
+	}
+	
+	public SoundSystem getSoundSystem() {
+		return soundSystem;
+	}
 }

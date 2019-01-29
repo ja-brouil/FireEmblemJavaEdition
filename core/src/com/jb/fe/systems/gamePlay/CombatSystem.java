@@ -9,6 +9,8 @@ import com.jb.fe.components.ItemComponent;
 import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.level.Level;
+import com.jb.fe.screens.FireEmblemGame;
+import com.jb.fe.screens.GameScreen;
 import com.jb.fe.systems.SystemPriorityList;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 
@@ -26,9 +28,12 @@ public class CombatSystem extends EntitySystem{
 	private ComponentMapper<InventoryComponent> invComponentMapper = ComponentMapper.getFor(InventoryComponent.class);
 	private ComponentMapper<MovementStatsComponent> mComponentMapper = ComponentMapper.getFor(MovementStatsComponent.class);
 	
-	public CombatSystem(UnitMapCellUpdater unitMapCellUpdater) {
+	private GameScreen gameScreen;
+	
+	public CombatSystem(UnitMapCellUpdater unitMapCellUpdater, GameScreen gameSreen) {
 		priority = SystemPriorityList.CombatPhase;
 		this.unitMapCellUpdater = unitMapCellUpdater;
+		this.gameScreen = gameSreen;
 		isProcessing = false;
 	}
 
@@ -66,6 +71,9 @@ public class CombatSystem extends EntitySystem{
 			
 			unitMapCellUpdater.updateCellInfo();
 			isProcessing = false;
+			
+			// To Combat Screen
+			gameScreen.getFireEmblemGame().setScreen(FireEmblemGame.allGameScreens.get("CombatScreen"));
 			return;
 		}	
 		

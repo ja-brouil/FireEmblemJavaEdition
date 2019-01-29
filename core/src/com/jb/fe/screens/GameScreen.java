@@ -31,7 +31,7 @@ import com.jb.fe.systems.movement.MovementUtilityCalculator;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 import com.jb.fe.systems.movement.UnitMovementSystem;
 
-public class GameScreen extends ScreenAdapter{
+public class GameScreen extends ScreenAdapter {
 
 	private Engine engine;
 	private AssetManager assetManager;
@@ -56,11 +56,13 @@ public class GameScreen extends ScreenAdapter{
 	private CombatSystem combatSystem;
 	private MovementUtilityCalculator movementUtilityCalculator;
 	private CombatSystemCalculator combatSystemCalculator;
+	private FireEmblemGame fireEmblemGame;
 	
-	public GameScreen(MusicSystem musicSystem, SoundSystem soundSystem, Engine engine, AssetManager assetManager, SpriteBatch spriteBatch, OrthographicCamera gameCamera) {
+	public GameScreen(FireEmblemGame fireEmblemGame ,MusicSystem musicSystem, SoundSystem soundSystem, Engine engine, AssetManager assetManager, SpriteBatch spriteBatch, OrthographicCamera gameCamera) {
 		this.engine = engine;
 		this.soundSystem = soundSystem;
 		this.assetManager = assetManager;
+		this.fireEmblemGame = fireEmblemGame;
 		
 		// Start Systems
 		cameraSystem = new CameraSystem(gameCamera, spriteBatch);
@@ -73,7 +75,7 @@ public class GameScreen extends ScreenAdapter{
 		aiSystem = new AISystem();
 		infoBoxUpdate = new InfoBoxUpdate();
 		userInterfaceManager = new UserInterfaceManager();
-		combatSystem = new CombatSystem(unitMapCellUpdater);
+		combatSystem = new CombatSystem(unitMapCellUpdater, this);
 		combatSystemCalculator = new CombatSystemCalculator();
 		
 		// Add Systems to the Engine
@@ -90,8 +92,8 @@ public class GameScreen extends ScreenAdapter{
 	
 		// Start First Level
 		//currentLevel = new Level("levels/level1/level1.tmx", assetManager, engine);
-		currentLevel = new Level("levels/level2/level2.tmx", assetManager, engine);
-		//currentLevel = new Level("levels/level3/level3.tmx", assetManager, engine);
+		//currentLevel = new Level("levels/level2/level2.tmx", assetManager, engine);
+		currentLevel = new Level("levels/level3/level3.tmx", assetManager, engine);
 		//currentLevel = new Level("levels/level4/level4.tmx", assetManager, engine);
 		currentLevel.startLevel();
 		
@@ -171,5 +173,22 @@ public class GameScreen extends ScreenAdapter{
 		// Start UI
 		userInterfaceManager.startSystem();
 		userInterfaceManager.setStates(mapCursor, dialogueState);
+	}
+	
+	// Getters
+	public UserInterfaceManager getUserInterfaceManager() {
+		return userInterfaceManager;
+	}
+	 
+	public Engine getEngine() {
+		return engine;
+	}
+	
+	public FireEmblemGame getFireEmblemGame() {
+		return fireEmblemGame;
+	}
+	
+	public AssetManager getAssetManager() {
+		return assetManager;
 	}
 }

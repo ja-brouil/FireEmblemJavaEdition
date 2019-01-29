@@ -15,7 +15,7 @@
 136,137,138,139,140,141,142,143,144,145,146,147,148,149,150
 </data>
  </layer>
- <objectgroup name="CellInfo" visible="0">
+ <objectgroup name="CellInfo">
   <object id="668" x="0" y="144" width="16" height="16">
    <properties>
     <property name="Avd" type="int" value="0"/>
@@ -1217,7 +1217,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Enemies">
+ <objectgroup name="Enemies" visible="0">
   <object id="507" x="32" y="32" width="16" height="16">
    <properties>
     <property name="BonusCrit" type="int" value="0"/>
@@ -1334,7 +1334,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Allies" visible="0">
+ <objectgroup name="Allies">
   <object id="490" x="208" y="112" width="16" height="16">
    <properties>
     <property name="Class" value="Lord"/>

@@ -18,22 +18,24 @@ b:levels/level1/.DS_Store:6148:application/unknown
 b:levels/level1/Impassable.tx:205:application/unknown
 b:levels/level1/level1 copy.tmx:31026:application/unknown
 i:levels/level1/level1.png:130356:image/png
-b:levels/level1/level1.tmx:52995:application/unknown
+b:levels/level1/level1.tmx:52983:application/unknown
 b:levels/level1/level1tileset:196:application/unknown
 b:levels/level1/Level1TileSetTest.tsx:235:application/unknown
 d:levels/level2:0:application/unknown
 i:levels/level2/level2.png:101820:image/png
-b:levels/level2/level2.tmx:144994:application/unknown
+b:levels/level2/level2.tmx:144981:application/unknown
 b:levels/level2/level2tileset.tsx:196:application/unknown
 d:levels/level3:0:application/unknown
 i:levels/level3/level3.png:43161:image/png
-b:levels/level3/level3.tmx:1323:application/unknown
+b:levels/level3/level3.tmx:76371:application/unknown
 b:levels/level3/Level3Tileset.tsx:231:application/unknown
 d:levels/level4:0:application/unknown
 i:levels/level4/level4.png:113674:image/png
 b:levels/level4/level4.tmx:86350:application/unknown
 b:levels/level4/level4tileset.tsx:231:application/unknown
 d:music:0:application/unknown
+a:music/Attack Theme.mp3:1302288:application/unknown
+a:music/Defense Theme.mp3:1470935:application/unknown
 a:music/enemy theme.mp3:2382504:application/unknown
 a:music/Enemy Turn.mp3:4512000:application/unknown
 a:music/FE Level1 HD Good.mp3:4795591:application/unknown
@@ -73,6 +75,8 @@ i:transition/enemy phase.png:18536:image/png
 i:transition/player phase.png:18260:image/png
 d:UI:0:application/unknown
 b:UI/.DS_Store:6148:application/unknown
+d:UI/combatUI:0:application/unknown
+i:UI/combatUI/combatUI.png:29865:image/png
 d:UI/Cursor:0:application/unknown
 i:UI/Cursor/cursor.png:71612:image/png
 i:UI/Cursor/hand.png:15618:image/png

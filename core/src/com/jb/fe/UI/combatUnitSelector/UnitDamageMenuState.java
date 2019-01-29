@@ -91,6 +91,7 @@ public class UnitDamageMenuState extends UserInterfaceState {
 	@Override
 	public void nextState() {
 		userInterfaceManager.setStates(this, userInterfaceManager.allUserInterfaceStates.get("MapCursor"));
+		
 	}
 
 	@Override

@@ -69,6 +69,7 @@ public class UnitFactory {
 		animationComponent.allAnimationObjects.put("CombatAnimationRegularHit", new AnimationObject(assetManager, 
 				"units/bandit/fighterRegular.png", 243, 213, 
 				AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 0, 25));
+		animationComponent.allAnimationObjects.get("CombatAnimationRegularHit").useSynchronizedTimer = false;
 		
 		// Set Default Animation
 		animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Idle");
@@ -155,8 +156,10 @@ public class UnitFactory {
 		// Set Default Animation
 		animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Idle");
 		
+		// Combat
 		animationComponent.allAnimationObjects.put("CombatAnimationRegularHit", new AnimationObject(assetManager, "units/bandit/fighterRegular.png", 243, 213, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 0, 25));
-
+		animationComponent.allAnimationObjects.get("CombatAnimationRegularHit").useSynchronizedTimer = false;
+		
 		// Off sets
 		animationComponent.allAnimationObjects.get("Left").Xoffset = 0;
 		animationComponent.allAnimationObjects.get("Right").Xoffset = -12;
@@ -257,7 +260,9 @@ public class UnitFactory {
 		// Set Default Animation
 		animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Idle");
 		
+		// Combat
 		animationComponent.allAnimationObjects.put("CombatAnimationRegularHit", new AnimationObject(assetManager, "units/bandit/fighterRegular.png", 243, 213, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 0, 25));
+		animationComponent.allAnimationObjects.get("CombatAnimationRegularHit").useSynchronizedTimer = false;
 		
 		// Unit Stats
 		movementStatsComponent.movementSteps = moveSteps;

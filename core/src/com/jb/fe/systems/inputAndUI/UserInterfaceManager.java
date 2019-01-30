@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.jb.fe.UI.UserInterfaceState;
 import com.jb.fe.UI.mapcursor.MapCursor;
+import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.SystemPriorityList;
 
 public class UserInterfaceManager extends EntitySystem {
@@ -16,8 +17,12 @@ public class UserInterfaceManager extends EntitySystem {
 	public HashMap<String, UserInterfaceState> allUserInterfaceStates;
 	public UserInterfaceState currentState;
 	
+	// Allow swapping of screens from the UI manager
+	public FireEmblemGame fireEmblemGame;
+	
 	// User Interface Menu
-	public UserInterfaceManager() {
+	public UserInterfaceManager(FireEmblemGame fireEmblemGame) {
+		this.fireEmblemGame = fireEmblemGame;
 		allUserInterfaceStates = new HashMap<>();
 		priority = SystemPriorityList.HandleInputAndUI;	
 	}

@@ -49,6 +49,16 @@ public class TextObject {
 		this.alignment = alignment;
 	}
 	
+	public TextObject(float x, float y, String text, float textFontSize, int alignment, Color color) {
+		this.x = x;
+		this.y = y;
+		this.text = text;
+		isEnabled = true;
+		this.textFontSize = textFontSize;
+		textColor = color;
+		this.alignment = alignment;
+	}
+	
 	public TextObject() {
 		this(0, 0, "PlaceHolder");
 	}

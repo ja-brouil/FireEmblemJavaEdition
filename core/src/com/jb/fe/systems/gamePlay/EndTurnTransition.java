@@ -110,7 +110,8 @@ public class EndTurnTransition {
 				
 				if (turnManager.getTurnStatus().equals(Turn_Status.TRANSITION_INTO_ALLY)) {
 					turnManager.setTurnStatus(Turn_Status.PLAYER_TURN);
-					if (currentLevel.allEnemies.size == 1) {
+					if (currentLevel.allEnemies.size <= 1) {
+						System.out.println(currentLevel.allEnemies.size);
 						musicSystem.setCurrentSong("Ally One Unit Left", true);
 					} else {
 						musicSystem.setCurrentSong("Ally Battle Theme SD", true);

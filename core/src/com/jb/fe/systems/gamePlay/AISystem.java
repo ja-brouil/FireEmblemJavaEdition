@@ -12,6 +12,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Array;
+import com.jb.fe.UI.combatUnitSelector.UnitDamageMenuState;
 import com.jb.fe.components.Artifical_IntelligenceComponent;
 import com.jb.fe.components.Artifical_IntelligenceComponent.AI_TYPE;
 import com.jb.fe.components.InventoryComponent;
@@ -20,6 +21,7 @@ import com.jb.fe.components.MovementStatsComponent;
 import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.map.MapCell;
+import com.jb.fe.screens.FireEmblemGame;
 import com.jb.fe.systems.SystemPriorityList;
 import com.jb.fe.systems.movement.MovementUtilityCalculator;
 import com.jb.fe.systems.movement.UnitMovementSystem;
@@ -60,10 +62,16 @@ public class AISystem extends EntitySystem{
 	private Entity enemyUnit;
 	private Entity currentUnitToAttack;
 	
-	public AISystem() {
+	// Combat animations
+	private FireEmblemGame fireEmblemGame;
+	
+	public AISystem(FireEmblemGame fireEmblemGame) {
 		// This system should only be started when the AI is needed.
 		priority = SystemPriorityList.AI_System;
 		setProcessing(false);
+		
+		// Allow swap to combat animations
+		this.fireEmblemGame = fireEmblemGame;
 		
 		reachableUnits = new Array<Entity>();
 		allyUnits = new Array<Entity>();
@@ -300,15 +308,25 @@ public class AISystem extends EntitySystem{
 			CombatSystem.defendingUnit = currentUnitToAttack;
 			combatSystemCalculator.setUnits(enemyUnit, currentUnitToAttack);
 			
+			// Set Preview numbers
+			UnitDamageMenuState.atkCrit = Integer.toString(combatSystemCalculator.calculateCritChanceNumber());
+			UnitDamageMenuState.atkDmg = Integer.toString(combatSystemCalculator.calculateDamagePreview());
+			UnitDamageMenuState.atkHit = Integer.toString(combatSystemCalculator.calculateHitChanceNumber());
+			
 			// Calculate Numbers
 			CombatSystemCalculator.AttackingDamage = combatSystemCalculator.calculateDamage();
 			
 			// Swap
 			combatSystemCalculator.setUnits(currentUnitToAttack, enemyUnit);
+			
+			UnitDamageMenuState.defCrit = Integer.toString(combatSystemCalculator.calculateCritChanceNumber());
+			UnitDamageMenuState.defDmg = Integer.toString(combatSystemCalculator.calculateDamagePreview());
+			UnitDamageMenuState.defHit = Integer.toString(combatSystemCalculator.calculateHitChanceNumber());
+			
 			CombatSystemCalculator.DefendingDamage = combatSystemCalculator.calculateDamage();
 			
 			// Process
-			CombatSystem.isProcessing = true;
+			fireEmblemGame.setScreen(FireEmblemGame.allGameScreens.get("CombatScreen"));
 			aiComponentMapper.get(enemyUnit).shouldAttack = false;
 			enemyUnit = null;
 		}

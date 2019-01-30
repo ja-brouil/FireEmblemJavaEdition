@@ -65,6 +65,11 @@ public class UnitFactory {
 		animationComponent.allAnimationObjects.put("Selected", new AnimationObject(assetManager, animationFileLocation,
 				32, 32, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 3, 4));
 
+		// Combat Animation
+		animationComponent.allAnimationObjects.put("CombatAnimationRegularHit", new AnimationObject(assetManager, 
+				"units/bandit/fighterRegular.png", 243, 213, 
+				AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 0, 25));
+		
 		// Set Default Animation
 		animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Idle");
 
@@ -149,6 +154,8 @@ public class UnitFactory {
 
 		// Set Default Animation
 		animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Idle");
+		
+		animationComponent.allAnimationObjects.put("CombatAnimationRegularHit", new AnimationObject(assetManager, "units/bandit/fighterRegular.png", 243, 213, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 0, 25));
 
 		// Off sets
 		animationComponent.allAnimationObjects.get("Left").Xoffset = 0;
@@ -249,6 +256,8 @@ public class UnitFactory {
 
 		// Set Default Animation
 		animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Idle");
+		
+		animationComponent.allAnimationObjects.put("CombatAnimationRegularHit", new AnimationObject(assetManager, "units/bandit/fighterRegular.png", 243, 213, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 0, 25));
 		
 		// Unit Stats
 		movementStatsComponent.movementSteps = moveSteps;

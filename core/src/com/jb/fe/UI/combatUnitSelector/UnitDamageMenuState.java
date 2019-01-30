@@ -40,6 +40,14 @@ public class UnitDamageMenuState extends UserInterfaceState {
 	// Combat System Calculator
 	private CombatSystemCalculator combatSystemCalculator;
 
+	// Damage Numbers for combat screen
+	public static String defHit;
+	public static String defDmg;
+	public static String defCrit;
+	public static String atkHit;
+	public static String atkDmg;
+	public static String atkCrit;
+
 	public UnitDamageMenuState(AssetManager assetManager, SoundSystem soundSystem,
 			UserInterfaceManager userInterfaceManager, CombatSystemCalculator combatSystemCalculator, Engine engine, Entity mapCursor) {
 		super(assetManager, soundSystem, userInterfaceManager);
@@ -91,7 +99,7 @@ public class UnitDamageMenuState extends UserInterfaceState {
 	@Override
 	public void nextState() {
 		userInterfaceManager.setStates(this, userInterfaceManager.allUserInterfaceStates.get("MapCursor"));
-		
+		userInterfaceManager.fireEmblemGame.setScreen(FireEmblemGame.allGameScreens.get("CombatScreen"));
 	}
 
 	@Override
@@ -120,13 +128,10 @@ public class UnitDamageMenuState extends UserInterfaceState {
 				soundSystem.playSound(UISounds.invalid);
 				return;
 			}
-			// Combat animations/Whatever cool shit you want to use here. For now, just
-			// boring old numbers changing | Turn this into a system
-			// later so that we can take units out when they are "dead" or if Eirika dies it
-			// should be game over.
+	
+			// Switch to combat screen
 			CombatSystem.attackingUnit = UserInterfaceManager.unitSelected;
 			CombatSystem.defendingUnit = allEntitiesThatCanBeActedUpon.get(unitSelection);
-			CombatSystem.isProcessing = true;
 			
 			// Unit is done
 			mStatComponentMapper.get(UserInterfaceManager.unitSelected).unit_State = Unit_State.DONE;
@@ -158,7 +163,7 @@ public class UnitDamageMenuState extends UserInterfaceState {
 		10 Attacking Unit Name
 	 * 
 	 */
-	private void setText(boolean isRight) {
+	public void setText(boolean isRight) {
 		int xOffset = 0;
 		if (isRight) {
 			xOffset = (int) (FireEmblemGame.WIDTH - 80 + (CameraSystem.cameraX - CameraSystem.xConstant));
@@ -181,7 +186,7 @@ public class UnitDamageMenuState extends UserInterfaceState {
 		textComponent.textArray.get(1).x = 5 + xOffset;
 		textComponent.textArray.get(1).y = 63 + yOffset;
 
-		// Attack Crit
+		// Defending Item
 		textComponent.textArray.get(2).text = nComponentMapper
 				.get(combatSystemCalculator.getDefendingInventory().selectedItem).name;
 		textComponent.textArray.get(2).x = 70 - 10 + xOffset;
@@ -190,16 +195,19 @@ public class UnitDamageMenuState extends UserInterfaceState {
 		// Attacking Numbers First
 		// Atk Crit
 		textComponent.textArray.get(2).text = Integer.toString(combatSystemCalculator.calculateCritChanceNumber());
+		atkCrit = textComponent.textArray.get(2).text;
 		textComponent.textArray.get(2).x = 70 - 19 + xOffset;
 		textComponent.textArray.get(2).y = 81 + yOffset;
 
 		// Atk Hit
 		textComponent.textArray.get(4).text = Integer.toString(combatSystemCalculator.calculateHitChanceNumber());
+		atkHit = textComponent.textArray.get(4).text;
 		textComponent.textArray.get(4).x = 70 - 19 + xOffset;
 		textComponent.textArray.get(4).y = 94 + yOffset;
 
 		// Atk Might
 		textComponent.textArray.get(6).text = Integer.toString(combatSystemCalculator.calculateDamagePreview());
+		atkDmg = textComponent.textArray.get(6).text;
 		textComponent.textArray.get(6).x = 70 - 19 + xOffset;
 		textComponent.textArray.get(6).y = 107 + yOffset;
 
@@ -223,16 +231,19 @@ public class UnitDamageMenuState extends UserInterfaceState {
 
 		// Def Crit
 		textComponent.textArray.get(3).text = Integer.toString(combatSystemCalculator.calculateCritChanceNumber());
+		defCrit = textComponent.textArray.get(3).text;
 		textComponent.textArray.get(3).x = xOffset + 8;
 		textComponent.textArray.get(3).y = 81 + yOffset;
 
 		// Def Hit
 		textComponent.textArray.get(5).text = Integer.toString(combatSystemCalculator.calculateHitChanceNumber());
+		defHit = textComponent.textArray.get(5).text;
 		textComponent.textArray.get(5).x = xOffset + 8;
 		textComponent.textArray.get(5).y = 94 + yOffset;
 
 		// Def Might
 		textComponent.textArray.get(7).text = Integer.toString(combatSystemCalculator.calculateDamagePreview());
+		defDmg = textComponent.textArray.get(7).text;
 		textComponent.textArray.get(7).x = xOffset + 8;
 		textComponent.textArray.get(7).y = 107 + yOffset;
 

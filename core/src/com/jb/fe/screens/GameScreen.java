@@ -72,9 +72,9 @@ public class GameScreen extends ScreenAdapter {
 		unitMapCellUpdater = new UnitMapCellUpdater();
 		unitMovementSystem = new UnitMovementSystem();
 		turnManagerSystem = new TurnManager();
-		aiSystem = new AISystem();
+		aiSystem = new AISystem(fireEmblemGame);
 		infoBoxUpdate = new InfoBoxUpdate();
-		userInterfaceManager = new UserInterfaceManager();
+		userInterfaceManager = new UserInterfaceManager(fireEmblemGame);
 		combatSystem = new CombatSystem(unitMapCellUpdater, this);
 		combatSystemCalculator = new CombatSystemCalculator();
 		
@@ -92,8 +92,8 @@ public class GameScreen extends ScreenAdapter {
 	
 		// Start First Level
 		//currentLevel = new Level("levels/level1/level1.tmx", assetManager, engine);
-		//currentLevel = new Level("levels/level2/level2.tmx", assetManager, engine);
-		currentLevel = new Level("levels/level3/level3.tmx", assetManager, engine);
+		currentLevel = new Level("levels/level2/level2.tmx", assetManager, engine);
+		//currentLevel = new Level("levels/level3/level3.tmx", assetManager, engine);
 		//currentLevel = new Level("levels/level4/level4.tmx", assetManager, engine);
 		currentLevel.startLevel();
 		

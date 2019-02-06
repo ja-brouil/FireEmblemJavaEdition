@@ -121,14 +121,6 @@ public class RenderSystem extends EntitySystem {
 							animationComponent.currentAnimation.isLooping), positionComponent.x + animationComponent.currentAnimation.Xoffset, 
 							positionComponent.y + animationComponent.currentAnimation.YoffSet, 
 							animationComponent.currentAnimation.width, animationComponent.currentAnimation.height);
-					
-					
-					// End timer if not looping
-					if (!animationComponent.currentAnimation.isLooping) {
-						if (animationComponent.currentAnimation.animationFrames.isAnimationFinished(animationComponent.currentAnimation.animationElapsedTime)) {
-							animationComponent.currentAnimation.animationElapsedTime = 0;
-						}
-					}
 				}
 			}
 			

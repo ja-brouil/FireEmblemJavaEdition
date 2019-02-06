@@ -11,6 +11,7 @@ import com.jb.fe.components.UnitStatsComponent;
 import com.jb.fe.level.Level;
 import com.jb.fe.screens.GameScreen;
 import com.jb.fe.systems.SystemPriorityList;
+import com.jb.fe.systems.graphics.CombatAnimationSystem;
 import com.jb.fe.systems.movement.UnitMapCellUpdater;
 
 public class CombatSystem extends EntitySystem{
@@ -18,6 +19,8 @@ public class CombatSystem extends EntitySystem{
 	public static Entity attackingUnit;
 	public static Entity defendingUnit;
 	public static boolean isProcessing;
+	
+	public static int currentHP;
 	
 	private Level level;
 	private UnitMapCellUpdater unitMapCellUpdater;
@@ -40,6 +43,7 @@ public class CombatSystem extends EntitySystem{
 		// Process attacking unit first
 		UnitStatsComponent defendingUnitStats = uComponentMapper.get(defendingUnit);
 		if (CombatSystemCalculator.AttackingDamage != -10000) {
+			currentHP = defendingUnitStats.health;
 			defendingUnitStats.health -= CombatSystemCalculator.AttackingDamage;
 		} else {
 			// TO DO MISS ANIMATION
@@ -55,22 +59,12 @@ public class CombatSystem extends EntitySystem{
 		}
 		
 		if (defendingUnitStats.health <= 0 ) {
-			defendingUnitStats.health = 0;
-			
-			getEngine().removeEntity(defendingUnit);
-			
-			// Remove unit from Level array
-			if (mComponentMapper.get(defendingUnit).isAlly) {
-				removeUnitFromLevelArray(level.allAllies, defendingUnit);
-			} else {
-				removeUnitFromLevelArray(level.allEnemies, defendingUnit);
-			}
-			
-			unitMapCellUpdater.updateCellInfo();
-			
 			isProcessing = false;
 			
+			defendingUnitStats.health = 0;
+			
 			// Set Animation combat system
+			CombatAnimationSystem.isProcessing = true;
 			System.out.println("COMBAT ANIMATION STARTING");
 			return;
 		}	
@@ -92,6 +86,7 @@ public class CombatSystem extends EntitySystem{
 		}
 		
 		if (attackingUnitStats.health <= 0) {
+			/*
 			attackingUnitStats.health = 0;
 			getEngine().removeEntity(attackingUnit);
 			
@@ -101,6 +96,7 @@ public class CombatSystem extends EntitySystem{
 			} else {
 				removeUnitFromLevelArray(level.allEnemies, attackingUnit);
 			}
+			*/
 		}
 		
 		// Combat animations
@@ -120,5 +116,20 @@ public class CombatSystem extends EntitySystem{
 	// Load Level
 	public void loadLevel(Level level) {
 		this.level = level;
+	}
+	
+	public void removeEntity(UnitStatsComponent defendingUnitStats) {
+		defendingUnitStats.health = 0;
+		
+		getEngine().removeEntity(defendingUnit);
+		
+		// Remove unit from Level array
+		if (mComponentMapper.get(defendingUnit).isAlly) {
+			removeUnitFromLevelArray(level.allAllies, defendingUnit);
+		} else {
+			removeUnitFromLevelArray(level.allEnemies, defendingUnit);
+		}
+		
+		unitMapCellUpdater.updateCellInfo();
 	}
 }

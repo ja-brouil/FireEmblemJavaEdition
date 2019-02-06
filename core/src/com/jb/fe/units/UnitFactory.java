@@ -261,7 +261,8 @@ public class UnitFactory {
 		animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Idle");
 		
 		// Combat
-		animationComponent.allAnimationObjects.put("CombatAnimationRegularHit", new AnimationObject(assetManager, "units/bandit/fighterRegular.png", 243, 213, AnimationObject.DEFAULT_ANIMATION_TIMER, 0, 0, 25));
+		animationComponent.allAnimationObjects.put("CombatAnimationRegularHit", new AnimationObject(assetManager, "units/bandit/fighterRegular.png", 
+				243, 213, 0.25f, 0, 0, 25));
 		animationComponent.allAnimationObjects.get("CombatAnimationRegularHit").useSynchronizedTimer = false;
 		
 		// Unit Stats

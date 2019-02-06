@@ -64,6 +64,13 @@ public class StaticImageComponent implements Component{
 		isEnabled = true;
 	}
 	
+	/**
+	 * Construct a new empty Static Image Component
+	 */
+	public StaticImageComponent() {
+		
+	}
+
 	// Move the Section to a specific section
 	public void setNewImageLocation(int x, int y, int width, int height) {
 		staticImage.setRegion(x, y, width, height);

@@ -64,6 +64,7 @@ public class CombatScreen extends ScreenAdapter {
 		// Combat Animation System
 		combatAnimationSystem = new CombatAnimationSystem();
 		engine.addSystem(combatAnimationSystem);
+		combatAnimationSystem.createInitialEntity();
 	}
 	
 	@Override
@@ -96,6 +97,7 @@ public class CombatScreen extends ScreenAdapter {
 		}
 		
 		// Combat animations take over here
+		combatAnimationSystem.update(delta);
 		
 		// Fade song before 5 seconds
 		if (timer >= 4.5f && timer <= 5.5) {
@@ -105,11 +107,13 @@ public class CombatScreen extends ScreenAdapter {
 			musicSystem.getCurrentSong().getSong().setVolume(volumeLevel);
 		}
 		
+		/*
 		if (timer >= 5.5) {
 			System.out.println("COMBAT IS DONE");
 			CombatSystem.isProcessing = false;
 			fireEmblemGame.setScreen(FireEmblemGame.allGameScreens.get("GameScreen"));
 		}
+		*/
 	}
 	
 	/**

@@ -20,8 +20,6 @@ public class CombatSystem extends EntitySystem{
 	public static Entity defendingUnit;
 	public static boolean isProcessing;
 	
-	public static int currentHP;
-	
 	private Level level;
 	private UnitMapCellUpdater unitMapCellUpdater;
 	
@@ -42,12 +40,10 @@ public class CombatSystem extends EntitySystem{
 		
 		// Process attacking unit first
 		UnitStatsComponent defendingUnitStats = uComponentMapper.get(defendingUnit);
-		if (CombatSystemCalculator.AttackingDamage != -10000) {
-			currentHP = defendingUnitStats.health;
-			defendingUnitStats.health -= CombatSystemCalculator.AttackingDamage;
-		} else {
-			// TO DO MISS ANIMATION
-		}
+		if (CombatSystemCalculator.AttackingDamage == -10000) {
+			System.out.println("DAMAGE MISS");
+			//defendingUnitStats.health -= CombatSystemCalculator.AttackingDamage;
+		} 
 		
 		// Process Item reduction/destruction
 		InventoryComponent attackingInventoryComponent = invComponentMapper.get(attackingUnit);
@@ -58,14 +54,13 @@ public class CombatSystem extends EntitySystem{
 			attackingInventoryComponent.removeItem(attackingInventoryComponent.selectedItemIndex);
 		}
 		
-		if (defendingUnitStats.health <= 0 ) {
+		// Start Animation
+		CombatAnimationSystem.isProcessing = true; 
+		System.out.println("COMBAT ANIMATION STARTING");
+		if (defendingUnitStats.health - CombatSystemCalculator.AttackingDamage <= 0 ) {
 			isProcessing = false;
 			
-			defendingUnitStats.health = 0;
-			
-			// Set Animation combat system
-			CombatAnimationSystem.isProcessing = true;
-			System.out.println("COMBAT ANIMATION STARTING");
+			//defendingUnitStats.health = 0;
 			return;
 		}	
 		

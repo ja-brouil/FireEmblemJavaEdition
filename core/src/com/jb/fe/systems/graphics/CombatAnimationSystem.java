@@ -1,9 +1,9 @@
 package com.jb.fe.systems.graphics;
 
 import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.Gdx;
 import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
@@ -17,6 +17,9 @@ public class CombatAnimationSystem extends EntitySystem {
 	public static boolean canRetaliate = false;
 	public static boolean isProcessing = false;
 	
+	public static int damageFromAttacker;
+	public static int damageFromDefender;
+	
 	private ComponentMapper<AnimationComponent> aComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<StaticImageComponent> sComponentMapper = ComponentMapper.getFor(StaticImageComponent.class);
@@ -29,6 +32,8 @@ public class CombatAnimationSystem extends EntitySystem {
 	
 	private float animationTimer;
 	private float animationRetaliateTimer;
+	
+	private float healthSpeedDecrease = 25;
 	
 	// Add this to the engine priority later
 	public CombatAnimationSystem() {
@@ -82,7 +87,7 @@ public class CombatAnimationSystem extends EntitySystem {
 		if (!isProcessing) { return; }
 		
 		animationTimer += delta;
-		
+		//System.out.println("Here");
 		// Check if attacking animations are done
 		if (!aComponentMapper.get(CombatSystem.attackingUnit).currentAnimation.animationFrames.isAnimationFinished(animationTimer)) {
 			return;
@@ -90,7 +95,8 @@ public class CombatAnimationSystem extends EntitySystem {
 		
 		// Set HP of the defender
 		UnitStatsComponent defUnitStatsComponent = uComponentMapper.get(CombatSystem.defendingUnit);
-		
+		defUnitStatsComponent.health -= (healthSpeedDecrease * Gdx.graphics.getDeltaTime());
+		System.out.println("Health: " + defUnitStatsComponent.health);
 	}
 	 
 	/**

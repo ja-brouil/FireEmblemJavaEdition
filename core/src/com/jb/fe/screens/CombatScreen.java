@@ -6,7 +6,6 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.jb.fe.UI.combatUIScreen.CombatScreenUI;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
-import com.jb.fe.systems.gamePlay.CombatSystem;
 import com.jb.fe.systems.gamePlay.TurnManager;
 import com.jb.fe.systems.gamePlay.TurnManager.Turn_Status;
 import com.jb.fe.systems.graphics.CombatAnimationSystem;
@@ -75,7 +74,7 @@ public class CombatScreen extends ScreenAdapter {
 		// Combat System start
 		if (timer == 0) {
 			System.out.println("START OF COMBAT PHASE");
-			CombatSystem.isProcessing = true;
+			CombatAnimationSystem.isProcessing = true;
 		}
 		timer += Gdx.graphics.getDeltaTime();
 		

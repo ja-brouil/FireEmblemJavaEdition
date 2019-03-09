@@ -20,6 +20,10 @@ public class CombatSystem extends EntitySystem{
 	public static Entity defendingUnit;
 	public static boolean isProcessing;
 	
+	// Statistics
+	public static int attackingDamage;
+	public static int defendingDamage;
+	
 	private Level level;
 	private UnitMapCellUpdater unitMapCellUpdater;
 	
@@ -103,6 +107,7 @@ public class CombatSystem extends EntitySystem{
 		// Update cells
 		unitMapCellUpdater.updateCellInfo();
 	}
+
 	
 	private void removeUnitFromLevelArray(Array<Entity> levelArray, Entity unitToRemove) {
 		levelArray.removeValue(unitToRemove, true);

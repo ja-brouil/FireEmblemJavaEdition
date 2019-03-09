@@ -82,4 +82,5 @@ public class AnimationObject{
 			keyFrame.flip(flipX, flipY);
 		}
 	}
+
 }

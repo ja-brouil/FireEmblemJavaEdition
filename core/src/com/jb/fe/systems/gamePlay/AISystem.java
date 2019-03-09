@@ -315,6 +315,7 @@ public class AISystem extends EntitySystem{
 			
 			// Calculate Numbers
 			CombatSystemCalculator.AttackingDamage = combatSystemCalculator.calculateDamage();
+			CombatSystemCalculator.currentAttackingHealth = combatSystemCalculator.getAttackingUnitStats().health;
 			
 			// Swap
 			combatSystemCalculator.setUnits(currentUnitToAttack, enemyUnit);
@@ -324,6 +325,7 @@ public class AISystem extends EntitySystem{
 			UnitDamageMenuState.defHit = Integer.toString(combatSystemCalculator.calculateHitChanceNumber());
 			
 			CombatSystemCalculator.DefendingDamage = combatSystemCalculator.calculateDamage();
+			CombatSystemCalculator.currentDefendingHealth = combatSystemCalculator.getAttackingUnitStats().health;
 			
 			// Process
 			fireEmblemGame.setScreen(FireEmblemGame.allGameScreens.get("CombatScreen"));

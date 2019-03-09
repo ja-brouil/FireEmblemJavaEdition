@@ -35,6 +35,8 @@ public class CombatSystemCalculator {
 	// These are set during the Unit Damage Preview Update Component
 	public static int AttackingDamage = 0;
 	public static int DefendingDamage = 0;
+	public static int currentAttackingHealth;
+	public static int currentDefendingHealth;
 	
 	public CombatSystemCalculator() {}
 	

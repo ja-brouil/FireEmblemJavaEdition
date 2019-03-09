@@ -190,4 +190,14 @@ public class CombatScreenUI extends UserInterfaceState{
 	public Entity getMainEntity() {
 		return this.combatScreenEntity;
 	}
+	
+	public void setHP(Entity ally, Entity enemy) {
+		textComponent.textArray.get(5).text = "HP " + Integer.toString(uComponentMapper.get(enemy).health);
+		textComponent.textArray.get(5).x = positionComponent.x + 20;
+		textComponent.textArray.get(5).y = positionComponent.y + 15;
+		
+		textComponent.textArray.get(11).text = "HP " + Integer.toString(uComponentMapper.get(ally).health);
+		textComponent.textArray.get(11).x = positionComponent.x + 143;
+		textComponent.textArray.get(11).y = positionComponent.y + 15;
+	}
 }

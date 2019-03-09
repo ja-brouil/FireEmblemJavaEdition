@@ -223,6 +223,9 @@ public class UnitDamageMenuState extends UserInterfaceState {
 
 		// Attacking unit damage
 		CombatSystemCalculator.AttackingDamage = combatSystemCalculator.calculateDamage();
+		
+		// Set HP of unit before swapping
+		CombatSystemCalculator.currentAttackingHealth = combatSystemCalculator.getAttackingUnitStats().health;
 
 		// Defending Numbers
 		// Swap Units
@@ -252,8 +255,9 @@ public class UnitDamageMenuState extends UserInterfaceState {
 		textComponent.textArray.get(9).x = xOffset + 8;
 		textComponent.textArray.get(9).y = 120 + yOffset;
 
-		// Defending unit damage
+		// Defending unit damage and health
 		CombatSystemCalculator.DefendingDamage = combatSystemCalculator.calculateDamage();
+		CombatSystemCalculator.currentDefendingHealth = combatSystemCalculator.getAttackingUnitStats().health;
 	}
 	
 	/**

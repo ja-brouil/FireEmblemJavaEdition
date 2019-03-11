@@ -65,9 +65,6 @@ public class CombatAnimationSystem extends EntitySystem {
 		defendingX = pComponentMapper.get(CombatSystem.defendingUnit).x;
 		defendingY = pComponentMapper.get(CombatSystem.defendingUnit).y;
 		
-		System.out.println(attackingX);
-		
-		
 		// Set New Location
 		pComponentMapper.get(CombatSystem.attackingUnit).x = CameraSystem.cameraX - CameraSystem.xConstant + 100;
 		pComponentMapper.get(CombatSystem.attackingUnit).y = CameraSystem.cameraY - CameraSystem.yConstant + 50;
@@ -87,13 +84,9 @@ public class CombatAnimationSystem extends EntitySystem {
 		aComponentMapper.get(CombatSystem.defendingUnit).currentAnimation.height = 50;
 		aComponentMapper.get(CombatSystem.defendingUnit).currentAnimation.isLooping = false;
 		aComponentMapper.get(CombatSystem.defendingUnit).currentAnimation.isDrawing = false;
-		for (TextureRegion region : aComponentMapper.get(CombatSystem.defendingUnit).currentAnimation.animationFrames.getKeyFrames()) {
-			region.flip(true, false);
-		}
 		
 		// Set First Frame for defending unit
 		sComponentMapper.get(defendingNonMovingEntity).staticImage = aComponentMapper.get(CombatSystem.defendingUnit).currentAnimation.animationFrames.getKeyFrames()[0];
-		sComponentMapper.get(defendingNonMovingEntity).staticImage.flip(true, false);
 		sComponentMapper.get(defendingNonMovingEntity).width = 50;
 		sComponentMapper.get(defendingNonMovingEntity).height = 50;
 		sComponentMapper.get(defendingNonMovingEntity).isEnabled = true;
@@ -249,12 +242,8 @@ public class CombatAnimationSystem extends EntitySystem {
 				getEngine().getSystem(CombatSystem.class).removeEntity(atkUnitStatsComponent);
 				CombatSystem.defendingUnit = null;
 				
-				// No retaliation here so we are done
-				isProcessing = false;
-				
 				// Remove the initial entity
 				sComponentMapper.get(defendingNonMovingEntity).isEnabled = false;
-				CombatAnimationSystem.combatAnimationsAreComplete = true;
 			}
 			
 			// Stop Healing past max Health
@@ -267,6 +256,9 @@ public class CombatAnimationSystem extends EntitySystem {
 			// Clean up
 			combatSystemState = CombatSystemState.Attacking;
 			
+			// We are done with animations
+			CombatAnimationSystem.combatAnimationsAreComplete = true;
+			isProcessing = false;
 		}
 	}
 	

@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.jb.fe.UI.combatUIScreen.CombatScreenUI;
+import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
@@ -44,6 +45,7 @@ public class CombatScreen extends ScreenAdapter {
 	
 	// Comp Mappers
 	private ComponentMapper<PositionComponent> pComponentMapper = ComponentMapper.getFor(PositionComponent.class);
+	private ComponentMapper<AnimationComponent> aComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
 	
 	// Engine and Systems
 	private Engine engine;
@@ -124,6 +126,7 @@ public class CombatScreen extends ScreenAdapter {
 		
 		// Set Song
 		if (CombatAnimationSystem.combatAnimationsAreComplete && !endingPhase) {
+			
 			secondMusicTimer += Gdx.graphics.getDeltaTime();
 			volumeLevel = 1 - (secondMusicTimer / musicTimer);;
 			if (volumeLevel <= 0) { 
@@ -136,17 +139,19 @@ public class CombatScreen extends ScreenAdapter {
 		
 		// End combat phase and back to normal gameplay
 		if (endingPhase) {
+			
 			// Set Units back to original
 			if (CombatSystem.attackingUnit != null) {
 				pComponentMapper.get(CombatSystem.attackingUnit).x = combatAnimationSystem.attackingX;
 				pComponentMapper.get(CombatSystem.attackingUnit).y = combatAnimationSystem.attackingY;
-				
+				aComponentMapper.get(CombatSystem.attackingUnit).currentAnimation = aComponentMapper.get(CombatSystem.attackingUnit).allAnimationObjects.get("Idle");
 			}
 			
 			
 			if (CombatSystem.defendingUnit != null) {
 				pComponentMapper.get(CombatSystem.defendingUnit).x = combatAnimationSystem.defendingX;
 				pComponentMapper.get(CombatSystem.defendingUnit).y = combatAnimationSystem.defendingY;
+				aComponentMapper.get(CombatSystem.defendingUnit).currentAnimation = aComponentMapper.get(CombatSystem.defendingUnit).allAnimationObjects.get("Idle");
 			}
 			
 			// Reset Animation System
@@ -166,6 +171,8 @@ public class CombatScreen extends ScreenAdapter {
 	 */
 	@Override
 	public void show(){
+		System.out.println(timer);
+		
 		// Turn off systems that don't need to be active
 		engine.getSystem(TurnManager.class).setProcessing(false);
 		userInterfaceManager.setStates(userInterfaceManager.currentState, combatScreenUI);
@@ -178,6 +185,8 @@ public class CombatScreen extends ScreenAdapter {
 	public void hide() {
 		timer = 0;
 		musicTimer = 0;
+		secondMusicTimer = 0;
+		volumeLevel = 1;
 		
 		// Turn back on all systems
 		engine.getSystem(TurnManager.class).setProcessing(true);

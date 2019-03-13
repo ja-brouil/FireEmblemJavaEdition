@@ -158,8 +158,8 @@ public class UnitFactory {
 		
 		// Combat
 		animationComponent.allAnimationObjects.put("CombatAnimationRegularHit", new AnimationObject(assetManager, 
-				"units/eirika/erikaBattleAnimation.png", 60, 80, 
-				1/3f, 0, 0, 11));
+				"units/cavalier/paladinAttackAnimation.png", 88, 94, 
+				1/3f, 0, 0, 26));
 		animationComponent.allAnimationObjects.get("CombatAnimationRegularHit").useSynchronizedTimer = false;
 		
 		// Off sets

@@ -1,5 +1,20 @@
 d:assets:0:application/unknown
 b:.DS_Store:6148:application/unknown
+d:background:0:application/unknown
+b:background/.DS_Store:6148:application/unknown
+i:background/castle.png:412631:image/png
+i:background/castle2.png:48682:image/png
+i:background/cool_throne.png:39265:image/png
+i:background/desert.png:25473:image/png
+i:background/forest.png:56901:image/png
+i:background/mountain.png:56344:image/png
+i:background/mountain_trail.png:50169:image/png
+i:background/plain.png:49818:image/png
+i:background/snow_forest.png:50531:image/png
+i:background/snowfield.png:42123:image/png
+i:background/throne.png:46914:image/png
+i:background/town.png:54910:image/png
+i:background/village.png:54910:image/png
 d:items:0:application/unknown
 b:items/.DS_Store:6148:application/unknown
 d:items/Axes:0:application/unknown
@@ -23,7 +38,7 @@ b:levels/level1/level1tileset:196:application/unknown
 b:levels/level1/Level1TileSetTest.tsx:235:application/unknown
 d:levels/level2:0:application/unknown
 i:levels/level2/level2.png:101820:image/png
-b:levels/level2/level2.tmx:144981:application/unknown
+b:levels/level2/level2.tmx:142862:application/unknown
 b:levels/level2/level2tileset.tsx:196:application/unknown
 d:levels/level3:0:application/unknown
 i:levels/level3/level3.png:43161:image/png
@@ -115,23 +130,28 @@ b:UI/unused/Main Font2.ttf:8736:application/unknown
 d:UI/victoryBox:0:application/unknown
 i:UI/victoryBox/victoryConditionBox.png:26150:image/png
 d:units:0:application/unknown
+b:units/.DS_Store:6148:application/unknown
 i:units/allSprites.png:512507:image/png
 d:units/bandit:0:application/unknown
 i:units/bandit/banditBlue.png:19240:image/png
 i:units/bandit/banditBlueGrey.png:19754:image/png
 i:units/bandit/banditRed.png:23100:image/png
+i:units/bandit/fighterRegular.png:623782:image/png
 b:units/bandit/red mask on this file.psd:77698:application/unknown
 d:units/cavalier:0:application/unknown
 i:units/cavalier/cavalierAlly copy.png:7456:image/png
 i:units/cavalier/cavalierAlly.png:7456:image/png
 i:units/cavalier/cavalierAllyGreyScale.png:7692:image/png
 i:units/cavalier/cavalierAllyRed.png:24352:image/png
+i:units/cavalier/paladinAttackAnimation.png:37419:image/png
 i:units/cavalier/sethPortrait.png:21679:image/png
 d:units/eirika:0:application/unknown
 i:units/eirika/eirika copy.png:19496:image/png
 i:units/eirika/eirika grey.png:6369:image/png
 i:units/eirika/eirika.png:19419:image/png
 i:units/eirika/eirikaPortrait.png:21831:image/png
+i:units/eirika/erikaBattleAnimation.png:9832:image/png
+b:units/eirika/erikaBattleAnimation.psb:70144:application/unknown
 d:units/enemyPortrait:0:application/unknown
 i:units/enemyPortrait/normalSoldierPortrait.png:18704:image/png
 d:units/knight:0:application/unknown

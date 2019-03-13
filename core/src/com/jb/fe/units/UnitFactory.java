@@ -159,7 +159,7 @@ public class UnitFactory {
 		// Combat
 		animationComponent.allAnimationObjects.put("CombatAnimationRegularHit", new AnimationObject(assetManager, 
 				"units/cavalier/paladinAttackAnimation.png", 88, 94, 
-				1/3f, 0, 0, 26));
+				1/5f, 0, 0, 26));
 		animationComponent.allAnimationObjects.get("CombatAnimationRegularHit").useSynchronizedTimer = false;
 		
 		// Off sets

@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.Align;
 import com.jb.fe.UI.UserInterfaceState;
 import com.jb.fe.UI.Text.TextObject;
 import com.jb.fe.UI.combatUnitSelector.UnitDamageMenuState;
-import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.TextComponent;

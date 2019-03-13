@@ -78,22 +78,22 @@ public class CombatAnimationSystem extends EntitySystem {
 		// Set New Location
 		// Ally
 		if (mComponentMapper.get(CombatSystem.attackingUnit).isAlly) {
-			pComponentMapper.get(CombatSystem.attackingUnit).x = CameraSystem.cameraX - CameraSystem.xConstant + 100;
+			pComponentMapper.get(CombatSystem.attackingUnit).x = CameraSystem.cameraX - CameraSystem.xConstant + 110;
 			pComponentMapper.get(CombatSystem.attackingUnit).y = CameraSystem.cameraY - CameraSystem.yConstant + 50;
 			
-			pComponentMapper.get(CombatSystem.defendingUnit).x = CameraSystem.cameraX - CameraSystem.xConstant + 50;
+			pComponentMapper.get(CombatSystem.defendingUnit).x = CameraSystem.cameraX - CameraSystem.xConstant - 10;
 			pComponentMapper.get(CombatSystem.defendingUnit).y = CameraSystem.cameraY - CameraSystem.yConstant + 50;
 			
-			pComponentMapper.get(defendingNonMovingEntity).x = CameraSystem.cameraX - CameraSystem.xConstant + 50;
+			pComponentMapper.get(defendingNonMovingEntity).x = CameraSystem.cameraX - CameraSystem.xConstant - 10;
 			pComponentMapper.get(defendingNonMovingEntity).y = CameraSystem.cameraY - CameraSystem.yConstant + 50;
 		} else {
-			pComponentMapper.get(CombatSystem.attackingUnit).x = CameraSystem.cameraX - CameraSystem.xConstant + 50;
+			pComponentMapper.get(CombatSystem.attackingUnit).x = CameraSystem.cameraX - CameraSystem.xConstant - 10;
 			pComponentMapper.get(CombatSystem.attackingUnit).y = CameraSystem.cameraY - CameraSystem.yConstant + 50;
 			
-			pComponentMapper.get(CombatSystem.defendingUnit).x = CameraSystem.cameraX - CameraSystem.xConstant + 100;
+			pComponentMapper.get(CombatSystem.defendingUnit).x = CameraSystem.cameraX - CameraSystem.xConstant + 110;
 			pComponentMapper.get(CombatSystem.defendingUnit).y = CameraSystem.cameraY - CameraSystem.yConstant + 50;
 			
-			pComponentMapper.get(defendingNonMovingEntity).x = CameraSystem.cameraX - CameraSystem.xConstant + 100;
+			pComponentMapper.get(defendingNonMovingEntity).x = CameraSystem.cameraX - CameraSystem.xConstant + 110;
 			pComponentMapper.get(defendingNonMovingEntity).y = CameraSystem.cameraY - CameraSystem.yConstant + 50;
 		}
 		
@@ -101,12 +101,12 @@ public class CombatAnimationSystem extends EntitySystem {
 		aComponentMapper.get(CombatSystem.attackingUnit).currentAnimation = aComponentMapper.get(CombatSystem.attackingUnit).allAnimationObjects.get("CombatAnimationRegularHit");
 		aComponentMapper.get(CombatSystem.attackingUnit).currentAnimation.isLooping = false;
 		aComponentMapper.get(CombatSystem.attackingUnit).currentAnimation.isDrawing = true;
-		aComponentMapper.get(CombatSystem.attackingUnit).currentAnimation.width = 50;
-		aComponentMapper.get(CombatSystem.attackingUnit).currentAnimation.height = 50;
+		aComponentMapper.get(CombatSystem.attackingUnit).currentAnimation.width = 100;
+		aComponentMapper.get(CombatSystem.attackingUnit).currentAnimation.height = 100;
 		
 		aComponentMapper.get(CombatSystem.defendingUnit).currentAnimation = aComponentMapper.get(CombatSystem.defendingUnit).allAnimationObjects.get("CombatAnimationRegularHit");
-		aComponentMapper.get(CombatSystem.defendingUnit).currentAnimation.width = 50;
-		aComponentMapper.get(CombatSystem.defendingUnit).currentAnimation.height = 50;
+		aComponentMapper.get(CombatSystem.defendingUnit).currentAnimation.width = 100;
+		aComponentMapper.get(CombatSystem.defendingUnit).currentAnimation.height = 100;
 		aComponentMapper.get(CombatSystem.defendingUnit).currentAnimation.isLooping = false;
 		aComponentMapper.get(CombatSystem.defendingUnit).currentAnimation.isDrawing = false;
 		
@@ -124,8 +124,8 @@ public class CombatAnimationSystem extends EntitySystem {
 		
 		// Set First Frame for defending unit
 		sComponentMapper.get(defendingNonMovingEntity).staticImage = aComponentMapper.get(CombatSystem.defendingUnit).currentAnimation.animationFrames.getKeyFrames()[0];
-		sComponentMapper.get(defendingNonMovingEntity).width = 50;
-		sComponentMapper.get(defendingNonMovingEntity).height = 50;
+		sComponentMapper.get(defendingNonMovingEntity).width = 100;
+		sComponentMapper.get(defendingNonMovingEntity).height = 100;
 		sComponentMapper.get(defendingNonMovingEntity).isEnabled = true;
 		
 		// Reset Animation timers

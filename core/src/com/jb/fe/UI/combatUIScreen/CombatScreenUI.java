@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Align;
 import com.jb.fe.UI.UserInterfaceState;
 import com.jb.fe.UI.Text.TextObject;
 import com.jb.fe.UI.combatUnitSelector.UnitDamageMenuState;
+import com.jb.fe.components.NameComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.TextComponent;
@@ -81,6 +82,30 @@ public class CombatScreenUI extends UserInterfaceState{
 		
 		// Set Text Objects
 		textComponent.isDrawing = true;
+		
+		
+		// Enemy
+		textComponent.textArray.get(1).text = UnitDamageMenuState.atkHit;
+		textComponent.textArray.get(1).x = positionComponent.x + 27;
+		textComponent.textArray.get(1).y = positionComponent.y + 47;
+		textComponent.textArray.get(2).text = UnitDamageMenuState.atkDmg;
+		textComponent.textArray.get(2).x = positionComponent.x + 27;
+		textComponent.textArray.get(2).y = positionComponent.y + 39;
+		textComponent.textArray.get(3).text = UnitDamageMenuState.atkCrit;
+		textComponent.textArray.get(3).x = positionComponent.x + 27;
+		textComponent.textArray.get(3).y = positionComponent.y + 31;
+		
+		// Ally
+		textComponent.textArray.get(7).text = UnitDamageMenuState.defHit;
+		textComponent.textArray.get(7).x = positionComponent.x + (FireEmblemGame.WIDTH - 14);
+		textComponent.textArray.get(7).y = positionComponent.y + 47;
+		textComponent.textArray.get(8).text = UnitDamageMenuState.defDmg;
+		textComponent.textArray.get(8).x = positionComponent.x + (FireEmblemGame.WIDTH - 14);
+		textComponent.textArray.get(8).y = positionComponent.y + 39;
+		textComponent.textArray.get(9).text = UnitDamageMenuState.defCrit;
+		textComponent.textArray.get(9).x = positionComponent.x + (FireEmblemGame.WIDTH - 14);
+		textComponent.textArray.get(9).y = positionComponent.y + 31;
+		
 		// Set entities
 		Entity enemy;
 		Entity ally;
@@ -192,12 +217,22 @@ public class CombatScreenUI extends UserInterfaceState{
 	}
 	
 	public void setHP(Entity ally, Entity enemy) {
-		textComponent.textArray.get(5).text = "HP " + Integer.toString(uComponentMapper.get(enemy).health);
-		textComponent.textArray.get(5).x = positionComponent.x + 20;
-		textComponent.textArray.get(5).y = positionComponent.y + 15;
-		
-		textComponent.textArray.get(11).text = "HP " + Integer.toString(uComponentMapper.get(ally).health);
-		textComponent.textArray.get(11).x = positionComponent.x + 143;
-		textComponent.textArray.get(11).y = positionComponent.y + 15;
+		if (mStatComponentMapper.get(ally).isAlly) {
+			textComponent.textArray.get(5).text = "HP " + Integer.toString(uComponentMapper.get(enemy).health);
+			textComponent.textArray.get(5).x = positionComponent.x + 20;
+			textComponent.textArray.get(5).y = positionComponent.y + 15;
+			
+			textComponent.textArray.get(11).text = "HP " + Integer.toString(uComponentMapper.get(ally).health);
+			textComponent.textArray.get(11).x = positionComponent.x + 143;
+			textComponent.textArray.get(11).y = positionComponent.y + 15;
+		} else {
+			textComponent.textArray.get(5).text = "HP " + Integer.toString(uComponentMapper.get(ally).health);
+			textComponent.textArray.get(5).x = positionComponent.x + 20;
+			textComponent.textArray.get(5).y = positionComponent.y + 15;
+			
+			textComponent.textArray.get(11).text = "HP " + Integer.toString(uComponentMapper.get(enemy).health);
+			textComponent.textArray.get(11).x = positionComponent.x + 143;
+			textComponent.textArray.get(11).y = positionComponent.y + 15;
+		}
 	}
 }

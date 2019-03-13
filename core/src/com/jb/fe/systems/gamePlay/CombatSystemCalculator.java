@@ -110,7 +110,7 @@ public class CombatSystemCalculator {
 	}
 	
 	/**
-	 * Calculates Damage dealt. Return -10000 if it's a miss.
+	 * Calculates Damage dealt. Return -10000 if it's a miss. | Needs to be changed. Returning 0 for now
 	 * @return
 	 */
 	public int calculateDamage() {
@@ -145,7 +145,7 @@ public class CombatSystemCalculator {
 		// If Miss return -10000 | For now it's 0 but later change this so that it has a No Damage animation instead of miss
 		if (!calculateHitChance()) {
 			System.out.println("IT MISSED");
-			return -10000;
+			return 0;
 		}
 		
 		int finalDamageAmount = attackDamage - defenceReduction;

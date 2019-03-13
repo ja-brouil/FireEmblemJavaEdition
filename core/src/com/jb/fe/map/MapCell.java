@@ -41,6 +41,9 @@ public class MapCell {
 	public int hCost;
 	public MapCell parentTileAStar;
 	
+	// Background for battle scene
+	public String backgroundFilePathString;
+	
 	public MapCell() {
 		position = new PositionComponent();
 		adjTiles = new Array<MapCell>();

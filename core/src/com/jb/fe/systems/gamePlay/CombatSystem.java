@@ -118,16 +118,17 @@ public class CombatSystem extends EntitySystem{
 		this.level = level;
 	}
 	
-	public void removeEntity(UnitStatsComponent defendingUnitStats) {
+	// Remove entity upon death
+	public void removeEntity(UnitStatsComponent defendingUnitStats, Entity unitToRemove) {
 		defendingUnitStats.health = 0;
 		
-		getEngine().removeEntity(defendingUnit);
+		getEngine().removeEntity(unitToRemove);
 		
 		// Remove unit from Level array
-		if (mComponentMapper.get(defendingUnit).isAlly) {
-			removeUnitFromLevelArray(level.allAllies, defendingUnit);
+		if (mComponentMapper.get(unitToRemove).isAlly) {
+			removeUnitFromLevelArray(level.allAllies, unitToRemove);
 		} else {
-			removeUnitFromLevelArray(level.allEnemies, defendingUnit);
+			removeUnitFromLevelArray(level.allEnemies, unitToRemove);
 		}
 		
 		unitMapCellUpdater.updateCellInfo();

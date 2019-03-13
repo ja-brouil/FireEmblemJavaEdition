@@ -67,8 +67,8 @@ public class UnitFactory {
 
 		// Combat Animation
 		animationComponent.allAnimationObjects.put("CombatAnimationRegularHit", new AnimationObject(assetManager, 
-				"units/bandit/fighterRegular.png", 243, 213, 
-				1/10f, 0, 0, 25));
+				"units/eirika/erikaBattleAnimation.png", 60, 80, 
+				1/3f, 0, 0, 11));
 		animationComponent.allAnimationObjects.get("CombatAnimationRegularHit").useSynchronizedTimer = false;
 		
 		// Set Default Animation
@@ -157,7 +157,9 @@ public class UnitFactory {
 		animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Idle");
 		
 		// Combat
-		animationComponent.allAnimationObjects.put("CombatAnimationRegularHit", new AnimationObject(assetManager, "units/bandit/fighterRegular.png", 243, 213, 1/10f, 0, 0, 25));
+		animationComponent.allAnimationObjects.put("CombatAnimationRegularHit", new AnimationObject(assetManager, 
+				"units/eirika/erikaBattleAnimation.png", 60, 80, 
+				1/3f, 0, 0, 11));
 		animationComponent.allAnimationObjects.get("CombatAnimationRegularHit").useSynchronizedTimer = false;
 		
 		// Off sets

@@ -44,6 +44,9 @@ public class EndTurnTransition {
 	
 	// Current Level
 	private Level currentLevel;
+	
+	// Combat Animation access
+	public static boolean oneEnemyLeft = false; 
 
 	public EndTurnTransition(AssetManager assetManager, Engine engine, SoundSystem soundSystem, MusicSystem musicSystem,
 			TurnManager turnManager) {
@@ -88,7 +91,7 @@ public class EndTurnTransition {
 
 		// Set Alpha
 		staticImageComponent.alpha = currentTime / maxTime;
-
+		
 		if (currentTime / maxTime >= 1) {
 			staticImageComponent.alpha = 1;
 			// Set Image to correct place
@@ -112,6 +115,7 @@ public class EndTurnTransition {
 					turnManager.setTurnStatus(Turn_Status.PLAYER_TURN);
 					if (currentLevel.allEnemies.size <= 1) {
 						musicSystem.setCurrentSong("Ally One Unit Left", true);
+						oneEnemyLeft = true;
 					} else {
 						musicSystem.setCurrentSong("Ally Battle Theme SD", true);
 					}

@@ -45,6 +45,7 @@ public class MapCellInfoSystem {
 			mapCell.position.x = tileProperties.get("x", Float.class);
 			mapCell.position.y = tileProperties.get("y", Float.class);
 			mapCell.tileName = tileProperties.get("TileType", String.class);
+			mapCell.backgroundFilePathString = "background/" + tileProperties.get("TileType", String.class);
 			mapCell.movementCost = tileProperties.get("MovementCost", Integer.class);
 			mapCell.defenceBonus = (int) tileProperties.get("Def", Integer.class);
 			mapCell.avoidanceBonus = (int) tileProperties.get("Avd", Integer.class);  

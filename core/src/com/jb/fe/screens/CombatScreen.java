@@ -10,6 +10,7 @@ import com.jb.fe.components.PositionComponent;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.gamePlay.CombatSystem;
+import com.jb.fe.systems.gamePlay.EndTurnTransition;
 import com.jb.fe.systems.gamePlay.TurnManager;
 import com.jb.fe.systems.gamePlay.TurnManager.Turn_Status;
 import com.jb.fe.systems.graphics.CombatAnimationSystem;
@@ -155,7 +156,6 @@ public class CombatScreen extends ScreenAdapter {
 			}
 			
 			// Reset Animation System
-			animationCalled = false;
 			CombatAnimationSystem.combatAnimationsAreComplete = false;
 			
 			// Update Cells
@@ -171,8 +171,6 @@ public class CombatScreen extends ScreenAdapter {
 	 */
 	@Override
 	public void show(){
-		System.out.println(timer);
-		
 		// Turn off systems that don't need to be active
 		engine.getSystem(TurnManager.class).setProcessing(false);
 		userInterfaceManager.setStates(userInterfaceManager.currentState, combatScreenUI);
@@ -183,22 +181,35 @@ public class CombatScreen extends ScreenAdapter {
 	 */
 	@Override
 	public void hide() {
+		// Reset Variables
 		timer = 0;
 		musicTimer = 0;
 		secondMusicTimer = 0;
 		volumeLevel = 1;
+		endingPhase = false;
+		animationCalled = false;
 		
 		// Turn back on all systems
 		engine.getSystem(TurnManager.class).setProcessing(true);
 		
 		// Something here to be changed when it swaps over to the AI turn. Check what logic order should be changed
+		// Reset Music Volumes
 		musicSystem.getSong("Enemy Phase").getSong().setVolume(1f);
 		musicSystem.getSong("Ally Battle Theme SD").getSong().setVolume(1f);
+		musicSystem.getSong("Defense").getSong().setVolume(1f);
+		musicSystem.getSong("Attack").getSong().setVolume(1f);
+		musicSystem.getSong("Ally One Unit Left").getSong().setVolume(1f);
+		
+		// Turn Manager update
 		engine.getSystem(TurnManager.class).update(Gdx.graphics.getDeltaTime());
 		if (engine.getSystem(TurnManager.class).getTurnStatus().equals(Turn_Status.ENEMY_TURN)) {
 			musicSystem.playSong("Enemy Phase", 1f);
 		} else if (engine.getSystem(TurnManager.class).getTurnStatus().equals(Turn_Status.PLAYER_TURN)){
-			musicSystem.playSong("Ally Battle Theme SD", 1f);
+			if (EndTurnTransition.oneEnemyLeft) {
+				musicSystem.playSong("Ally One Unit Left", 1f);
+			} else {
+				musicSystem.playSong("Ally Battle Theme SD", 1f);
+			}
 		}
 		
 		// Back to gameplay

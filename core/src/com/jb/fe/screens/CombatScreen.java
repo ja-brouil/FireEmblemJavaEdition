@@ -9,6 +9,7 @@ import com.jb.fe.components.AnimationComponent;
 import com.jb.fe.components.PositionComponent;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
+import com.jb.fe.systems.camera.CameraSystem;
 import com.jb.fe.systems.gamePlay.CombatSystem;
 import com.jb.fe.systems.gamePlay.EndTurnTransition;
 import com.jb.fe.systems.gamePlay.TurnManager;
@@ -92,6 +93,9 @@ public class CombatScreen extends ScreenAdapter {
 	public void render(float delta){
 		// Update all regular systems | Does this need to be moved lower?
 		engine.update(delta);
+		
+		// Camera always needs to be updated
+		engine.getSystem(CameraSystem.class).update(delta);
 		
 		// Combat System start
 		if (timer == 0) {

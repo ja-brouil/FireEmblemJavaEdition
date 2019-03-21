@@ -83,9 +83,18 @@ public class FireEmblemGame extends Game {
 		allGameScreens = new HashMap<>();
 		allGameScreens.put("GameScreen", new GameScreen(this, musicSystem, soundSystem, engine, assetManager, spriteBatch, gameCamera));
 		allGameScreens.put("CombatScreen", new CombatScreen(this, (GameScreen) allGameScreens.get("GameScreen")));
+		allGameScreens.put("Intro Screen", new IntroScreen(engine, this));
 		allGameScreens.put("GameOverScreen", new GameOverScreen());
 		allGameScreens.put("PauseScreen", new PauseScreen());
-		this.setScreen(allGameScreens.get("GameScreen"));
+		
+		// Turn Engine off
+		engine.getSystems().forEach((system) -> {
+			system.setProcessing(false);
+		});
+		
+		// Start the game
+		((IntroScreen) allGameScreens.get("Intro Screen")).startIntro();
+		this.setScreen(allGameScreens.get("Intro Screen"));
 	}
 	
 	@Override
@@ -130,5 +139,9 @@ public class FireEmblemGame extends Game {
 	
 	public SoundSystem getSoundSystem() {
 		return soundSystem;
+	}
+	
+	public AssetManager getAssetManager() {
+		return assetManager;
 	}
 }

@@ -73,6 +73,7 @@ public class UnitFactory {
 		
 		// Set Default Animation
 		animationComponent.currentAnimation = animationComponent.allAnimationObjects.get("Idle");
+		animationComponent.currentAnimation.isDrawing = false;
 
 		// Off sets
 		animationComponent.allAnimationObjects.get("Left").Xoffset = -6;

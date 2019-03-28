@@ -2,7 +2,6 @@ package com.jb.fe.screens;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.scenes.scene2d.ui.Tree;
 import com.jb.fe.UI.introscreenUI.IntroScreenUserInterface;
 import com.jb.fe.systems.audio.MusicSystem;
 import com.jb.fe.systems.audio.SoundSystem;
@@ -42,12 +41,16 @@ public class IntroScreen extends ScreenAdapter {
 		// Start User interface manager
 		introUserInterfaceManager = new UserInterfaceManager(fireEmblemGame);
 		introUserInterfaceManager.allUserInterfaceStates.put("Intro Screen", new IntroScreenUserInterface(fireEmblemGame.getAssetManager(), soundSystem, introUserInterfaceManager));
+		introUserInterfaceManager.setStates(introUserInterfaceManager.allUserInterfaceStates.get("Intro Screen"), introUserInterfaceManager.allUserInterfaceStates.get("Intro Screen"));
 	
 		// Add Entity to engine
 		((IntroScreenUserInterface) introUserInterfaceManager.allUserInterfaceStates.get("Intro Screen")).addEntities(engine);
 		
 		// Start graphic engine
 		engine.getSystem(RenderSystem.class).setProcessing(true);
+		
+		// Add Intro UI System
+		engine.addSystem(introUserInterfaceManager);
 		
 		// Play Intro Music
 		musicSystem.addNewSong("Intro Song", musicFilePath, fireEmblemGame.getAssetManager());

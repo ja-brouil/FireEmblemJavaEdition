@@ -38,6 +38,17 @@ public class AnimationObject{
 	// Animation Frame
 	public Animation<TextureRegion> animationFrames;
 	
+	/**
+	 * Use this for standard
+	 * @param assetManager
+	 * @param fileLocation
+	 * @param width
+	 * @param height
+	 * @param animationTimerLength
+	 * @param col
+	 * @param row
+	 * @param frameAmount
+	 */
 	public AnimationObject(AssetManager assetManager, String fileLocation, int width, int height, float animationTimerLength, int col, int row, int frameAmount) {
 		zOrder = 0;
 		YoffSet = 0;
@@ -67,6 +78,52 @@ public class AnimationObject{
 		useSynchronizedTimer = true;
 	}
 	
+	public AnimationObject(AssetManager assetManager, String fileLocation, int width, int height, float animationTimerLength, int frameAmount) {
+		zOrder = 0;
+		YoffSet = 0;
+		Xoffset = 0;
+		isLooping = true;
+		
+		// Process Animation Creation
+		if(!assetManager.isLoaded(fileLocation, Texture.class)) {
+			assetManager.load(fileLocation, Texture.class);
+			assetManager.finishLoading();
+		}
+		
+		Texture tmpTexture = assetManager.get(fileLocation, Texture.class);
+		TextureRegion[][] tmpRegions = TextureRegion.split(tmpTexture, width, height);
+		TextureRegion[] animationKeyFrames = new TextureRegion[frameAmount];
+		int frameCounter = 0;
+		for (int i = 0; i < tmpRegions.length; i++) {
+			for (int j = 0; j < tmpRegions[i].length; j++) {
+				animationKeyFrames[frameCounter] =  tmpRegions[i][j];
+				frameCounter++;
+			}
+		}
+		
+		// Create Animation Object
+		animationFrames = new Animation<>(animationTimerLength, animationKeyFrames);
+		
+		// Set Default Width/Height
+		this.width = animationKeyFrames[0].getRegionWidth();
+		this.height = animationKeyFrames[0].getRegionHeight();
+
+		// Synchronize Default
+		useSynchronizedTimer = true;
+	}
+	
+	/**
+	 * Extra Variable method for Animation Object
+	 * @param assetManager
+	 * @param fileLocation
+	 * @param width
+	 * @param height
+	 * @param animationTimerLength
+	 * @param col
+	 * @param row
+	 * @param frameAmount
+	 * @param zOrder
+	 */
 	public AnimationObject(AssetManager assetManager, String fileLocation, int width, int height, float animationTimerLength, int col, int row, int frameAmount, int zOrder) {
 		this(assetManager, fileLocation, width, height, animationTimerLength, col, row, frameAmount);
 		this.zOrder = zOrder;

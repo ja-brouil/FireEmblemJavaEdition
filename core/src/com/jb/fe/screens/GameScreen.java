@@ -103,8 +103,11 @@ public class GameScreen extends ScreenAdapter {
 		musicSystem.addNewSong("Enemy Phase", "music/enemy theme.mp3", assetManager);
 		musicSystem.addNewSong("Ally One Unit Left", "music/oneUnitLeft.mp3", assetManager);
 		
-		// Set Level
-		//setNewMap(currentLevel);
+		startGameScreen();
+	}
+	
+	public void startGameScreen() {
+		setNewMap(currentLevel);
 	}
 	
 	@Override

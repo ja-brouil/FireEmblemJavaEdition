@@ -87,14 +87,20 @@ public class FireEmblemGame extends Game {
 		allGameScreens.put("GameOverScreen", new GameOverScreen());
 		allGameScreens.put("PauseScreen", new PauseScreen());
 		
+		/*
 		// Turn Engine off
 		engine.getSystems().forEach((system) -> {
 			system.setProcessing(false);
 		});
+		*/
 		
 		// Start the game
+		/*
 		((IntroScreen) allGameScreens.get("Intro Screen")).startIntro();
 		this.setScreen(allGameScreens.get("Intro Screen"));
+		*/
+		setScreen(allGameScreens.get("GameScreen"));
+		
 	}
 	
 	@Override

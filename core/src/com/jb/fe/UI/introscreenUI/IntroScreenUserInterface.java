@@ -13,6 +13,8 @@ import com.jb.fe.components.PositionComponent;
 import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.ZOrderComponent;
 import com.jb.fe.screens.FireEmblemGame;
+import com.jb.fe.screens.GameScreen;
+import com.jb.fe.screens.IntroScreen;
 import com.jb.fe.systems.audio.SoundSystem;
 import com.jb.fe.systems.graphics.ZOrder;
 import com.jb.fe.systems.inputAndUI.UserInterfaceManager;
@@ -73,7 +75,11 @@ public class IntroScreenUserInterface extends UserInterfaceState {
 	public void handleInput(float delta) {
 		// Press any key to go to the next screen
 		if (Gdx.input.isKeyJustPressed(Keys.ANY_KEY)) {
-			System.out.println("Any key pressed");
+			// Off to the next screen
+			
+			((IntroScreen) userInterfaceManager.fireEmblemGame.getScreen()).nextScreen(FireEmblemGame.allGameScreens.get("GameScreen"));
+			
+			((GameScreen) FireEmblemGame.allGameScreens.get("GameScreen")).startGameScreen();
 		}
 	}
 	

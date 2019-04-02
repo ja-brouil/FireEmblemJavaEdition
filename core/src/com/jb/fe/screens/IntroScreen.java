@@ -67,11 +67,11 @@ public class IntroScreen extends ScreenAdapter {
 	 * @param nextScreen The next screen to move to
 	 * @param game
 	 */
-	public void nextScreen(ScreenAdapter nextScreen, FireEmblemGame game) {
+	public void nextScreen(ScreenAdapter nextScreen) {
 		// Remove User Interface Manager
 		engine.removeSystem(introUserInterfaceManager);
 		
 		// To the next screen
-		game.setScreen(nextScreen);
+		fireEmblemGame.setScreen(nextScreen);
 	}
 }

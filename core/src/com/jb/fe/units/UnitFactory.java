@@ -131,6 +131,11 @@ public class UnitFactory {
 		Entity icon = IconFactory.createUnitIcon(assetManager, "units/cavalier/sethPortrait.png", engine);
 		iconComponent.iconEntity = icon;
 		
+		// Movement Penalty
+		movementStatsComponent.setMovementPenalties(unitStats.get("defaultPenalty", Integer.class), unitStats.get("mountainPenalty", Integer.class), 
+				unitStats.get("hillPenalty", Integer.class), unitStats.get("forestPenalty", Integer.class), 
+				unitStats.get("fortressPenalty", Integer.class), unitStats.get("buildingPenalty", Integer.class), 
+				unitStats.get("riverPenalty", Integer.class), unitStats.get("seaPenalty", Integer.class));
 		
 		// Sound
 		soundComponent.allSoundObjects.put("Movement", new SoundObject("sound/unitMovement/Horse Steps.wav", assetManager));

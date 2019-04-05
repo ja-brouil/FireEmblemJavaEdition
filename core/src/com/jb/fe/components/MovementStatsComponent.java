@@ -32,6 +32,16 @@ public class MovementStatsComponent implements Component {
 	// Ally
 	public boolean isAlly;
 	
+	// Movement Penalties
+	public int defaultPenalty;
+	public int mountainPenalty;
+	public int hillPenalty;
+	public int forestPenalty;
+	public int fortressPenalty;
+	public int buildingPenalty;
+	public int riverPenalty;
+	public int seaPenalty;
+	
 	// Default Stats
 	public MovementStatsComponent() {
 		
@@ -44,6 +54,16 @@ public class MovementStatsComponent implements Component {
 		currentCell = null;
 		isMoving = false;
 		animationMovementSpeed = 8f;
+		
+		// Penalty Defaults
+		defaultPenalty = 0;
+		mountainPenalty = 0;
+		hillPenalty = 0;
+		forestPenalty = 0;
+		fortressPenalty = 0;
+		buildingPenalty = 0;
+		riverPenalty = 0;
+		seaPenalty = 0;
 		
 		// Unit State
 		unit_State = Unit_State.CAN_DO_BOTH;
@@ -60,6 +80,16 @@ public class MovementStatsComponent implements Component {
 		isMoving = false;
 		animationMovementSpeed = 8f;
 		
+		// Penalty Defaults
+		defaultPenalty = 0;
+		mountainPenalty = 0;
+		hillPenalty = 0;
+		forestPenalty = 0;
+		fortressPenalty = 0;
+		buildingPenalty = 0;
+		riverPenalty = 0;
+		seaPenalty = 0;
+		
 		// Unit State
 		unit_State = Unit_State.CAN_DO_BOTH;
 	}
@@ -69,5 +99,16 @@ public class MovementStatsComponent implements Component {
 		CAN_ONLY_MOVE,
 		CAN_DO_BOTH, 
 		DONE
-	}	
+	}
+	
+	public void setMovementPenalties(int defaultPenalty, int mountainPenalty, int hillPenalty, int forestPenalty, int fortressPenalty, int buildingPenalty, int riverPenalty, int seaPenalty) {
+		this.defaultPenalty = defaultPenalty;
+		this.mountainPenalty = mountainPenalty;
+		this.hillPenalty = hillPenalty;
+		this.forestPenalty = forestPenalty;
+		this.fortressPenalty = forestPenalty;
+		this.buildingPenalty = buildingPenalty;
+		this.riverPenalty = riverPenalty;
+		this.seaPenalty = seaPenalty;
+	}
 }

@@ -210,7 +210,7 @@ public class AISystem extends EntitySystem{
 				int newMovementCostToNeighbor = currentCell.gCost + adjcell.movementCost;
 				if (newMovementCostToNeighbor < adjcell.gCost || !openList.contains(adjcell)) {
 					adjcell.gCost = newMovementCostToNeighbor;
-					adjcell.hCost = movementUtilityCalculator.calculateHCost(adjcell, destinationCell);
+					adjcell.hCost = movementUtilityCalculator.calculateHCost(adjcell, destinationCell, enemyUnit);
 					adjcell.parentTileAStar = currentCell;
 					
 					// Add to openList

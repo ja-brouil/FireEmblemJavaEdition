@@ -6,11 +6,11 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Queue;
-import com.jb.fe.components.PositionComponent;
-import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.components.InventoryComponent;
 import com.jb.fe.components.ItemComponent;
 import com.jb.fe.components.MovementStatsComponent;
+import com.jb.fe.components.PositionComponent;
+import com.jb.fe.components.StaticImageComponent;
 import com.jb.fe.level.Level;
 import com.jb.fe.map.MapCell;
 
@@ -93,7 +93,7 @@ public class MovementUtilityCalculator {
 		unitStatsComponent.allOutsideAttackMoves = attackCells;
 	}
 
-	private void processTile(MapCell initialTile, MovementStatsComponent unitStatsComponent, int moveSteps, Entity unit) {
+	private void processTile(MapCell initialTile, MovementStatsComponent moveStatsComponent, int moveSteps, Entity unit) {
 		// Add initial tile
 		allPossibleMoves.add(initialTile);
 
@@ -103,15 +103,15 @@ public class MovementUtilityCalculator {
 			MapCell adjMapCell = initialTile.adjTiles.get(i);
 
 			// Next Move Cost
-			int nextMoveCost = moveSteps - adjMapCell.movementCost;
+			int nextMoveCost = moveSteps - adjMapCell.movementCost - getPenaltyCost(adjMapCell.tileName, moveStatsComponent);
 
 			if (nextMoveCost >= 0) {
 				// Allow ally passage
 				if (adjMapCell.isOccupied && !(adjMapCell.occupyingUnit
-						.getComponent(MovementStatsComponent.class).isAlly == unitStatsComponent.isAlly)) {
+						.getComponent(MovementStatsComponent.class).isAlly == moveStatsComponent.isAlly)) {
 					continue;
 				} else {
-					processTile(adjMapCell, unitStatsComponent, nextMoveCost, unit);
+					processTile(adjMapCell, moveStatsComponent, nextMoveCost, unit);
 				}
 
 			}
@@ -275,7 +275,8 @@ public class MovementUtilityCalculator {
 	/*
 	 * Calculate the cost of going to the end node
 	 */
-	public int calculateHCost(MapCell initial, MapCell destination) {
+	public int calculateHCost(MapCell initial, MapCell destination, Entity unit) {
+		MovementStatsComponent movementStatsComponent = unit.getComponent(MovementStatsComponent.class);
 		int startingNodeY = (int) initial.position.y / MapCell.CELL_SIZE;
 		int startingNodeX = (int) initial.position.x / MapCell.CELL_SIZE;
 		int totalVerticalCost = 0;
@@ -292,7 +293,9 @@ public class MovementUtilityCalculator {
 			
 			
 			for (int i = 0; i < verticalTileAmount(initial, destination); i++) {
-				totalVerticalCost += allMapCells[startingNodeX][startingNodeY + verticalMovement].movementCost;
+				totalVerticalCost += allMapCells[startingNodeX][startingNodeY + verticalMovement].movementCost 
+						+ getPenaltyCost(allMapCells[startingNodeX][startingNodeY + verticalMovement].tileName, 
+								movementStatsComponent);
 			}
 			
 			// West | East
@@ -305,7 +308,9 @@ public class MovementUtilityCalculator {
 			
 
 			for (int i = 0; i < horizontalTileAmount(initial, destination); i++) {
-				totalHorizontalCost += allMapCells[startingNodeX + horizontalMovement][startingNodeY].movementCost;
+				totalHorizontalCost += allMapCells[startingNodeX + horizontalMovement][startingNodeY].movementCost + 
+						getPenaltyCost(allMapCells[startingNodeX + horizontalMovement][startingNodeY].tileName, 
+						movementStatsComponent);
 			}
 		} else {
 			// West | East
@@ -317,7 +322,9 @@ public class MovementUtilityCalculator {
 			}
 			
 			for (int i = 0; i < horizontalTileAmount(initial, destination); i++) {
-				totalHorizontalCost += allMapCells[startingNodeX + horizontalMovement][startingNodeY].movementCost;
+				totalHorizontalCost += allMapCells[startingNodeX + horizontalMovement][startingNodeY].movementCost + 
+						getPenaltyCost(allMapCells[startingNodeX + horizontalMovement][startingNodeY].tileName, 
+						movementStatsComponent);
 			}
 			
 			// North | South
@@ -330,11 +337,42 @@ public class MovementUtilityCalculator {
 			
 			
 			for (int i = 0; i < verticalTileAmount(initial, destination); i++) {
-				totalVerticalCost += allMapCells[startingNodeX][startingNodeY + verticalMovement].movementCost;
+				totalVerticalCost += allMapCells[startingNodeX][startingNodeY + verticalMovement].movementCost +
+						getPenaltyCost(allMapCells[startingNodeX][startingNodeY + verticalMovement].tileName, 
+						movementStatsComponent);;
 			}
 		}
 		
 		return totalVerticalCost + totalHorizontalCost;
+	}
+	
+	/**
+	 * Return the type of Map Cell for movement purposes
+	 * @param mapCellType
+	 * @param movementStatsComponent
+	 * @return movement cost by the unit
+	 */
+	public static int getPenaltyCost(String mapCellType, MovementStatsComponent movementStatsComponent) {
+		
+		if (mapCellType.equals("Plain") || mapCellType.equals("Road") || mapCellType.equals("Bridge") || mapCellType.equals("Throne")) {
+			return movementStatsComponent.defaultPenalty;
+		} else if (mapCellType.equals("Mountain")) {
+			return movementStatsComponent.mountainPenalty;
+		} else if (mapCellType.equals("Hill")) {
+			return movementStatsComponent.hillPenalty;
+		} else if (mapCellType.equals("Forest")) {
+			return movementStatsComponent.forestPenalty;
+		} else if (mapCellType.equals("Fortress")) {
+			return movementStatsComponent.fortressPenalty;
+		} else if (mapCellType.equals("Village")) {
+			return movementStatsComponent.buildingPenalty;
+		} else if (mapCellType.equals("River")) {
+			return movementStatsComponent.riverPenalty;
+		} else if (mapCellType.equals("Sea")) {
+			return movementStatsComponent.seaPenalty;
+		}
+		
+		return 0;
 	}
 	
 	public int verticalTileAmount(MapCell initial, MapCell destination) {

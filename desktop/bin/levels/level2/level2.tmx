@@ -3549,7 +3549,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Allies">
+ <objectgroup name="Allies" visible="0">
   <object id="2281" x="32" y="288" width="16" height="16">
    <properties>
     <property name="BonusCrit" type="int" value="1"/>
@@ -3570,14 +3570,23 @@
     <property name="Str" type="int" value="14"/>
     <property name="Weapon" value="Iron Axe"/>
     <property name="buildingPenalty" type="int" value="0"/>
+    <property name="constiChance" type="int" value="70"/>
+    <property name="defChance" type="int" value="60"/>
     <property name="defaultPenalty" type="int" value="0"/>
     <property name="forestPenalty" type="int" value="0"/>
     <property name="fortressPenalty" type="int" value="0"/>
     <property name="hillPenalty" type="int" value="4"/>
     <property name="isAlly" type="bool" value="true"/>
+    <property name="luckChance" type="int" value="15"/>
+    <property name="magicChance" type="int" value="10"/>
+    <property name="maxHPChance" type="int" value="70"/>
     <property name="mountainPenalty" type="int" value="0"/>
+    <property name="resChance" type="int" value="15"/>
     <property name="riverPenalty" type="int" value="5"/>
     <property name="seaPenalty" type="int" value="0"/>
+    <property name="skillChance" type="int" value="20"/>
+    <property name="speedChance" type="int" value="50"/>
+    <property name="strChance" type="int" value="80"/>
    </properties>
   </object>
   <object id="2282" x="16" y="272" width="16" height="16">
@@ -3587,7 +3596,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Enemies">
+ <objectgroup name="Enemies" visible="0">
   <object id="2276" x="80" y="256" width="16" height="16">
    <properties>
     <property name="BonusCrit" type="int" value="0"/>
